@@ -1,0 +1,47 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path":"pages/user/login/login",
+			"style":{
+				"navigationBarTitleText": "登录"				
+			}
+		},{
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle":"custom"
+			}
+		},
+		{
+			"path":"pages/checkInfo/checkInfo",
+			"style":{
+				"navigationBarTitleText": "数据调阅"				
+			}
+		},		{
+			"path":"pages/user/reg/reg",
+			"style":{
+				"navigationBarTitleText": "注册"				
+			}
+		},
+		{
+			"path":"pages/workOrder/workOrder",
+			"style":{
+				"navigationBarTitleText": "工单管理"				
+			}
+		},{
+			"path":"pages/workOrder/checkWorkOrder/checkWorkOrder",
+			"style":{
+				"navigationBarTitleText": "查看工单"				
+			}
+		},{
+			"path":"pages/report/report",
+			"style":{
+				"navigationBarTitleText": "现场报备"				
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarBackgroundColor": "#517FDF",
+		"backgroundColor": "#fff"
+	}
+}
