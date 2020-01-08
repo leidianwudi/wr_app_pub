@@ -40,22 +40,22 @@
 												<t-th>阀门状态</t-th>
 											</t-tr>
 											<t-tr v-for="(item, index) in tableList" :key="index">
-												<t-td>{{ item.时间 }}</t-td>
-												<t-td>{{ item.瞬时流量 }}</t-td>
-												<t-td>{{ item.累计流量 }}</t-td>
-												<t-td>{{ item.日配额 }}</t-td>
-												<t-td>{{ item.日配额余量 }}</t-td>
+												<t-td>{{ item.time }}</t-td> <!-- 时间 -->
+												<t-td>{{ item.nowWater }}</t-td>  <!-- 瞬时流量 -->
+												<t-td>{{ item.addWater }}</t-td>  <!-- 累计流量 -->
+												<t-td>{{ item.dayAmount }}</t-td>  <!-- 日配额 -->
+												<t-td>{{ item.dayAmountRemain }}</t-td>  <!-- 日配额余量 -->
 												<t-td>{{ item.COD }}</t-td>
-												<t-td>{{ item.氨氮 }}</t-td>
+												<t-td>{{ item.anDan }}</t-td>  <!-- 氨氮 -->
 												<t-td>{{ item.PH }}</t-td>
 												<t-td>{{ item.SS }}</t-td>
-												<t-td>{{ item.余氯 }}</t-td>
-												<t-td>{{ item.电导率 }}</t-td>
-												<t-td>{{ item.温度 }}</t-td>
-												<t-td>{{ item.阀门控制模式 === 0 ? "计费模式" : item.阀门控制模式 }}</t-td>
-												<t-td>{{ item.阀门自动 === 1 ? "自动" : "手动" }}</t-td>
-												<t-td>{{ item.市电 === 1 ? "市电" : item.市电 }}</t-td>
-												<t-td>{{ item.阀门开到位 === 1 ? "开到位" : "关到位" }}</t-td>
+												<t-td>{{ item.yuLv }}</t-td>  <!-- 余氯 -->
+												<t-td>{{ item.eleLv }}</t-td>  <!-- 电导率 -->
+												<t-td>{{ item.temperature }}</t-td> <!-- 温度 -->
+												<t-td>{{ item.gateControl === 0 ? "计费模式" : item.gateControl }}</t-td> <!-- 阀门控制模式 -->
+												<t-td>{{ item.gateAuto === 1 ? "自动" : "手动" }}</t-td> <!-- 阀门自动 -->
+												<t-td>{{ item.cityEle === 1 ? "市电" : item.cityEle }}</t-td>  <!-- 市电 -->
+												<t-td>{{ item.gateOpen === 1 ? "开到位" : "关到位" }}</t-td>  <!-- 阀门开到位 -->
 											</t-tr>
 										</t-table>
 									</block>
@@ -86,9 +86,9 @@
 										<t-th>SS(mg/l)</t-th>
 										<t-th>SS最大(mg/l)</t-th>
 										<t-th>SS最小(mg/l)</t-th>
-										<t-th>余氨(mg/l)</t-th>
-										<t-th>余氨最大(mg/l)</t-th>
-										<t-th>余氨最小(mg/l)</t-th>
+										<t-th>余氯(mg/l)</t-th>
+										<t-th>余氯最大(mg/l)</t-th>
+										<t-th>余氯最小(mg/l)</t-th>
 										<t-th>电导(mg/l)</t-th>
 										<t-th>电导最大(最大)</t-th>
 										<t-th>电导最小(最小)</t-th>
@@ -101,22 +101,22 @@
 									</t-tr>
 									<t-tr v-for="(item, index) in dayList" :key="index">
 										<t-td>{{ item.hour }}</t-td>
-										<t-td>{{ item.时流量 }}</t-td>
-										<t-td>{{ item.累计流量 }}</t-td>
+										<t-td>{{ item.hourWater }}</t-td>  <!-- 时流量 -->
+										<t-td>{{ item.dleAddWater }}</t-td> <!-- 累计流量 -->
 										<t-td>{{ item.COD }}</t-td>
-										<t-td>{{ item.氨氮 }}</t-td>
+										<t-td>{{ item.anDan }}</t-td> <!-- 氨氮 -->
 										<t-td>{{ item.SS }}</t-td>
 										<t-td>{{ item.SSMax }}</t-td>
 										<t-td>{{ item.SSMin }}</t-td>
-										<t-td>{{ item.余氨 }}</t-td>
-										<t-td>{{ item.余氯Max }}</t-td>
-										<t-td>{{ item.余氨Min }}</t-td>
-										<t-td>{{ item.电导率 }}</t-td>
-										<t-td>{{ item.电导率Max }}</t-td>
-										<t-td>{{ item.电导率Min }}</t-td>
-										<t-td>{{ item.温度 }}</t-td>
-										<t-td>{{ item.温度Max }}</t-td>
-										<t-td>{{ item.温度Min }}</t-td>
+										<t-td>{{ item.yuLv }}</t-td> <!-- 余氯 -->
+										<t-td>{{ item.yuLvMax }}</t-td> <!-- 余氯Max -->
+										<t-td>{{ item.yuLvMin }}</t-td> <!-- 余氯Min -->
+										<t-td>{{ item.eleLv }}</t-td>  <!-- 电导率 -->
+										<t-td>{{ item.eleLvMax }}</t-td> <!-- 电导率Max -->
+										<t-td>{{ item.eleLvMin }}</t-td> <!-- 电导率Min -->
+										<t-td>{{ item.temperature }}</t-td>  <!-- 温度 -->
+										<t-td>{{ item.temperatureMax }}</t-td> <!-- 温度Max -->
+										<t-td>{{ item.temperatureMin }}</t-td> <!-- 温度Min -->
 										<t-td>{{ item.PH }}</t-td>
 										<t-td>{{ item.PHMax }}</t-td>
 										<t-td>{{ item.PHMin }}</t-td>
@@ -150,9 +150,9 @@
 										<t-th>SS(mg/l)</t-th>
 										<t-th>SS最大(mg/l)</t-th>
 										<t-th>SS最小(mg/l)</t-th>
-										<t-th>余氨(mg/l)</t-th>
-										<t-th>余氨最大(mg/l)</t-th>
-										<t-th>余氨最小(mg/l)</t-th>
+										<t-th>余氯(mg/l)</t-th>
+										<t-th>余氯最大(mg/l)</t-th>
+										<t-th>余氯最小(mg/l)</t-th>
 										<t-th>电导(mg/l)</t-th>
 										<t-th>电导最大(最大)</t-th>
 										<t-th>电导最小(最小)</t-th>
@@ -165,22 +165,22 @@
 									</t-tr>
 									<t-tr v-for="(item, index) in monthList" :key="index">
 										<t-td>{{ item.day + '日' }}</t-td>
-										<t-td>{{ item.时流量 }}</t-td>
-										<t-td>{{ item.累计流量 }}</t-td>
+										<t-td>{{ item.hourWater }}</t-td>  <!-- 时流量 -->
+										<t-td>{{ item.dleAddWater }}</t-td>  <!-- 累计流量 -->
 										<t-td>{{ item.COD }}</t-td>
-										<t-td>{{ item.氨氮 }}</t-td>
+										<t-td>{{ item.anDan }}</t-td>  <!-- 氨氮 -->
 										<t-td>{{ item.SS }}</t-td>
 										<t-td>{{ item.SSMax }}</t-td>
 										<t-td>{{ item.SSMin }}</t-td>
-										<t-td>{{ item.余氨 }}</t-td>
-										<t-td>{{ item.余氯Max }}</t-td>
-										<t-td>{{ item.余氨Min }}</t-td>
-										<t-td>{{ item.电导率 }}</t-td>
-										<t-td>{{ item.电导率Max }}</t-td>
-										<t-td>{{ item.电导率Min }}</t-td>
-										<t-td>{{ item.温度 }}</t-td>
-										<t-td>{{ item.温度Max }}</t-td>
-										<t-td>{{ item.温度Min }}</t-td>
+										<t-td>{{ item.yuLv }}</t-td>  <!-- 余氨 -->
+										<t-td>{{ item.yuLvMax }}</t-td> <!-- 余氯Max -->
+										<t-td>{{ item.yuLvMin }}</t-td> <!-- 余氯Min -->
+										<t-td>{{ item.eleLv }}</t-td>  <!-- 电导率 -->
+										<t-td>{{ item.eleLvMax }}</t-td> <!-- 电导率Max -->
+										<t-td>{{ item.eleLvMin }}</t-td> <!-- 电导率Min -->
+										<t-td>{{ item.temperature }}</t-td> <!-- 温度 -->
+										<t-td>{{ item.temperatureMax }}</t-td> <!-- 温度Max -->
+										<t-td>{{ item.temperatureMin }}</t-td> <!-- 温度Min -->
 										<t-td>{{ item.PH }}</t-td>
 										<t-td>{{ item.PHMax }}</t-td>
 										<t-td>{{ item.PHMin }}</t-td>
