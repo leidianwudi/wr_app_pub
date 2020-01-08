@@ -51,13 +51,13 @@ export default {
                 this.positionTop = uni.getSystemInfoSync().windowHeight - 100;
             },
             bindLogin() {				
-                if (this.account.length < 5) {
-                    uni.showToast({
-                        icon: 'none',
-                        title: '账号最短为 5 个字符'
-                    });
-                    return;
-                }
+                // if (this.account.length < 5) {
+                //     uni.showToast({
+                //         icon: 'none',
+                //         title: '账号最短为 5 个字符'
+                //     });
+                //     return;
+                // }
                 if (this.password.length < 6) {
                     uni.showToast({
                         icon: 'none',
@@ -76,12 +76,15 @@ export default {
 				api.login(postData, res=>{
 					let code = api.getCode(res);
 					let resData = api.getData(res);
+					console.log(res);
 					if(code === 0){
 						let data = {
 							nickName: resData.user.nickName,
 							token: resData.userToken.token,
 							pc: resData.pc
 						};
+						if(resData.permissions.search("删除用户") != -1) data.isAdmin = 1;
+						else data.isAdmin = 0;
 						storage.setMyInfo(data);
 						uni.reLaunch({
 							url: '/pages/index/index'

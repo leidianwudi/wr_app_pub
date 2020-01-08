@@ -20,7 +20,7 @@ module.exports = {
 	//上传文件
 	uploadFileToCache: function(path, funSuccess) {httpUtil.upload('external/uploadFileToCache', path, 'file', funSuccess);},
 		
-	//查询瞬时数据
+	//登录
 	login: function(postData, funSuccess) 
 	{
 		let data = {
@@ -32,7 +32,7 @@ module.exports = {
 		httpUtil.post('wr/request', data, funSuccess);
 	},
 	
-	//登录
+	//查询瞬时数据
 	NowDataList: function(postData, funSuccess)
 	{
 		let data = {
@@ -41,6 +41,58 @@ module.exports = {
 					"Referer:" + config.baseUrl2 + "/admin/zhgy/data/nowDataList.html"],
 			"data": postData,
 			"type":"post"
+		}
+		httpUtil.post('wr/request', data, funSuccess);
+	},
+	
+	//查询日数据
+	DayDataList: function(postData, funSuccess) 
+	{
+		let data = {
+			"url": config.baseUrl2 + "/zhgyData/EnterpriceDayDataList",
+			"head":["Content-Type:application/x-www-form-urlencoded",
+					"Referer:" + config.baseUrl2 + "/admin/zhgy/data/enterpriceDayDataList.html"],
+			"data": postData,
+			"type":"get"
+		}
+		httpUtil.post('wr/request', data, funSuccess);
+	},
+	
+	//查询月数据
+	MonthDataList: function(postData, funSuccess) 
+	{
+		let data = {
+			"url": config.baseUrl2 + "/zhgyData/EnterpriceMonthDataList",
+			"head":["Content-Type:application/x-www-form-urlencoded",
+					"Referer:" + config.baseUrl2 + "/admin/zhgy/data/enterpriceMonthDataList.html"],
+			"data": postData,
+			"type":"get"
+		}
+		httpUtil.post('wr/request', data, funSuccess);
+	},
+	
+	//获取瞬时数据的子服务器列表
+	NowDataZhgyServerList: function(postData, funSuccess)
+	{
+		let data = {
+			"url": config.baseUrl2 + "/zhgyServer/List",
+			"head":["Content-Type:application/x-www-form-urlencoded",
+					"Referer:" + config.baseUrl2 + "/admin/zhgy/data/nowDataList.html"],
+			"data": postData,
+			"type":"get"
+		}
+		httpUtil.post('wr/request', data, funSuccess);
+	},
+	
+	//获取瞬时数据的企业名称列表
+	NowDataZhgyEnterpriceList: function(postData, funSuccess)
+	{
+		let data = {
+			"url": config.baseUrl2 + "/zhgyEnterprice/List",
+			"head":["Content-Type:application/x-www-form-urlencoded",
+					"Referer:" + config.baseUrl2 + "/admin/zhgy/data/nowDataList.html"],
+			"data": postData,
+			"type":"get"
 		}
 		httpUtil.post('wr/request', data, funSuccess);
 	},

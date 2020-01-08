@@ -13,8 +13,19 @@
 				<view class="box" id="box0">
 							<!-- 瞬时数据企业信息 -->
 							<view class="enterprise_info" @touchmove="handletouchmove" @touchstart="handletouchstart" @touchend="handletouchend">
-								<view class="enterprise_name">{{name}}</view>
-								<view class="position">{{position_name}}</view>
+								<view class="day">
+									<text>子服务器名：</text>
+									<picker :range="ZhgyServerNameList" @change="zhgyServerNameListChange" range-key="name">
+										<input type="text" value="" v-model="nowZhgyServerName"/>
+									</picker>
+								</view>
+								<view class="day">
+									<text>企业名：</text>
+									<picker :range="ZhgyEnterpriceNameList" @change="ZhgyEnterpriceNameListChange" range-key="name">
+										<input type="text" value="" v-model="nowEnterpriceName"/>
+									</picker>
+								</view>
+								<button type="primary" @tap="searchNow">搜索</button>
 							</view>
 							<!-- 瞬时数据信息列表 -->
 							<view class="info_lists">
@@ -22,6 +33,8 @@
 									<block class="box">
 										<t-table>
 											<t-tr>
+												<t-th>子服务器</t-th>
+												<t-th>企业</t-th>
 												<t-th>时间</t-th>
 												<t-th>瞬时</t-th>
 												<t-th>累计</t-th>
@@ -40,6 +53,8 @@
 												<t-th>阀门状态</t-th>
 											</t-tr>
 											<t-tr v-for="(item, index) in tableList" :key="index">
+												<t-td>{{ item.zhgyServerName }}</t-td>
+												<t-td>{{ item.enterpriceName }}</t-td>
 												<t-td>{{ item.时间 }}</t-td>
 												<t-td>{{ item.瞬时流量 }}</t-td>
 												<t-td>{{ item.累计流量 }}</t-td>
@@ -66,11 +81,23 @@
 				<view class="box" id="box1">
 					<!-- 日数据信息 -->
 					<view class="enterprise_info" @touchmove="handletouchmove" @touchstart="handletouchstart" @touchend="handletouchend">
+						<view class="day">
+							<text>子服务器名：</text>
+							<picker :range="ZhgyServerNameList" @change="dayzhgyServerNameListChange" range-key="name">
+								<input type="text" value="" v-model="dayZhgyServerName"/>
+							</picker>
+						</view>
+						<view class="day">
+							<text>企业名：</text>
+							<picker :range="ZhgyEnterpriceNameList" @change="dayZhgyEnterpriceNameListChange" range-key="name">
+								<input type="text" value="" v-model="dayEnterpriceName"/>
+							</picker>
+						</view>
 					    <view class="day">
 					    	<text>日期：</text>
 							<input type="text" value="" @tap="onDay(1)" v-model="dayData"/>
-							<button type="primary" @tap="dayDataList">搜索</button>
 					    </view>
+						<button type="primary" @tap="dayDataList">搜索</button>
 					</view>
 					<!-- 日数据信息列表 -->
 					<view class="info_lists">
@@ -129,12 +156,24 @@
 				<!-- 月数据界面 -->
 				<view class="box" id="box2">
 					<!-- 月数据信息 -->
-					<view class="enterprise_info" @touchmove="handletouchmove" @touchstart="handletouchstart" @touchend="handletouchend">
+					<view class="enterprise_info"  @touchmove="handletouchmove" @touchstart="handletouchstart" @touchend="handletouchend">
+						<view class="month">
+							<text>子服务器名：</text>
+							<picker :range="ZhgyServerNameList" @change="monthzhgyServerNameListChange" range-key="name">
+								<input type="text" value="" v-model="monthZhgyServerName"/>
+							</picker>
+						</view>
+						<view class="month">
+							<text>企业名：</text>
+							<picker :range="ZhgyEnterpriceNameList" @change="monthZhgyEnterpriceNameListChange" range-key="name">
+								<input type="text" value="" v-model="monthEnterpriceName"/>
+							</picker>
+						</view>
 					    <view class="month">
 					    	<text>日期：</text>
 							<input type="text" value="" @tap="onDay(2)" v-model="monthData"/>
-							<button type="primary" @tap="monthDataList">搜索</button>
 					    </view>
+						<button type="primary" @tap="monthDataList">搜索</button>
 					</view>
 					<!-- 月数据信息列表 -->
 					<view class="info_lists">
@@ -216,17 +255,35 @@
 		},
 		data() {
 			return {
-				items: ['瞬时数据', '日数据', '月数据'],
+				items: ['瞬时数据', '日数据', '月数据'], //顶部切换条数组
 				current: 0,
 				name: '',  //瞬时数据企业名称
 				position_name: "",  //瞬时数据用户名
 				hourList: ["08:00", "09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00", 
 				"17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "00:00", 
 				"01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00"],  //日时间小时列表
+				scrollToView: "", 		//横向滚动条指定位置
+				ZhgyServerNameList: [],		//子服务器列表(瞬时，日，月通用)
+				ZhgyEnterpriceNameList: [],	//企业列表(瞬时，日，月通用)
+				//有关瞬时的信息
 				tableList: [], //瞬时列表
-				dayList: [],   //日数据列表
-				monthList: [],   //月数据列表
-				scrollToView: "", //横向滚动条指定位置
+				nowZhgyServerName: "" ,		//瞬时数据的子服务器搜索框
+				nowEnterpriceName: "" ,		//瞬时数据的企业搜索框
+				saveNowServerNameInfo: null,  	//瞬时保存被选中的子服务器信息
+				//有关日数据的信息
+				dayList: [],   			//日数据列表
+				dayData: ''  ,			//日数据时间搜索框值
+				dayZhgyServerName: "",	//日数据的子服务器搜索框
+				dayEnterpriceName: "",	//日数据的企业搜索框	
+				saveDayServerNameInfo: null,  	//日数据保存被选中的子服务器信息
+				//有关月数据的信息
+				monthList: [],   	//月数据列表	
+				monthData: '' ,		//月数据时间搜索框值		
+				monthZhgyServerName: "",	//月数据的子服务器搜索框
+				monthEnterpriceName: "",	//月数据的企业搜索框	
+				saveMonthServerNameInfo: null,  	//月数据保存被选中的子服务器信息									
+				num: null,  //区分日期选择器的标识 1:日时间 2:月时间
+				//日期选择器需要的属性
 				type: 1,
 				startYear: 1980,
 				endYear: 2030,
@@ -234,13 +291,15 @@
 				color: "#5677fc",
 				setDateTime: "",
 				result: "",
-				dayData: ''  ,//日数据搜索框值
-				monthData: '' ,//月数据搜索框值
-				num: null
+				//监听tabs手动滚动
+				flag: 0,
+				text: '',
+				lastX: 0
 			}
 		},
 		onLoad() {
 			this.getNowDataList();
+			this.getNowDataNameList();
 		},
 		methods: {
 			//判断屏幕手动滚动方向
@@ -279,6 +338,7 @@
 			            this.flag = 0;
 			            this.text = '没有滑动';
 			        },
+			// 日期选择器
 			onDay(type){
 				this.cancelColor = "#888";
 				this.color = "#5677fc";
@@ -305,6 +365,33 @@
 				if(this.num === 1) 	this.dayData = e.result;
 				if(this.num === 2)  this.monthData = e.result;
 			},
+			// 瞬时获取选中的子服务器
+			zhgyServerNameListChange:function(e){
+			    this.nowZhgyServerName = this.ZhgyServerNameList[e.detail.value].name;
+				this.saveNowServerNameInfo = this.ZhgyServerNameList[e.detail.value];
+			},
+			// 瞬时获取选中的企业名
+			ZhgyEnterpriceNameListChange:function(e){
+			    this.nowEnterpriceName = this.ZhgyEnterpriceNameList[e.detail.value].name;
+			},
+			// 日数据获取选中的子服务器
+			dayzhgyServerNameListChange:function(e){
+			    this.dayZhgyServerName = this.ZhgyServerNameList[e.detail.value].name;
+				this.saveDayServerNameInfo = this.ZhgyServerNameList[e.detail.value];
+			},
+			// 日数据获取选中的企业名
+			dayZhgyEnterpriceNameListChange:function(e){
+			    this.dayEnterpriceName = this.ZhgyEnterpriceNameList[e.detail.value].name;
+			},
+			// 月数据获取选中的子服务器
+			monthzhgyServerNameListChange:function(e){
+			    this.monthZhgyServerName = this.ZhgyServerNameList[e.detail.value].name;
+				this.saveMonthServerNameInfo = this.ZhgyServerNameList[e.detail.value];
+			},
+			// 月数据获取选中的企业名
+			monthZhgyEnterpriceNameListChange:function(e){
+			    this.monthEnterpriceName = this.ZhgyEnterpriceNameList[e.detail.value].name;
+			},
 			//瞬时、日、月数据页面切换
 			onClickItem(e) {
 				if (this.current !== e.currentIndex) {
@@ -312,7 +399,43 @@
 					this.scrollToView = "box" + e.currentIndex;
 				};
 			},
-			// 获取瞬时数据列表
+			//获取瞬时数据的子服务器列表和企业列表
+			getNowDataNameList(){
+				let _this = this;
+				let data1 = {
+					size: 100,
+					token: storage.getMyInfo().token,
+					pc: storage.getMyInfo().pc 
+				};
+				api.NowDataZhgyServerList(data1,res=>{
+					let data = api.getData(res);
+					_this.ZhgyServerNameList = data;
+				});
+				api.NowDataZhgyEnterpriceList(data1,res=>{
+					let data = api.getData(res);
+					_this.ZhgyEnterpriceNameList = data;
+				});
+			},
+			//搜索指定子服务器和企业的数据获取瞬时数据
+			searchNow(){
+				let _this = this;
+				let data = {
+					page: 1,
+					limit: 200,
+					token: storage.getMyInfo().token,
+					pc: storage.getMyInfo().pc,
+					serverId: this.saveNowServerNameInfo == "" ? null : this.saveNowServerNameInfo.id,
+					enterpriceName: this.nowEnterpriceName == "" ? null : this.nowEnterpriceName
+				}
+				api.NowDataList(data, res=>{
+					let data1 = api.getData(res);
+					let code = api.getCode(res);
+					if(code === 0){
+						_this.tableList = data1;						
+					}
+				});
+			},
+			//获取瞬时数据列表
 			getNowDataList(){
 				let _this = this;
 				api.NowDataList({
@@ -326,12 +449,11 @@
 					if(code === 0){
 						data.forEach(function(item){
 							_this.tableList.push(item);
-							_this.name = item.zhgyServerName;
-							_this.position_name = item.enterpriceName;
 						});
 					}
 				});
 			},
+			//获取日数据列表
 			dayDataList(){
 				if(this.dayData === '') return;
 				this.dayList = [];
@@ -339,7 +461,9 @@
 				api.DayDataList({
 			        date: this.dayData,
 					token: storage.getMyInfo().token,
-					pc: storage.getMyInfo().pc
+					pc: storage.getMyInfo().pc,
+					serverId: this.saveDayServerNameInfo == "" ? null : this.saveDayServerNameInfo.id,
+					enterpriceName: this.dayEnterpriceName == "" ? null : this.nowEnterpriceName
 				},res=>{
 					let code = api.getCode(res);
 					let data = api.getData(res);
@@ -354,6 +478,7 @@
 					};
 				});
 			},
+			//获取月数据列表
 			monthDataList(){
 				if(this.monthData === '') return;
 				this.monthList = [];
@@ -361,7 +486,9 @@
 				api.MonthDataList({
 			        date: this.monthData,
 					token: storage.getMyInfo().token,
-					pc: storage.getMyInfo().pc
+					pc: storage.getMyInfo().pc,
+					serverId: this.saveMonthServerNameInfo == "" ? null : this.saveMonthServerNameInfo.id,
+					enterpriceName: this.monthEnterpriceName == "" ? null : this.monthEnterpriceName
 				},res=>{
 					let code = api.getCode(res);
 					let data = api.getData(res);
@@ -381,8 +508,8 @@
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		padding: 40rpx 0;
+		justify-content:center;
+		padding: 40rpx 100rpx;
 		box-sizing: border-box;
 		align-items: center;
 		background: #fff;
@@ -436,13 +563,17 @@
 	}
 	button{
 		background:#009688;
-		margin-left:50rpx;
 		font-size:14px;
+		margin:0 auto;
+		width:200rpx;
 	}
 	.day, .month{
 		display:flex;
 		flex-direction:row;
 		align-items:center;
+		justify-content:space-between;
 		font-size:18px;
+		width:100%;
+		margin-bottom:40rpx;
 	}
 </style>

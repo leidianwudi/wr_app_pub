@@ -66,6 +66,7 @@
 		font-weight: bold;
 		text-align: center;
 		color: #3b4246;
+		border-top: 1px #d0dee5 solid;
 		border-right: 1px #d0dee5 solid;
 		border-bottom: 1px #d0dee5 solid;
 		padding: 15upx;

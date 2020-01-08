@@ -59,7 +59,7 @@
 		width:300rpx;
 		display: flex;
 		align-items: center;
-		padding: 14upx;
+		padding: 15upx;
 		border-right: 1px #d0dee5 solid;
 		text-align: center;
 		color: #555c60;

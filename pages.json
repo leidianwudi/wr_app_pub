@@ -37,6 +37,11 @@
 			"style":{
 				"navigationBarTitleText": "现场报备"				
 			}
+		},{
+			"path":"pages/checkAdminInfo/checkAdminInfo",
+			"style":{
+				"navigationBarTitleText": "数据调阅"
+			}
 		}
 	],
 	"globalStyle": {

@@ -67,6 +67,7 @@
 import tuiBadge from "@/components/badge/badge";
 import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue";
 import mIcon from "@/components/m-icon/m-icon.vue";
+import storage from '@/api/storage.js';
 export default {
 	components: {
 		uniNavBar,
@@ -83,9 +84,15 @@ export default {
 	},
 	methods:{
 		toCheck(){
-			uni.navigateTo({
-				url:'/pages/checkInfo/checkInfo'
-			})
+			if(storage.getMyInfo().isAdmin === 1){
+				uni.navigateTo({
+					url:'/pages/checkAdminInfo/checkAdminInfo'
+				})
+			}else{
+				uni.navigateTo({
+					url:'/pages/checkInfo/checkInfo'
+				})
+			}
 		},
 		toResort(){
 			uni.navigateTo({
@@ -95,6 +102,11 @@ export default {
 		toworkOrder(){
 			uni.navigateTo({
 				url:'/pages/workOrder/workOrder'
+			})
+		},
+		toadmin(){
+			uni.navigateTo({
+				url:'/pages/checkAdminInfo/checkAdminInfo'
 			})
 		}
 	}
