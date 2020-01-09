@@ -68,7 +68,7 @@
 					<view class="enterprise_info" @touchmove="handletouchmove" @touchstart="handletouchstart" @touchend="handletouchend">
 					    <view class="day">
 					    	<text>日期：</text>
-							<input type="text" value="" @tap="onDay(1)" v-model="dayData"/>
+							<input type="text" value="" @tap="onDay(1)" v-model="dayData" :disabled="true"/>
 							<button type="primary" @tap="dayDataList">搜索</button>
 					    </view>
 					</view>
@@ -132,7 +132,7 @@
 					<view class="enterprise_info" @touchmove="handletouchmove" @touchstart="handletouchstart" @touchend="handletouchend">
 					    <view class="month">
 					    	<text>日期：</text>
-							<input type="text" value="" @tap="onDay(2)" v-model="monthData"/>
+							<input type="text" value="" @tap="onDay(2)" v-model="monthData" :disabled="true"/>
 							<button type="primary" @tap="monthDataList">搜索</button>
 					    </view>
 					</view>
@@ -318,7 +318,7 @@
 				api.NowDataList({
 					page: 1,
 					limit: 200,
-					token: storage.getMyInfo().token,
+					token: _this.$store.state.token,
 					pc: storage.getMyInfo().pc
 				},res=>{
 					let code = api.getCode(res);
@@ -338,7 +338,7 @@
 				let _this = this;
 				api.DayDataList({
 			        date: this.dayData,
-					token: storage.getMyInfo().token,
+					token: _this.$store.state.token,
 					pc: storage.getMyInfo().pc
 				},res=>{
 					let code = api.getCode(res);
@@ -360,7 +360,7 @@
 				let _this = this;
 				api.MonthDataList({
 			        date: this.monthData,
-					token: storage.getMyInfo().token,
+					token: _this.$store.state.token,
 					pc: storage.getMyInfo().pc
 				},res=>{
 					let code = api.getCode(res);

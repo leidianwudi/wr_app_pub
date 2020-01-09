@@ -12,7 +12,8 @@ const store = new Vuex.Store({
         forcedLogin: false,
         hasLogin: false,
 		userEn: null,	//用户信息
-		//ws: ws //webscoket链接,		
+		//ws: ws //webscoket链接,
+		token: null
     },
     mutations: {
         login(state, userEn) {
@@ -22,7 +23,7 @@ const store = new Vuex.Store({
         logout(state) {
             state.userEn = null;
             state.hasLogin = false;
-        }
+        },
     }
 })
 

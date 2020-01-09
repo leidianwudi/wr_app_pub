@@ -86,6 +86,7 @@ export default {
 						if(resData.permissions.search("删除用户") != -1) data.isAdmin = 1;
 						else data.isAdmin = 0;
 						storage.setMyInfo(data);
+						this.$store.state.token = resData.userToken.token;
 						uni.reLaunch({
 							url: '/pages/index/index'
 						})

@@ -16,13 +16,13 @@
 								<view class="day">
 									<text>子服务器名：</text>
 									<picker :range="ZhgyServerNameList" @change="zhgyServerNameListChange" range-key="name">
-										<input type="text" value="" v-model="nowZhgyServerName"/>
+										<input type="text" value="" v-model="nowZhgyServerName" :disabled="true"/>
 									</picker>
 								</view>
 								<view class="day">
 									<text>企业名：</text>
 									<picker :range="ZhgyEnterpriceNameList" @change="ZhgyEnterpriceNameListChange" range-key="name">
-										<input type="text" value="" v-model="nowEnterpriceName"/>
+										<input type="text" value="" v-model="nowEnterpriceName" :disabled="true"/>
 									</picker>
 								</view>
 								<button type="primary" @tap="searchNow">搜索</button>
@@ -84,18 +84,18 @@
 						<view class="day">
 							<text>子服务器名：</text>
 							<picker :range="ZhgyServerNameList" @change="dayzhgyServerNameListChange" range-key="name">
-								<input type="text" value="" v-model="dayZhgyServerName"/>
+								<input type="text" value="" v-model="dayZhgyServerName" :disabled="true"/>
 							</picker>
 						</view>
 						<view class="day">
 							<text>企业名：</text>
 							<picker :range="ZhgyEnterpriceNameList" @change="dayZhgyEnterpriceNameListChange" range-key="name">
-								<input type="text" value="" v-model="dayEnterpriceName"/>
+								<input type="text" value="" v-model="dayEnterpriceName" :disabled="true"/>
 							</picker>
 						</view>
 					    <view class="day">
 					    	<text>日期：</text>
-							<input type="text" value="" @tap="onDay(1)" v-model="dayData"/>
+							<input type="text" value="" @tap="onDay(1)" v-model="dayData" :disabled="true"/>
 					    </view>
 						<button type="primary" @tap="dayDataList">搜索</button>
 					</view>
@@ -160,18 +160,18 @@
 						<view class="month">
 							<text>子服务器名：</text>
 							<picker :range="ZhgyServerNameList" @change="monthzhgyServerNameListChange" range-key="name">
-								<input type="text" value="" v-model="monthZhgyServerName"/>
+								<input type="text" value="" v-model="monthZhgyServerName" :disabled="true"/>
 							</picker>
 						</view>
 						<view class="month">
 							<text>企业名：</text>
 							<picker :range="ZhgyEnterpriceNameList" @change="monthZhgyEnterpriceNameListChange" range-key="name">
-								<input type="text" value="" v-model="monthEnterpriceName"/>
+								<input type="text" value="" v-model="monthEnterpriceName" :disabled="true"/>
 							</picker>
 						</view>
 					    <view class="month">
 					    	<text>日期：</text>
-							<input type="text" value="" @tap="onDay(2)" v-model="monthData"/>
+							<input type="text" value="" @tap="onDay(2)" v-model="monthData" :disabled="true"/>
 					    </view>
 						<button type="primary" @tap="monthDataList">搜索</button>
 					</view>
@@ -404,51 +404,74 @@
 				let _this = this;
 				let data1 = {
 					size: 100,
-					token: storage.getMyInfo().token,
+					token: _this.$store.state.token,
 					pc: storage.getMyInfo().pc 
 				};
 				api.NowDataZhgyServerList(data1,res=>{
 					let data = api.getData(res);
-					_this.ZhgyServerNameList = data;
+					let code = api.getCode(res);
+					if(code === 0){
+						_this.ZhgyServerNameList = data;
+					}
 				});
 				api.NowDataZhgyEnterpriceList(data1,res=>{
 					let data = api.getData(res);
-					_this.ZhgyEnterpriceNameList = data;
+					let code = api.getCode(res);
+					if(code === 0){
+						_this.ZhgyEnterpriceNameList = data;;
+					}
 				});
+
 			},
 			//搜索指定子服务器和企业的数据获取瞬时数据
 			searchNow(){
 				let _this = this;
-				let data = {
-					page: 1,
-					limit: 200,
-					token: storage.getMyInfo().token,
-					pc: storage.getMyInfo().pc,
-					serverId: this.saveNowServerNameInfo == "" ? null : this.saveNowServerNameInfo.id,
-					enterpriceName: this.nowEnterpriceName == "" ? null : this.nowEnterpriceName
-				}
-				api.NowDataList(data, res=>{
-					let data1 = api.getData(res);
-					let code = api.getCode(res);
-					if(code === 0){
-						_this.tableList = data1;						
+				uni.showLoading({
+				    title: '加载中',
+					success() {
+						let data = {
+							page: 1,
+							limit: 200,
+							token: _this.$store.state.token,
+							pc: storage.getMyInfo().pc,
+							serverId: _this.saveNowServerNameInfo == "" ? null : _this.saveNowServerNameInfo.id,
+							enterpriceName: _this.nowEnterpriceName == "" ? null : _this.nowEnterpriceName
+						}
+						api.NowDataList(data, res=>{
+							let data1 = api.getData(res);
+							let code = api.getCode(res);
+							if(code === 0){
+								_this.tableList = data1;
+								uni.hideLoading();
+							}
+						});
 					}
 				});
 			},
 			//获取瞬时数据列表
 			getNowDataList(){
 				let _this = this;
-				api.NowDataList({
-					page: 1,
-					limit: 200,
-					token: storage.getMyInfo().token,
-					pc: storage.getMyInfo().pc
-				},res=>{
-					let code = api.getCode(res);
-					let data = api.getData(res);
-					if(code === 0){
-						data.forEach(function(item){
-							_this.tableList.push(item);
+				uni.showLoading({
+				    title: '加载中',
+					success() {
+						api.NowDataList({
+							page: 1,
+							limit: 200,
+							token: _this.$store.state.token,
+							pc: storage.getMyInfo().pc
+						},res=>{
+							let code = api.getCode(res);
+							let data = api.getData(res);
+							if(code === 0){
+								data.forEach(function(item, index){
+									_this.tableList.push(item);
+									if(index == data.length -1) uni.hideLoading();
+								});
+								// for(let i=0; i<data.length; i++){
+								// 	_this.tableList.push(data[i]);
+								// 	if(_this.tableList.length == data.length) uni.hideLoading();
+								// }
+							}
 						});
 					}
 				});
@@ -456,47 +479,59 @@
 			//获取日数据列表
 			dayDataList(){
 				if(this.dayData === '') return;
-				this.dayList = [];
 				let _this = this;
-				api.DayDataList({
-			        date: this.dayData,
-					token: storage.getMyInfo().token,
-					pc: storage.getMyInfo().pc,
-					serverId: this.saveDayServerNameInfo == "" ? null : this.saveDayServerNameInfo.id,
-					enterpriceName: this.dayEnterpriceName == "" ? null : this.nowEnterpriceName
-				},res=>{
-					let code = api.getCode(res);
-					let data = api.getData(res);
-					if(code === 0){
-						data.forEach(function(item){
-							 item.hour = "";
-							_this.dayList.push(item);
+				uni.showLoading({
+					title: '加载中',
+					success() {
+						_this.dayList = [];
+						api.DayDataList({
+						    date: _this.dayData,
+							token: _this.$store.state.token,
+							pc: storage.getMyInfo().pc,
+							serverId: _this.saveDayServerNameInfo == "" ? null : _this.saveDayServerNameInfo.id,
+							enterpriceName: _this.dayEnterpriceName == "" ? null : _this.nowEnterpriceName
+						},res=>{
+							let code = api.getCode(res);
+							let data = api.getData(res);
+							if(code === 0){
+								data.forEach(function(item, index){
+									 item.hour = "";
+									_this.dayList.push(item);
+									if(index == data.length -1) uni.hideLoading();
+								});
+								for(let i = 0; i < _this.hourList.length; i++){
+									_this.dayList[i].hour = _this.hourList[i];
+								};
+							};
 						});
-						for(let i = 0; i < _this.hourList.length; i++){
-							_this.dayList[i].hour = _this.hourList[i];
-						};
-					};
+					}
 				});
 			},
 			//获取月数据列表
 			monthDataList(){
 				if(this.monthData === '') return;
-				this.monthList = [];
 				let _this = this;
-				api.MonthDataList({
-			        date: this.monthData,
-					token: storage.getMyInfo().token,
-					pc: storage.getMyInfo().pc,
-					serverId: this.saveMonthServerNameInfo == "" ? null : this.saveMonthServerNameInfo.id,
-					enterpriceName: this.monthEnterpriceName == "" ? null : this.monthEnterpriceName
-				},res=>{
-					let code = api.getCode(res);
-					let data = api.getData(res);
-					if(code === 0){
-						data.forEach(function(item){
-							_this.monthList.push(item);
+				uni.showLoading({
+				    title: '加载中',
+					success() {
+						_this.monthList = [];
+						api.MonthDataList({
+						    date: _this.monthData,
+							token: _this.$store.state.token,
+							pc: storage.getMyInfo().pc,
+							serverId: _this.saveMonthServerNameInfo == "" ? null : _this.saveMonthServerNameInfo.id,
+							enterpriceName: _this.monthEnterpriceName == "" ? null : _this.monthEnterpriceName
+						},res=>{
+							let code = api.getCode(res);
+							let data = api.getData(res);
+							if(code === 0){
+								data.forEach(function(item, index){
+									_this.monthList.push(item);
+									if(index == data.length -1) uni.hideLoading();									
+								});
+							};
 						});
-					};
+					}
 				});
 			}
 		}
