@@ -60,8 +60,6 @@
 				<text>工单管理</text>
 			</view>
 		</view>
-		
-		<button type="primary" class="exit_btn" @tap="exit">退出登录</button>
 	</view>
 </template>
 
@@ -80,8 +78,8 @@ export default {
 		return {
 			level: 1,
 			msgNum: 3,
-			warn: '无',
-			notice: '......................'
+			warn: '',
+			notice: ''
 		}
 	},
 	methods:{
@@ -110,12 +108,6 @@ export default {
 			uni.navigateTo({
 				url:'/pages/checkAdminInfo/checkAdminInfo'
 			})
-		},
-		exit(){
-			storage.outLogin();
-			uni.reLaunch({
-				url: '/pages/user/login/login'
-			});
 		}
 	}
 }
@@ -250,12 +242,5 @@ export default {
 		margin-top:10rpx;
 		color:#2E2E2E;
 		font-size:15px;
-	}
-	.exit_btn{
-		position:absolute;
-		bottom:100rpx;
-		left:50%;
-		transform: translateX(-50%);
-		width:70%;
 	}
 </style>

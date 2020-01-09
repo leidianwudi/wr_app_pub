@@ -57,7 +57,7 @@
 
 <style>
 	.t-th {
-        width:300rpx;
+        width:200rpx;
 		height:30rpx;
 		display:flex;
 		justify-content:center;
@@ -69,7 +69,7 @@
 		border-top: 1px #d0dee5 solid;
 		border-right: 1px #d0dee5 solid;
 		border-bottom: 1px #d0dee5 solid;
-		padding: 15upx;
+		padding: 15upx 0;
 		flex-shrink: 0;
 	}
 </style>

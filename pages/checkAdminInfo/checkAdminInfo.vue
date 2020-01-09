@@ -35,7 +35,7 @@
 											<t-tr>
 												<t-th>子服务器</t-th>
 												<t-th>企业</t-th>
-												<t-th>时间</t-th>
+												<t-th style="width: 290rpx;">时间</t-th>
 												<t-th>瞬时</t-th>
 												<t-th>累计</t-th>
 												<t-th>配额</t-th>
@@ -55,7 +55,7 @@
 											<t-tr v-for="(item, index) in tableList" :key="index">
 												<t-td>{{ item.zhgyServerName }}</t-td>
 												<t-td>{{ item.enterpriceName }}</t-td>
-												<t-td>{{ item.time }}</t-td> <!-- 时间 -->
+												<t-td style="width: 290rpx;">{{ item.time }}</t-td> <!-- 时间 -->
 												<t-td>{{ item.nowWater }}</t-td>  <!-- 瞬时流量 -->
 												<t-td>{{ item.addWater }}</t-td> <!-- 累计流量 -->
 												<t-td>{{ item.dayAmount }}</t-td>  <!-- 日配额 -->
@@ -105,7 +105,7 @@
 							<block class="box">
 								<t-table>
 									<t-tr>
-										<t-th>日期</t-th>
+										<t-th >日期</t-th>
 										<t-th>时流量(m3)</t-th>
 										<t-th>累计流量(m3)</t-th>
 										<t-th>COD(mg/l)</t-th>
@@ -294,14 +294,27 @@
 				//监听tabs手动滚动
 				flag: 0,
 				text: '',
-				lastX: 0
+				lastX: 0,
+				intervalID: null
 			}
 		},
 		onLoad() {
 			this.getNowDataList();
 			this.getNowDataNameList();
+			this.myTimerOpen();
+		},
+		onUnload() {
+			this.myTimerStop();  //关闭瞬时数据请求定时器
 		},
 		methods: {
+			//每20秒自动获取一次瞬时数据
+			myTimerOpen(){
+				this.intervalID = setInterval(this.getNowDataList.bind(this), 20000);
+			},
+			//关闭瞬时数据请求定时器
+			myTimerStop() {
+			    clearInterval(this.intervalID);
+			},
 			//判断屏幕手动滚动方向
 			handletouchmove: function(event) {
 			            // console.log(event)
@@ -448,31 +461,27 @@
 					}
 				});
 			},
-			//获取瞬时数据列表
+			//获取瞬时数据列表（每20秒获取一次）
 			getNowDataList(){
+				if(this.current != 0) return;
+				this.tableList = [];
 				let _this = this;
-				uni.showLoading({
-				    title: '加载中',
-					success() {
-						api.NowDataList({
-							page: 1,
-							limit: 200,
-							token: _this.$store.state.token,
-							pc: storage.getMyInfo().pc
-						},res=>{
-							let code = api.getCode(res);
-							let data = api.getData(res);
-							if(code === 0){
-								data.forEach(function(item, index){
-									_this.tableList.push(item);
-									if(index == data.length -1) uni.hideLoading();
-								});
-								// for(let i=0; i<data.length; i++){
-								// 	_this.tableList.push(data[i]);
-								// 	if(_this.tableList.length == data.length) uni.hideLoading();
-								// }
-							}
+				api.NowDataList({
+					page: 1,
+					limit: 200,
+					token: _this.$store.state.token,
+					pc: storage.getMyInfo().pc
+				},res=>{
+					let code = api.getCode(res);
+					let data = api.getData(res);
+					if(code === 0){
+						data.forEach(function(item, index){
+							_this.tableList.push(item);
 						});
+						// for(let i=0; i<data.length; i++){
+						// 	_this.tableList.push(data[i]);
+						// 	if(_this.tableList.length == data.length) uni.hideLoading();
+						// }
 					}
 				});
 			},

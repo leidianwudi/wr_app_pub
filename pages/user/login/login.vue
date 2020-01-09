@@ -81,7 +81,8 @@ export default {
 						let data = {
 							nickName: resData.user.nickName,
 							token: resData.userToken.token,
-							pc: resData.pc
+							pc: resData.pc,
+							userName: resData.user.userName
 						};
 						if(resData.permissions.search("删除用户") != -1) data.isAdmin = 1;
 						else data.isAdmin = 0;

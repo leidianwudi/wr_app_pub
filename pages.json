@@ -42,11 +42,32 @@
 			"style":{
 				"navigationBarTitleText": "数据调阅"
 			}
+		},{
+			"path":"pages/user/my/my",
+			"style":{
+				"navigationBarTitleText": "我的信息"
+			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarBackgroundColor": "#517FDF",
 		"backgroundColor": "#fff"
+	},
+	"tabBar": {
+	    "color": "#7a7e83",
+	    "selectedColor": "#0faeff",
+	    "backgroundColor": "#ffffff",
+	    "list": [{
+		    "pagePath": "pages/index/index",
+		    "text": "首页",
+		    "iconPath": "static/img/my.png",
+		    "selectedIconPath": "static/img/my_a.png"
+		},{
+	        "pagePath": "pages/user/my/my",
+	        "text": "我的",
+	        "iconPath": "static/img/list.png",
+	        "selectedIconPath": "static/img/list_a.png"
+	    }]
 	}
 }

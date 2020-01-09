@@ -13,8 +13,10 @@
 				<view class="box" id="box0">
 							<!-- 瞬时数据企业信息 -->
 							<view class="enterprise_info" @touchmove="handletouchmove" @touchstart="handletouchstart" @touchend="handletouchend">
-								<view class="enterprise_name">{{name}}</view>
-								<view class="position">{{position_name}}</view>
+								<view class="day">
+									<view class="enterprise_name">{{name}}</view>
+									<view class="position">{{position_name}}</view>
+								</view>
 							</view>
 							<!-- 瞬时数据信息列表 -->
 							<view class="info_lists">
@@ -22,7 +24,7 @@
 									<block class="box">
 										<t-table>
 											<t-tr>
-												<t-th>时间</t-th>
+												<t-th style="width: 290rpx;">时间</t-th>
 												<t-th>瞬时</t-th>
 												<t-th>累计</t-th>
 												<t-th>配额</t-th>
@@ -40,7 +42,7 @@
 												<t-th>阀门状态</t-th>
 											</t-tr>
 											<t-tr v-for="(item, index) in tableList" :key="index">
-												<t-td>{{ item.time }}</t-td> <!-- 时间 -->
+												<t-td  style="width: 290rpx;">{{ item.time }}</t-td> <!-- 时间 -->
 												<t-td>{{ item.nowWater }}</t-td>  <!-- 瞬时流量 -->
 												<t-td>{{ item.addWater }}</t-td>  <!-- 累计流量 -->
 												<t-td>{{ item.dayAmount }}</t-td>  <!-- 日配额 -->
@@ -236,13 +238,26 @@
 				result: "",
 				dayData: ''  ,//日数据搜索框值
 				monthData: '' ,//月数据搜索框值
-				num: null
+				num: null,
+				intervalID: null
 			}
 		},
 		onLoad() {
 			this.getNowDataList();
+			this.myTimerOpen();
+		},
+		onUnload() {
+			this.myTimerStop();  //关闭瞬时数据请求定时器
 		},
 		methods: {
+			//每20秒自动获取一次瞬时数据
+			myTimerOpen(){
+				this.intervalID = setInterval(this.getNowDataList.bind(this), 20000);
+			},
+			//关闭瞬时数据请求定时器
+			myTimerStop() {
+				clearInterval(this.intervalID);
+			},
 			//判断屏幕手动滚动方向
 			handletouchmove: function(event) {
 			            // console.log(event)
@@ -314,7 +329,9 @@
 			},
 			// 获取瞬时数据列表
 			getNowDataList(){
+				if(this.current != 0) return;
 				let _this = this;
+				this.tableList = [];
 				api.NowDataList({
 					page: 1,
 					limit: 200,
@@ -401,7 +418,6 @@
 	}
 
 	.enterprise_name {
-		margin-top: 20rpx;
 		font-size:17px;
 		font-weight:bold;
 		color:#393D49;
@@ -417,9 +433,9 @@
 		width: 100%;
 	}
 	.position{
-		font-size:16px;
+		font-size:17px;
 		color:#01AAED;
-		margin-top:10rpx;
+		margin-left:10rpx;
 	}
 	.box{
 		width:100%;
