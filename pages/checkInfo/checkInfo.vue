@@ -24,7 +24,7 @@
 									<block class="box">
 										<t-table>
 											<t-tr>
-												<t-th style="width: 290rpx;">时间</t-th>
+												<t-th-time>时间</t-th-time>
 												<t-th>瞬时</t-th>
 												<t-th>累计</t-th>
 												<t-th>配额</t-th>
@@ -42,7 +42,7 @@
 												<t-th>阀门状态</t-th>
 											</t-tr>
 											<t-tr v-for="(item, index) in tableList" :key="index">
-												<t-td  style="width: 290rpx;">{{ item.time }}</t-td> <!-- 时间 -->
+												<t-td-time>{{ item.time }}</t-td-time> <!-- 时间 -->
 												<t-td>{{ item.nowWater }}</t-td>  <!-- 瞬时流量 -->
 												<t-td>{{ item.addWater }}</t-td>  <!-- 累计流量 -->
 												<t-td>{{ item.dayAmount }}</t-td>  <!-- 日配额 -->
@@ -204,6 +204,8 @@
 	import tTh from '@/components/t-table/t-th.vue';
 	import tTr from '@/components/t-table/t-tr.vue';
 	import tTd from '@/components/t-table/t-td.vue';
+	import tThTime from '@/components/t-table/t-th-time.vue';
+	import tTdTime from '@/components/t-table/t-td-time.vue';
 	import api from '@/api/api.js';
 	import storage from '@/api/storage.js';
 	import tuiDatetime from "@/components/dateTime/dateTime";
@@ -214,7 +216,9 @@
 			tTh,
 			tTr,
 			tTd,
-			tuiDatetime
+			tuiDatetime,
+			tTdTime,
+			tThTime
 		},
 		data() {
 			return {

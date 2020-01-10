@@ -35,7 +35,7 @@
 											<t-tr>
 												<t-th>子服务器</t-th>
 												<t-th>企业</t-th>
-												<t-th style="width: 290rpx;">时间</t-th>
+												<t-th-time>时间</t-th-time>
 												<t-th>瞬时</t-th>
 												<t-th>累计</t-th>
 												<t-th>配额</t-th>
@@ -55,7 +55,7 @@
 											<t-tr v-for="(item, index) in tableList" :key="index">
 												<t-td>{{ item.zhgyServerName }}</t-td>
 												<t-td>{{ item.enterpriceName }}</t-td>
-												<t-td style="width: 290rpx;">{{ item.time }}</t-td> <!-- 时间 -->
+												<t-td-time>{{ item.time }}</t-td-time> <!-- 时间 -->
 												<t-td>{{ item.nowWater }}</t-td>  <!-- 瞬时流量 -->
 												<t-td>{{ item.addWater }}</t-td> <!-- 累计流量 -->
 												<t-td>{{ item.dayAmount }}</t-td>  <!-- 日配额 -->
@@ -240,6 +240,8 @@
 	import tTable from '@/components/t-table/t-table.vue';
 	import tTh from '@/components/t-table/t-th.vue';
 	import tTr from '@/components/t-table/t-tr.vue';
+	import tThTime from '@/components/t-table/t-th-time.vue';
+	import tTdTime from '@/components/t-table/t-td-time.vue';
 	import tTd from '@/components/t-table/t-td.vue';
 	import api from '@/api/api.js';
 	import storage from '@/api/storage.js';
@@ -251,7 +253,9 @@
 			tTh,
 			tTr,
 			tTd,
-			tuiDatetime
+			tuiDatetime,
+			tTdTime,
+			tThTime
 		},
 		data() {
 			return {
@@ -295,7 +299,7 @@
 				flag: 0,
 				text: '',
 				lastX: 0,
-				intervalID: null
+				intervalID: null //定时器id
 			}
 		},
 		onLoad() {
