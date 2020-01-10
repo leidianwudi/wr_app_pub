@@ -1,5 +1,6 @@
 import httpUtil from '@/common/httpUtil.js';
 import config from '@/static/app/config.js';
+import store from "@/store/store.js";
 //网络操作封装
 module.exports = {
 	//取返回数据内,code数据
@@ -35,6 +36,7 @@ module.exports = {
 	//查询瞬时数据
 	NowDataList: function(postData, funSuccess)
 	{
+		postData.token = store.state.token;  //添加token
 		let data = {
 			"url": config.baseUrl2 + "/zhgyData/NowDataList",
 			"head":["Content-Type:application/x-www-form-urlencoded",
@@ -48,6 +50,7 @@ module.exports = {
 	//查询日数据
 	DayDataList: function(postData, funSuccess) 
 	{
+		postData.token = store.state.token;  //添加token
 		let data = {
 			"url": config.baseUrl2 + "/zhgyData/EnterpriceDayDataList",
 			"head":["Content-Type:application/x-www-form-urlencoded",
@@ -61,6 +64,7 @@ module.exports = {
 	//查询月数据
 	MonthDataList: function(postData, funSuccess) 
 	{
+		postData.token = store.state.token;  //添加token
 		let data = {
 			"url": config.baseUrl2 + "/zhgyData/EnterpriceMonthDataList",
 			"head":["Content-Type:application/x-www-form-urlencoded",
@@ -74,6 +78,7 @@ module.exports = {
 	//获取瞬时数据的子服务器列表
 	NowDataZhgyServerList: function(postData, funSuccess)
 	{
+		postData.token = store.state.token;  //添加token
 		let data = {
 			"url": config.baseUrl2 + "/zhgyServer/List",
 			"head":["Content-Type:application/x-www-form-urlencoded",
@@ -87,6 +92,7 @@ module.exports = {
 	//获取瞬时数据的企业名称列表
 	NowDataZhgyEnterpriceList: function(postData, funSuccess)
 	{
+		postData.token = store.state.token;  //添加token
 		let data = {
 			"url": config.baseUrl2 + "/zhgyEnterprice/List",
 			"head":["Content-Type:application/x-www-form-urlencoded",

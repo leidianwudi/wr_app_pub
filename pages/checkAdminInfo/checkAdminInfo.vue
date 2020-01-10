@@ -421,7 +421,6 @@
 				let _this = this;
 				let data1 = {
 					size: 100,
-					token: _this.$store.state.token,
 					pc: storage.getMyInfo().pc 
 				};
 				api.NowDataZhgyServerList(data1,res=>{
@@ -449,7 +448,6 @@
 						let data = {
 							page: 1,
 							limit: 200,
-							token: _this.$store.state.token,
 							pc: storage.getMyInfo().pc,
 							serverId: _this.saveNowServerNameInfo == "" ? null : _this.saveNowServerNameInfo.id,
 							enterpriceName: _this.nowEnterpriceName == "" ? null : _this.nowEnterpriceName
@@ -473,7 +471,6 @@
 				api.NowDataList({
 					page: 1,
 					limit: 200,
-					token: _this.$store.state.token,
 					pc: storage.getMyInfo().pc
 				},res=>{
 					let code = api.getCode(res);
@@ -499,7 +496,6 @@
 						_this.dayList = [];
 						api.DayDataList({
 						    date: _this.dayData,
-							token: _this.$store.state.token,
 							pc: storage.getMyInfo().pc,
 							serverId: _this.saveDayServerNameInfo == "" ? null : _this.saveDayServerNameInfo.id,
 							enterpriceName: _this.dayEnterpriceName == "" ? null : _this.nowEnterpriceName
@@ -530,7 +526,6 @@
 						_this.monthList = [];
 						api.MonthDataList({
 						    date: _this.monthData,
-							token: _this.$store.state.token,
 							pc: storage.getMyInfo().pc,
 							serverId: _this.saveMonthServerNameInfo == "" ? null : _this.saveMonthServerNameInfo.id,
 							enterpriceName: _this.monthEnterpriceName == "" ? null : _this.monthEnterpriceName

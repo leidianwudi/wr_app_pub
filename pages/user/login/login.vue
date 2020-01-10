@@ -11,9 +11,15 @@
                 <text class="title login_info">密码：</text>
                 <m-input type="password" displayable v-model="password" placeholder="请输入密码"></m-input>
             </view>
-			
-			
         </view>
+		
+		<view class="input-group savePwdGroup">
+			<view class="input-row savePwd">
+			    <text class="title login_info text-df margin-right-sm">记住密码：</text>
+			    <switch @change="SetShadow" :class="shadow?'checked':''" color="#39B54A"></switch>
+			</view>
+		</view>
+
         <view class="btn-row">
             <button class="primary" @tap="bindLogin" hover-class="onbutton">登录</button>
         </view>
@@ -31,6 +37,7 @@
 import mInput from '@/components/m-input.vue';
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
+import util from '@/common/util.js';
 export default {
         components: {
             mInput
@@ -40,9 +47,14 @@ export default {
                 account: '',   //输入的账号
                 password: '',  //输入的密码
                 positionTop: 0,
+				shadow: false,
             }
         },
-        methods: {                                                                                       
+        methods: {   
+			//控制勾选按钮
+			SetShadow(e) {
+				this.shadow = e.detail.value;
+			},
             initPosition() {
                 /**
                  * 使用 absolute 定位，并且设置 bottom 值进行定位。软键盘弹出时，底部会因为窗口变化而被顶上来。
@@ -73,10 +85,11 @@ export default {
 				}
             },
 			onLogin(postData){
+				let _this = this;
 				api.login(postData, res=>{
 					let code = api.getCode(res);
 					let resData = api.getData(res);
-					console.log(res);
+					// console.log(res);
 					if(code === 0){
 						let data = {
 							nickName: resData.user.nickName,
@@ -86,8 +99,15 @@ export default {
 						};
 						if(resData.permissions.search("删除用户") != -1) data.isAdmin = 1;
 						else data.isAdmin = 0;
+						if(_this.shadow){
+							let userInfo = {
+								userName: _this.account,
+								password: _this.password
+							}
+							storage.setMyUserInfo(userInfo);
+						}else storage.delMyUserInfo();
 						storage.setMyInfo(data);
-						this.$store.state.token = resData.userToken.token;
+						this.$store.state.setToken(resData.userToken.token);
 						uni.reLaunch({
 							url: '/pages/index/index'
 						})
@@ -104,7 +124,13 @@ export default {
         },
         onReady() {
             this.initPosition();
-        }
+        },
+		onLoad() {
+			if(!util.isEmpty(storage.getMyUserInfo())){
+				this.account = storage.getMyUserInfo().userName;
+				this.password = storage.getMyUserInfo().password; 
+			}
+		}
 }
 </script>
 
@@ -161,6 +187,15 @@ export default {
 		border:1px solid #e3e3e3;
 		color:rgba(0, 0, 0,.8);
 		font-size:14px;
+	}
+	.savePwdGroup{
+		margin-top:10rpx;
+	}
+	.savePwd{
+		padding:10rpx 10rpx;
+		display:flex;
+		justify-content: space-between;
+		align-items:center;
 	}
 </style>
 

@@ -38,7 +38,7 @@ module.exports = {
 		let code = this.getCode(res);
 		let data = this.getData(res);
 		if(data.hasOwnProperty("token")){
-			this.$store.state.token = data.token;
+			this.$store.state.setToken(data.token)
 		}
 		if(code === -1){
 			let msg = this.getMsg(res);

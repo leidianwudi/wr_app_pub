@@ -339,7 +339,6 @@
 				api.NowDataList({
 					page: 1,
 					limit: 200,
-					token: _this.$store.state.token,
 					pc: storage.getMyInfo().pc
 				},res=>{
 					let code = api.getCode(res);
@@ -359,7 +358,6 @@
 				let _this = this;
 				api.DayDataList({
 			        date: this.dayData,
-					token: _this.$store.state.token,
 					pc: storage.getMyInfo().pc
 				},res=>{
 					let code = api.getCode(res);
@@ -381,7 +379,6 @@
 				let _this = this;
 				api.MonthDataList({
 			        date: this.monthData,
-					token: _this.$store.state.token,
 					pc: storage.getMyInfo().pc
 				},res=>{
 					let code = api.getCode(res);

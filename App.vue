@@ -98,6 +98,7 @@
 		display: flex;
 		flex-direction: row;
 		position: relative;
+		padding:10rpx 10rpx;
 	}
 
 	.input-row .title {
