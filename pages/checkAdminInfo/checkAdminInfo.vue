@@ -471,7 +471,6 @@
 			//获取瞬时数据列表（每20秒获取一次）
 			getNowDataList(){
 				if(this.current != 0) return;
-				this.tableList = [];
 				let _this = this;
 				api.NowDataList({
 					page: 1,
@@ -483,9 +482,7 @@
 					if(code === 0){
 						// console.log(data);
 						let list = tranNowList.tranNowList(data);
-						list.forEach(function(item, index){
-							_this.tableList.push(item);
-						});
+						_this.tableList = list;
 						// for(let i=0; i<data.length; i++){
 						// 	_this.tableList.push(data[i]);
 						// 	if(_this.tableList.length == data.length) uni.hideLoading();
@@ -500,7 +497,6 @@
 				uni.showLoading({
 					title: '加载中',
 					success() {
-						_this.dayList = [];
 						api.DayDataList({
 						    date: _this.dayData,
 							pc: storage.getMyInfo().pc,
@@ -512,7 +508,7 @@
 							if(code === 0){								
 								let list = tranDayList.tranDayList(data);
 								list.forEach(function(item, index){
-									 item.hour = "";
+									item.hour = "";
 									_this.dayList.push(item);
 									if(index == data.length -1) uni.hideLoading();
 								});	
@@ -531,7 +527,6 @@
 				uni.showLoading({
 				    title: '加载中',
 					success() {
-						_this.monthList = [];
 						api.MonthDataList({
 						    date: _this.monthData,
 							pc: storage.getMyInfo().pc,
@@ -543,9 +538,9 @@
 							if(code === 0){
 								let list = tranMoneyList.tranMoneyList(data);
 								list.forEach(function(item, index){
-									_this.monthList.push(item);
 									if(index == data.length -1) uni.hideLoading();									
 								});
+								_this.monthList = list;
 							};
 						});
 					}

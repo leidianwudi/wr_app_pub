@@ -340,7 +340,6 @@
 			getNowDataList(){
 				if(this.current != 0) return;
 				let _this = this;
-				this.tableList = [];
 				api.NowDataList({
 					page: 1,
 					limit: 200,
@@ -351,10 +350,10 @@
 					if(code === 0){
 						let list = tranNowList.tranNowList(data);
 						list.forEach(function(item){
-							_this.tableList.push(item);
 							_this.name = item.zhgyServerName;
 							_this.position_name = item.enterpriceName;
 						});
+						_this.tableList = list;
 					}
 				});
 			},
@@ -371,7 +370,7 @@
 					if(code === 0){
 						let list = tranDayList.tranDayList(data);
 						list.forEach(function(item){
-							 item.hour = "";
+							item.hour = "";
 							_this.dayList.push(item);
 						});						
 						for(let i = 0; i < _this.hourList.length; i++){
@@ -392,9 +391,7 @@
 					let data = api.getData(res);
 					if(code === 0){
 						let list = tranMoneyList.tranMoneyList(data);
-						list.forEach(function(item){
-							_this.monthList.push(item);
-						});
+                        _this.monthList = list;
 					};
 				});
 			}

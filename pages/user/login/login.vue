@@ -16,7 +16,8 @@
 		<view class="input-group savePwdGroup">
 			<view class="input-row savePwd">
 			    <text class="title login_info text-df margin-right-sm">记住密码：</text>
-			    <switch @change="SetShadow" :class="shadow?'checked':''" color="#39B54A"></switch>
+			    <!-- <switch @change="SetShadow" :class="shadow?'checked':''" color="#39B54A"></switch> -->
+				<switch @change="SetShadow" checked color="#0FAEFF"></switch>
 			</view>
 		</view>
 
