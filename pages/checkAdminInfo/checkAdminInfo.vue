@@ -8,11 +8,11 @@
 			<view v-show="current === 2" @tap="btn3"></view>
 		</view>
 		
-		<scroll-view :scroll-x="true" :scroll-into-view="scrollToView" class="scrollbox" :scroll-with-animation="true">
+		<!-- <scroll-view :scroll-x="true" :scroll-into-view="scrollToView" class="scrollbox" :scroll-with-animation="true"> -->
 			    <!-- 瞬时数据界面 -->
-				<view class="box" id="box0">
+				<view class="box" id="box0" v-if="dataTye === 0">
 							<!-- 瞬时数据企业信息 -->
-							<view class="enterprise_info" @touchmove="handletouchmove" @touchstart="handletouchstart" @touchend="handletouchend">
+							<view class="enterprise_info">
 								<view class="day">
 									<text>子服务器名：</text>
 									<picker :range="ZhgyServerNameList" @change="zhgyServerNameListChange" range-key="name">
@@ -78,9 +78,9 @@
 							</view>
 				</view>
 				<!-- 日数据界面 -->
-				<view class="box" id="box1">
+				<view class="box" id="box1" v-if="dataTye === 1">
 					<!-- 日数据信息 -->
-					<view class="enterprise_info" @touchmove="handletouchmove" @touchstart="handletouchstart" @touchend="handletouchend">
+					<view class="enterprise_info">
 						<view class="day">
 							<text>子服务器名：</text>
 							<picker :range="ZhgyServerNameList" @change="dayzhgyServerNameListChange" range-key="name">
@@ -154,9 +154,9 @@
 					</view>
 				</view>
 				<!-- 月数据界面 -->
-				<view class="box" id="box2">
+				<view class="box" id="box2" v-if="dataTye === 2">
 					<!-- 月数据信息 -->
-					<view class="enterprise_info"  @touchmove="handletouchmove" @touchstart="handletouchstart" @touchend="handletouchend">
+					<view class="enterprise_info">
 						<view class="month">
 							<text>子服务器名：</text>
 							<picker :range="ZhgyServerNameList" @change="monthzhgyServerNameListChange" range-key="name">
@@ -229,7 +229,7 @@
 						</scroll-view>
 					</view>
 				</view>
-		</scroll-view>
+		<!-- </scroll-view> -->
 		<tui-datetime ref="dateTime" :type="type" :startYear="startYear" :endYear="endYear" :cancelColor="cancelColor" :color="color"
 		 :setDateTime="setDateTime" @confirm="change"></tui-datetime>
 	</view>
@@ -246,6 +246,9 @@
 	import api from '@/api/api.js';
 	import storage from '@/api/storage.js';
 	import tuiDatetime from "@/components/dateTime/dateTime";
+    import tranNowList from "@/api/tranNowList.js";
+	import tranDayList from "@/api/tranDayList.js";
+	import tranMoneyList from "@/api/tranMoneyList.js";
 	export default {
 		components: {
 			uniSegmentedControl,
@@ -299,7 +302,8 @@
 				flag: 0,
 				text: '',
 				lastX: 0,
-				intervalID: null //定时器id
+				intervalID: null, //定时器id
+				dataTye: 0 //控制瞬时，日，月数据页面切换的参数
 			}
 		},
 		onLoad() {
@@ -320,41 +324,41 @@
 			    clearInterval(this.intervalID);
 			},
 			//判断屏幕手动滚动方向
-			handletouchmove: function(event) {
-			            // console.log(event)
-			            if (this.flag !== 0) {
-			                return;
-			            };
-			            let currentX = event.touches[0].pageX;
-			            let tx = currentX - this.lastX;
-			            let text = '';
-			            this.mindex = -1;
-			            //左右方向滑动
-			                if (tx < 0) {
-			                    text = '向左滑动';
-			                    this.flag = 1;
-								if(this.current == 2) return;
-								else this.current++;
-								this.scrollToView = "box" + this.current;
-			                //  this.getList();  //调用列表的方法
-			                } else if (tx > 0) {
-			                    text = '向右滑动';
-			                    this.flag = 2;
-								if(this.current == 0) return;
-								else this.current--;
-								this.scrollToView = "box" + this.current;
-			                }
-			            //将当前坐标进行保存以进行下一次计算
-			            this.lastX = currentX;
-			            this.text = text;
-			        },
-			        handletouchstart: function(event) {
-			            this.lastX = event.touches[0].pageX;
-			        },
-			        handletouchend: function(event) {
-			            this.flag = 0;
-			            this.text = '没有滑动';
-			        },
+			// handletouchmove: function(event) {
+			//             // console.log(event)
+			//             if (this.flag !== 0) {
+			//                 return;
+			//             };
+			//             let currentX = event.touches[0].pageX;
+			//             let tx = currentX - this.lastX;
+			//             let text = '';
+			//             this.mindex = -1;
+			//             //左右方向滑动
+			//                 if (tx < 0) {
+			//                     text = '向左滑动';
+			//                     this.flag = 1;
+			// 					if(this.current == 2) return;
+			// 					else this.current++;
+			// 					this.scrollToView = "box" + this.current;
+			//                 //  this.getList();  //调用列表的方法
+			//                 } else if (tx > 0) {
+			//                     text = '向右滑动';
+			//                     this.flag = 2;
+			// 					if(this.current == 0) return;
+			// 					else this.current--;
+			// 					this.scrollToView = "box" + this.current;
+			//                 }
+			//             //将当前坐标进行保存以进行下一次计算
+			//             this.lastX = currentX;
+			//             this.text = text;
+			//         },
+			//         handletouchstart: function(event) {
+			//             this.lastX = event.touches[0].pageX;
+			//         },
+			//         handletouchend: function(event) {
+			//             this.flag = 0;
+			//             this.text = '没有滑动';
+			//         },
 			// 日期选择器
 			onDay(type){
 				this.cancelColor = "#888";
@@ -413,7 +417,8 @@
 			onClickItem(e) {
 				if (this.current !== e.currentIndex) {
 					this.current = e.currentIndex;
-					this.scrollToView = "box" + e.currentIndex;
+					// this.scrollToView = "box" + e.currentIndex;
+					this.dataTye = e.currentIndex;
 				};
 			},
 			//获取瞬时数据的子服务器列表和企业列表
@@ -476,7 +481,9 @@
 					let code = api.getCode(res);
 					let data = api.getData(res);
 					if(code === 0){
-						data.forEach(function(item, index){
+						// console.log(data);
+						let list = tranNowList.tranNowList(data);
+						list.forEach(function(item, index){
 							_this.tableList.push(item);
 						});
 						// for(let i=0; i<data.length; i++){
@@ -502,12 +509,13 @@
 						},res=>{
 							let code = api.getCode(res);
 							let data = api.getData(res);
-							if(code === 0){
-								data.forEach(function(item, index){
+							if(code === 0){								
+								let list = tranDayList.tranDayList(data);
+								list.forEach(function(item, index){
 									 item.hour = "";
 									_this.dayList.push(item);
 									if(index == data.length -1) uni.hideLoading();
-								});
+								});	
 								for(let i = 0; i < _this.hourList.length; i++){
 									_this.dayList[i].hour = _this.hourList[i];
 								};
@@ -533,7 +541,8 @@
 							let code = api.getCode(res);
 							let data = api.getData(res);
 							if(code === 0){
-								data.forEach(function(item, index){
+								let list = tranMoneyList.tranMoneyList(data);
+								list.forEach(function(item, index){
 									_this.monthList.push(item);
 									if(index == data.length -1) uni.hideLoading();									
 								});
@@ -615,8 +624,11 @@
 		flex-direction:row;
 		align-items:center;
 		justify-content:space-between;
-		font-size:18px;
+		font-size:15px;
 		width:100%;
 		margin-bottom:40rpx;
+	}
+	.day>button, .month>button{
+		font-size:12px;
 	}
 </style>

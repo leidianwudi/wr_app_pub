@@ -30,7 +30,7 @@ module.exports = {
 			"data": postData,
 			"type":"post"
 		}
-		httpUtil.post('wr/request', data, funSuccess);
+		httpUtil.post('wr/request2', data, funSuccess);
 	},
 	
 	//查询瞬时数据
@@ -44,7 +44,7 @@ module.exports = {
 			"data": postData,
 			"type":"post"
 		}
-		httpUtil.post('wr/request', data, funSuccess);
+		httpUtil.post('wr/request2', data, funSuccess);
 	},
 	
 	//查询日数据
@@ -58,7 +58,7 @@ module.exports = {
 			"data": postData,
 			"type":"get"
 		}
-		httpUtil.post('wr/request', data, funSuccess);
+		httpUtil.post('wr/request2', data, funSuccess);
 	},
 	
 	//查询月数据
@@ -72,7 +72,7 @@ module.exports = {
 			"data": postData,
 			"type":"get"
 		}
-		httpUtil.post('wr/request', data, funSuccess);
+		httpUtil.post('wr/request2', data, funSuccess);
 	},
 	
 	//获取瞬时数据的子服务器列表
@@ -86,7 +86,7 @@ module.exports = {
 			"data": postData,
 			"type":"get"
 		}
-		httpUtil.post('wr/request', data, funSuccess);
+		httpUtil.post('wr/request2', data, funSuccess);
 	},
 	
 	//获取瞬时数据的企业名称列表
@@ -100,6 +100,8 @@ module.exports = {
 			"data": postData,
 			"type":"get"
 		}
-		httpUtil.post('wr/request', data, funSuccess);
+		httpUtil.post('wr/request2', data, funSuccess);
 	},
+	
+	
 } 
