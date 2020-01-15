@@ -1,6 +1,32 @@
 <template>
 	<view class="content">
 		<view class="main">
+			<!-- 运维类别单选 -->
+			<view class="uni-title uni-common-mt title" style="font-size:16px;">*运维类别：</view>
+			<view class="info">
+				<checkbox-group>
+					<label>
+					    <checkbox value="cb"/>
+						<text>设备标定</text>
+					</label>
+					<label>
+					    <checkbox value="cb"/>
+						<text>设备清洗</text>
+					</label>
+					<label>
+					    <checkbox value="cb"/>
+						<text>设备校准</text>
+					</label>
+					<label>
+					    <checkbox value="cb"/>
+						<text>设备故障提示</text>
+					</label>
+					<label>
+					    <checkbox value="cb"/>
+						<text>日常运维</text>
+					</label>					
+				</checkbox-group>
+			</view>
 			<!-- 数据因子多选 -->
 			<view class="uni-title uni-common-mt title" style="font-size:16px;">*数据因子：</view>
 			<view class="info">
@@ -54,7 +80,7 @@
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*报备人信息：</view>
 				<view class="">
-					<textarea value="" placeholder="" />
+					<textarea value="" placeholder=""/>
 				</view>
 			</view>
 			<!-- 附件 -->
@@ -80,7 +106,7 @@ export default{
 	},
 	data() {
 		return {
-			type: 1,
+			type: 0,
 			startYear: 1980,
 			endYear: 2030,
 			cancelColor: "#888",
@@ -98,7 +124,7 @@ export default{
 			this.setDateTime = "";
 			this.startYear = 1980;
 			this.endYear = 2030;
-            this.type = 1;
+            this.type = 0;
 			if(num ===1) this.num = 1;
 			else this.num = 2;
 			this.$refs.dateTime.show()
@@ -120,13 +146,17 @@ export default{
 	}
 	.title{
 		font-size:18px;
-		margin-bottom:30rpx;
-		margin-top:50rpx;
+		margin-bottom:20rpx;
+		margin-top:30rpx;
 	}
 	.info checkbox-group{
 		display:flex;
-		justify-content:space-between;
+		justify-content:flex-start;
 		font-size:15px;
+		flex-wrap: wrap;
+	}
+	.info label{
+		margin-top:20rpx;
 	}
 	.info text{
 		margin-left:10rpx;

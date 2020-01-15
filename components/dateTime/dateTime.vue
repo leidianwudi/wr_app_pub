@@ -19,19 +19,25 @@
 							{{ formatNum(item)}}<text class="tui-text">月</text>
 						</view>
 					</picker-view-column>
-					<picker-view-column v-if="!reset && (type==1 || type==2)">
+					<picker-view-column v-if="!reset && (type==1 || type==2 || type == 0)">
 						<view class="tui-column-item" v-for="(item,index) in days" :key="index">
 							{{ formatNum(item) }}<text class="tui-text">日</text>
 						</view>
 					</picker-view-column>
-					<picker-view-column v-if="!reset && (type==1 || type==4)">
+					<picker-view-column v-if="!reset && (type==1 || type==4 || type == 0)">
 						<view class="tui-column-item" v-for="(item,index) in hours" :key="index">
 							{{ formatNum(item) }}<text class="tui-text">时</text>
 						</view>
 					</picker-view-column>
-					<picker-view-column v-if="!reset && (type==1 || type==4)">
+					<picker-view-column v-if="!reset && (type==1 || type==4 || type == 0)">
 						<view class="tui-column-item" v-for="(item,index) in minutes" :key="index">
 							{{ formatNum(item) }}<text class="tui-text">分</text>
+						</view>
+					</picker-view-column>
+					
+					<picker-view-column v-if="!reset && (type==1 || type==4 || type == 0)">
+						<view class="tui-column-item" v-for="(item,index) in seconds" :key="index">
+							{{ formatNum(item) }}<text class="tui-text">秒</text>
 						</view>
 					</picker-view-column>
 				</picker-view>
@@ -83,11 +89,13 @@
 				days: [],
 				hours: [],
 				minutes: [],
+				seconds: [],
 				year: 0,
 				month: 0,
 				day: 0,
 				hour: 0,
 				minute: 0,
+				sencod: 0,
 				startDate: "",
 				endDate: "",
 				value: [0, 0, 0, 0, 0],
@@ -142,11 +150,21 @@
 				this.day = time.getDate();
 				this.hour = time.getHours();
 				this.minute = time.getMinutes();
+				this.second = time.getSeconds();
 			},
 			initData() {
 				this.initSelectValue()
 				this.reset = false
 				switch (this.type) {
+					case 0:
+						this.value = [0, 0, 0, 0, 0, 0];
+						this.setYears();
+						this.setMonths();
+						this.setDays();
+						this.setHours();
+						this.setMinutes();
+						this.setSeconds();
+						break;
 					case 1:
 						this.value = [0, 0, 0, 0, 0];
 						this.setYears();
@@ -208,6 +226,12 @@
 					this.$set(this.value, this.value.length - 1, this.getIndex(this.minutes, this.minute));
 				}, 8);
 			},
+			setSeconds() {
+				this.seconds = this.generateArray(0, 59);
+				setTimeout(()=> {
+					this.$set(this.value, this.value.length - 1, this.getIndex(this.seconds, this.second));
+				}, 8);
+			},
 			show() {
 				setTimeout(() => {
 					this.isShow = true;
@@ -217,8 +241,18 @@
 				this.isShow = false;
 			},
 			change(e) {
+				console.log(e);
 				this.value = e.detail.value;
+				console.log(this.value);
 				switch (this.type) {
+					case 0:
+						this.year = this.years[this.value[0]];
+						this.month = this.months[this.value[1]];
+						this.day = this.days[this.value[2]];
+						this.hour = this.hours[this.value[3]];
+						this.minute = this.minutes[this.value[4]];
+						this.second = this.seconds[this.value[5]];
+						break;
 					case 1:
 						this.year = this.years[this.value[0]];
 						this.month = this.months[this.value[1]];
@@ -251,7 +285,19 @@
 				let day = this.formatNum(this.day || 0);
 				let hour = this.formatNum(this.hour || 0);
 				let minute = this.formatNum(this.minute || 0);
+				let second = this.formatNum(this.second || 0);
 				switch (this.type) {
+					case 0:
+						result = {
+							year: year,
+							month: month,
+							day: day,
+							hour: hour,
+							minute: minute,
+							minute: second,
+							result: `${year}-${month}-${day} ${hour}:${minute}:${second}`
+						}
+						break;
 					case 1:
 						result = {
 							year: year,

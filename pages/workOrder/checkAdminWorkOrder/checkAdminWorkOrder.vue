@@ -1,5 +1,10 @@
 <template>
-	<view class="content">
+	<view class="content" style="padding-bottom:150rpx;">
+		<!-- 底部按钮组 -->
+		<view class="footer_btn">
+			<button type="primary" class="pass" @tap="handle">处理</button>
+			<button type="primary" class="refuse" @tap="del">删除</button>
+		</view>
 		<!-- 工单详情信息 -->
 		<view class="workOrder_info">
 			<!-- 查看报错信息 -->
@@ -178,7 +183,7 @@ export default{
 		//处理按钮
 		handle(){
 			uni.navigateTo({
-				url: '/pages/handleData/handleData'
+				url: '/pages/workOrder/checkAdminWorkOrder/handleData/handleData'
 			})
 		},
 		//处理按钮
@@ -198,6 +203,27 @@ export default{
 <style>
 	text{
 		word-wrap: break-word;
+	}
+	.footer_btn{
+		border-top:1px solid #e3e3e3;
+		position:fixed;
+		bottom:0;
+		left:0;
+		right:0;
+		z-index:999;
+		display:flex;
+		align-items:center;
+		height:150rpx;
+		background:#fff;
+	}
+	.footer_btn>button{
+		width:40%;
+	}
+	.pass{
+		background:#009688;
+	}
+	.refuse{
+		background:#FF5722;
 	}
 	.workOrder_info{
 		padding:10rpx 30rpx;

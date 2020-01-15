@@ -33,6 +33,11 @@
 				"navigationBarTitleText": "查看工单"				
 			}
 		},{
+			"path":"pages/workOrder/checkAdminWorkOrder/checkAdminWorkOrder",
+			"style":{
+				"navigationBarTitleText": "查看工单"				
+			}
+		},{
 			"path":"pages/report/report",
 			"style":{
 				"navigationBarTitleText": "现场报备"				
@@ -46,6 +51,11 @@
 			"path":"pages/user/my/my",
 			"style":{
 				"navigationBarTitleText": "我的信息"
+			}
+		},{
+			"path":"pages/workOrder/checkAdminWorkOrder/handleData/handleData",
+			"style":{
+				"navigationBarTitleText": "处理工单"
 			}
 		}
 	],
