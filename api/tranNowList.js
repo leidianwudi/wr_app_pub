@@ -3,6 +3,7 @@ module.exports = {
 		let newList = [];
 		nowList.forEach(function(item){
 			let newObj = {};
+			newObj.COD = item.COD;
 			newObj.PH = item.PH;
 			newObj.SS = item.SS;
 			newObj.enterpriceId = item.enterpriceId;
