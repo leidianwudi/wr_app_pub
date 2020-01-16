@@ -104,4 +104,59 @@ module.exports = {
 	},
 	
 	
+	//获取数据报错列表
+	zhgyDataHandleList: function(postData, funSuccess)
+	{
+		postData.token = store.state.token;  //添加token
+		let data = {
+			"url": config.baseUrl2 + "/zhgyDataHandle/List",
+			"head":["Content-Type:application/x-www-form-urlencoded",
+					"Referer:" + config.baseUrl2 + "/admin/zhgy/dataHandle/dataReport.html"],
+			"data": postData,
+			"type":"post"
+		}
+		httpUtil.post('wr/request2', data, funSuccess);
+	},
+	
+	//获取数据报错详细信息
+	zhgyDataHandle: function(postData, funSuccess)
+	{
+		postData.token = store.state.token;  //添加token
+		let data = {
+			"url": config.baseUrl2 + "/zhgyDataHandle/Get",
+			"head":["Content-Type:application/x-www-form-urlencoded",
+					"Referer:" + config.baseUrl2 + "/admin/zhgy/dataHandle/viewDataReport.html"],
+			"data": postData,
+			"type":"get"
+		}
+		httpUtil.post('wr/request2', data, funSuccess);
+	},
+	
+	//管理员处理数据报错
+	editDataReport: function(postData, funSuccess)
+	{
+		postData.token = store.state.token;  //添加token
+		let data = {
+			"url": config.baseUrl2 + "/zhgyDataHandle/Edit",
+			"head":["Content-Type:application/x-www-form-urlencoded",
+					"Referer:" + config.baseUrl2 + "/admin/zhgy/dataHandle/editDataReport.html"],
+			"data": postData,
+			"type":"post"
+		}
+		httpUtil.post('wr/request2', data, funSuccess);
+	},
+	
+	//管理员删除数据报错
+	dataReport: function(postData, funSuccess)
+	{
+		postData.token = store.state.token;  //添加token
+		let data = {
+			"url": config.baseUrl2 + "/zhgyDataHandle/Delete",
+			"head":["Content-Type:application/x-www-form-urlencoded",
+					"Referer:" + config.baseUrl2 + "/admin/zhgy/dataHandle/dataReport.html"],
+			"data": postData,
+			"type":"get"
+		}
+		httpUtil.post('wr/request2', data, funSuccess);
+	},
 } 

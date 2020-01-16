@@ -9,25 +9,17 @@
 				<view class="people_info">
 					<text>处理操作：</text>
 					<view class="info">
-						<checkbox-group>
-							<label>
-							    <checkbox value="cb"/>
-								<text>待处理</text>
-							</label>
-							<label>
-							    <checkbox value="cb"/>
-								<text>处理完成</text>
-							</label>
-							<label>
-							    <checkbox value="cb"/>
-								<text>处理终止</text>
-							</label>							
-						</checkbox-group>
+						<radio-group @change="getState">
+							<label class="radio"><radio value="0" />待处理</label>
+							<label class="radio"><radio value="1" />处理完成</label>
+							<label class="radio"><radio value="2" />处理终止</label>							
+						</radio-group>
 					</view>
 				</view>
 				<!-- 处理反馈 -->
 				<view class="people_info">
-					<text>处理反馈：<textarea :value="state_msg" placeholder="" class="textarea_box" autoHeight="true"/></text>
+					<text>处理反馈：</text>
+					<textarea v-model="state_msg" placeholder="" class="textarea_box" autoHeight="true"/>
 				</view>
 				<view class="people_info">
 					<button type="primary" class="submit" @tap="submit">确认处理</button>
@@ -39,26 +31,46 @@
 
 <script>
 import mIcon from "@/components/m-icon/m-icon.vue";
+import storage from '@/api/storage.js';
+import api from '@/api/api.js';
+import tran from '@/common/tran.js';
 export default{
 	components: {
 		mIcon,
 	},
 	data() {
 		return {
-			name: "报备人",
-			phone: "1843284732",
-			state_msg: '测试111111111111111111111111111111111111111111111111111111111111111111111111111111111',
-			state:"处理完成",
-			starTime: '2020-01-15 00:00:00',
-			endTime:  '2020-01-15 00:00:00',
-			inputMsg:'1'
+			id: null,
+			userEn: null,
+			operationType: null,
+			state_msg: '',  //处理反馈
+			state: null //处理操作
 		}
 	},
+	onLoad(res) {
+		this.id = res.id;
+		this.operationType = res.operationType;
+		this.userEn = storage.getMyInfo();
+	},
 	methods:{
+		getState(e){
+			this.state = parseInt(e.detail.value);
+		},
 		//提交处理
 		submit(){
-			uni.navigateBack({
-				delta: 1
+			api.editDataReport({
+				id: this.id,
+				state: this.state,
+				handleMsg: this.state_msg,
+				operationType: this.operationType,
+				pc: this.userEn.pc
+			},res=>{
+				let code = api.getCode(res);
+				if(code === 0){
+					uni.navigateBack({
+						delta: 1
+					})
+				}
 			})
 		}
 	}
@@ -112,9 +124,9 @@ export default{
 		font-size:14px;
 		background:#009688;
 	}
-	.info checkbox-group{
+	.info radio-group{
 		display:flex;
-		justify-content:flex-start;
+		justify-content:space-between;
 		flex-wrap: wrap;
 		font-size:15px;
 		margin-top:20rpx;

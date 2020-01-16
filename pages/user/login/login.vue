@@ -48,7 +48,7 @@ export default {
                 account: '',   //输入的账号
                 password: '',  //输入的密码
                 positionTop: 0,
-				shadow: false,
+				shadow: true,
             }
         },
         methods: {   

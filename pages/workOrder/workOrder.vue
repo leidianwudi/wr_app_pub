@@ -1,6 +1,6 @@
 <template>
 	<view class="content" style="background:#fff;">
-		<view class="workeOrder_list" v-for="(item, index) in workeOrder_list" :key="index" @tap="toCheckWorkOrder">
+		<view class="workeOrder_list" v-for="(item, index) in workeOrder_list" :key="index"  @tap="toCheckWorkOrder(item.id)">
 			<view class="workeOrder_info">
 				<view class="info">
 					报备来源：
@@ -8,16 +8,22 @@
 					<text class="margin_l">{{item.zhgyEnterpriceName}}</text>  <!-- 企业名 -->
 				</view>
 				<view class="info">
-					运维类型：<text class="type">{{item.type}}</text>  <!-- 运维类型 -->
+					运维类型：<text class="type" v-if="item.operationType ===1">设备标定</text>  <!-- 运维类型 -->
+							 <text class="type" v-if="item.operationType ===2">设备清洗</text>
+							 <text class="type" v-if="item.operationType ===3">设备校准</text>
+							 <text class="type" v-if="item.operationType ===4">设备故障提示</text>
+							 <text class="type" v-if="item.operationType ===5">日常运维</text>
 				</view>
 				<view class="info">
-					运维类型：<text :class="item.state == '待处理' ? 'state1' : 'state0'">{{item.state}}</text>  <!-- 状态 -->
+					运维类型：<text class="state2" v-if="item.state === 0">待处理</text>  <!-- 状态 -->
+							<text class="state1" v-if="item.state === 1">处理完成</text>
+							<text class="state0" v-if="item.state === 2">处理终止</text>
 				</view>	
 				<view class="info">
 					报备因子：<text>{{item.dataType}}</text>  <!-- 报备因子 -->
 				</view>								
 				<view class="info">
-					开始时间：{{item.starTime}}  <!-- 开始时间 -->
+					开始时间：{{item.startTime}}  <!-- 开始时间 -->
 				</view>
 			</view>
 			<m-icon type="forward"></m-icon>
@@ -28,101 +34,49 @@
 <script>
 import mIcon from "@/components/m-icon/m-icon.vue";
 import storage from '@/api/storage.js';
+import api from '@/api/api.js';
 export default{
 	components: {
 		mIcon
 	},
 	data() {
 		return {
-			workeOrder_list: [{
-				zhgyEnterpriceName: '万峰盛',
-				zhgyServerName: '锦尚工业区',
-				type: "设备故障提示",
-				state: "待处理",
-				dataType: 'SS,PH',
-				starTime: "2020-01-15 00:00:00",
-			},{
-				zhgyEnterpriceName: '万峰盛',
-				zhgyServerName: '锦尚工业区',
-				type: "设备故障提示",
-				state: "处理终止",		
-				dataType: 'SS,PH',
-				starTime: "2020-01-15 00:00:00",
-				endTime:"2020-01-15 00:00:00"	
-			},{
-				zhgyEnterpriceName: '万峰盛',
-				zhgyServerName: '锦尚工业区',
-				type: "设备校准",
-				state: "处理完成",
-				dataType: 'SS,PH',
-				starTime: "2020-01-15 00:00:00",
-			},{
-				zhgyEnterpriceName: '万峰盛',
-				zhgyServerName: '锦尚工业区',
-				type: "设备故障提示",
-				state: "待处理",	
-				dataType: 'SS,PH',
-				starTime: "2020-01-15 00:00:00",
-			},{
-				zhgyEnterpriceName: '万峰盛',
-				zhgyServerName: '锦尚工业区',
-				type: "设备校准",
-				state: "处理终止",
-				dataType: 'SS,PH',
-				starTime: "2020-01-15 00:00:00",
-			},{
-				zhgyEnterpriceName: '万峰盛',
-				zhgyServerName: '锦尚工业区',
-				type: "设备校准",
-				state: "待处理",		
-				dataType: 'SS,PH',
-				starTime: "2020-01-15 00:00:00",
-			},{
-				zhgyEnterpriceName: '万峰盛',
-				zhgyServerName: '锦尚工业区',
-				type: "设备校准",
-				state: "处理终止",	
-				dataType: 'SS,PH',
-				starTime: "2020-01-15 00:00:00",
-			},{
-				zhgyEnterpriceName: '万峰盛',
-				zhgyServerName: '锦尚工业区',
-				type: "设备故障提示",
-				state: "待处理",
-				starTime: "2020-01-15 00:00:00",
-			},{
-				zhgyEnterpriceName: '万峰盛',
-				zhgyServerName: '锦尚工业区',
-				type: "设备故障提示",
-				state: "处理终止",
-				starTime: "2020-01-15 00:00:00",
-			},{
-				zhgyEnterpriceName: '万峰盛',
-				zhgyServerName: '锦尚工业区',
-				type: "设备故障提示",
-				state: "待处理",
-				starTime: "2020-01-15 00:00:00",
-			},{
-				zhgyEnterpriceName: '万峰盛',
-				zhgyServerName: '锦尚工业区',
-				type: "设备故障提示",
-				state: "待处理",
-				starTime: "2020-01-15 00:00:00",
-			},]
+			workeOrder_list: [],
+			userEn: null
 		}
 	},
 	methods:{
-		toCheckWorkOrder(){
+		toCheckWorkOrder(id){
 			if(storage.getMyInfo().isAdmin === 1){
 				uni.navigateTo({
-					url: "/pages/workOrder/checkAdminWorkOrder/checkAdminWorkOrder"
-				})
+					url: "/pages/workOrder/checkAdminWorkOrder/checkAdminWorkOrder?id=" + id
+				});
 			}else{
 				uni.navigateTo({
-					url: "/pages/workOrder/checkWorkOrder/checkWorkOrder"
-				})
+					url: "/pages/workOrder/checkWorkOrder/checkWorkOrder?id=" + id
+				});
 			}
-		}
+		},
+		getZhgyDataHandleList(){
+			let _this = this;
+			api.zhgyDataHandleList({
+				page: 1,
+				limit: 10,
+				pc: this.userEn.pc
+			},res=>{
+				let code = api.getCode(res);
+				let data = api.getData(res);
+				if(code === 0){
+					_this.workeOrder_list = data;
+				}
+			})
+		},
+	},
+	onLoad() {
+		this.userEn = storage.getMyInfo();  //获取我的信息
+	},
+	onShow() {
+		this.getZhgyDataHandleList();  //获取数据报错列表		
 	}
 }
 </script>
@@ -154,11 +108,15 @@ export default{
 		color:#01AAED;
 	}
 	.state0{
-		color:#FFB800;
+		color:#FF5722;
 		font-weight:bold;
 	}
 	.state1{
-		color:#FF5722;
+		color:#009688;
+		font-weight:bold;
+	}
+	.state2{
+		color:#FFB800;
 		font-weight:bold;
 	}
 </style>
