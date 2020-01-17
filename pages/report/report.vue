@@ -5,11 +5,16 @@
 			<view class="uni-title uni-common-mt title" style="font-size:16px;">*运维类别：</view>
 			<view class="info">
 				<radio-group @change="getType">
-					<label class="radio"><radio value="1" />设备标定</label>
-					<label class="radio"><radio value="2" />设备清洗</label>
-					<label class="radio"><radio value="3" />备注校准</label>	
-					<label class="radio"><radio value="4" />设备故障提示</label>
-					<label class="radio"><radio value="5" />日常运维</label>																
+					<label class="radio">
+						<radio value="1" />设备标定</label>
+					<label class="radio">
+						<radio value="2" />设备清洗</label>
+					<label class="radio">
+						<radio value="3" />备注校准</label>
+					<label class="radio">
+						<radio value="4" />设备故障提示</label>
+					<label class="radio">
+						<radio value="5" />日常运维</label>
 				</radio-group>
 			</view>
 			<!-- 数据因子多选 -->
@@ -17,115 +22,132 @@
 			<view class="info">
 				<checkbox-group @change="getDataType">
 					<label>
-					    <checkbox value="cod"/>
+						<checkbox value="COD" />
 						<text>COD</text>
 					</label>
 					<label>
-					    <checkbox value="andan"/>
+						<checkbox value="氨氮" />
 						<text>氨氮</text>
 					</label>
 					<label>
-					    <checkbox value="ss"/>
+						<checkbox value="SS" />
 						<text>SS</text>
 					</label>
 					<label>
-					    <checkbox value="ph"/>
+						<checkbox value="PH" />
 						<text>HP</text>
 					</label>
 				</checkbox-group>
 			</view>
 			<view class="people_info">
-				<text>正确值：</text> 
+				<text v-if="cod || andan || ss || ph">*正确值：</text>
 				<view class="correct">
-			        <view class="COD"  v-if="cod ? true : false">
-			        	<text class="margin_T correct_name">COD：</text>
-			            <view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" @tap="show('codStart')" v-model="codstartTime" placeholder="开始时间"/>
-			            	<input type="text" value="" v-model="codStartInputMsg" placeholder="输入开始正确值"  class="margin_T infoWidth"/>
-			            </view>
-			            <view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="codendTime" placeholder="结束时间" @tap="show('codEnd')"/>							
-			            	<input type="text" value="" v-model="codEndInputMsg"  class="margin_T infoWidth" placeholder="输入结束正确值"/>
-			            </view>
-			        </view>
-					
-					<view class=""  v-if="andan ? true : false">
+					<view class="COD" v-if="cod ? true : false">
+						<text class="margin_T correct_name">COD：</text>
+						<view class="correct_info">
+							<input class="margin_T timeWidth" type="text" value="" @tap="show('codStart')" v-model="codstartTime"
+							 placeholder="开始时间" />
+							<input type="text" value="" v-model="codStartInputMsg" placeholder="输入开始正确值" class="margin_T infoWidth" />
+						</view>
+						<view class="correct_info">
+							<input class="margin_T timeWidth" type="text" value="" v-model="codendTime" placeholder="结束时间" @tap="show('codEnd')" />
+							<input type="text" value="" v-model="codEndInputMsg" class="margin_T infoWidth" placeholder="输入结束正确值" />
+						</view>
+					</view>
+
+					<view class="" v-if="andan ? true : false">
 						<text class="margin_T correct_name">氨氮：</text>
-			            <view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="andanstartTime" placeholder="开始时间" @tap="show('andanStart')"/>
-			            	<input type="text" value="" v-model="andanStartInputMsg" placeholder="输入开始正确值"  class="margin_T infoWidth"/>
-			            </view>
-			            <view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="andanendTime" placeholder="结束时间" @tap="show('andanEnd')"/>								
-			            	<input type="text" value="" v-model="andanEndInputMsg" placeholder="输入结束正确值" class="margin_T infoWidth"/>
-			            </view>
+						<view class="correct_info">
+							<input class="margin_T timeWidth" type="text" value="" v-model="andanstartTime" placeholder="开始时间" @tap="show('andanStart')" />
+							<input type="text" value="" v-model="andanStartInputMsg" placeholder="输入开始正确值" class="margin_T infoWidth" />
+						</view>
+						<view class="correct_info">
+							<input class="margin_T timeWidth" type="text" value="" v-model="andanendTime" placeholder="结束时间" @tap="show('andanEnd')" />
+							<input type="text" value="" v-model="andanEndInputMsg" placeholder="输入结束正确值" class="margin_T infoWidth" />
+						</view>
 					</view>
-					
-					<view class="SS"  v-if="ss ? true : false">
+
+					<view class="SS" v-if="ss ? true : false">
 						<text class="margin_T correct_name">SS：</text>
-			            <view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="ssstartTime" placeholder="开始时间" @tap="show('ssStart')"/>							
-			            	<input type="text" value="" v-model="ssStartInputMsg" placeholder="输入开始正确值"  class="margin_T infoWidth"/>
-			            </view>
-			            <view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="ssendTime" placeholder="结束时间" @tap="show('ssEnd')"/>		
-			            	<input type="text" value="" v-model="ssEndInputMsg" placeholder="输入结束正确值" class="margin_T infoWidth"/>
-			            </view>
+						<view class="correct_info">
+							<input class="margin_T timeWidth" type="text" value="" v-model="ssstartTime" placeholder="开始时间" @tap="show('ssStart')" />
+							<input type="text" value="" v-model="ssStartInputMsg" placeholder="输入开始正确值" class="margin_T infoWidth" />
+						</view>
+						<view class="correct_info">
+							<input class="margin_T timeWidth" type="text" value="" v-model="ssendTime" placeholder="结束时间" @tap="show('ssEnd')" />
+							<input type="text" value="" v-model="ssEndInputMsg" placeholder="输入结束正确值" class="margin_T infoWidth" />
+						</view>
 					</view>
-					<view class="PH"  v-if="ph ? true : false">
+					<view class="PH" v-if="ph ? true : false">
 						<text class="margin_T correct_name">PH：</text>
-			            <view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="phstartTime" placeholder="开始时间" @tap="show('phStart')"/>
-			            	<input type="text" value="" v-model="phStartInputMsg"  placeholder="输入结束正确值"  class="margin_T infoWidth"/>
-			            </view>
-			            <view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="phendTime" placeholder="结束时间" @tap="show('phEnd')"/>	
-			            	<input type="text" value="" v-model="phEndInputMsg"  placeholder="输入结束正确值" class="margin_T infoWidth"/>
-			            </view>
+						<view class="correct_info">
+							<input class="margin_T timeWidth" type="text" value="" v-model="phstartTime" placeholder="开始时间" @tap="show('phStart')" />
+							<input type="text" value="" v-model="phStartInputMsg" placeholder="输入结束正确值" class="margin_T infoWidth" />
+						</view>
+						<view class="correct_info">
+							<input class="margin_T timeWidth" type="text" value="" v-model="phendTime" placeholder="结束时间" @tap="show('phEnd')" />
+							<input type="text" value="" v-model="phEndInputMsg" placeholder="输入结束正确值" class="margin_T infoWidth" />
+						</view>
 					</view>
 				</view>
 			</view>
 			<!-- 选择时间 -->
-            <view class="input-box">
-            	<view class="uni-title uni-common-mt date_test">*开始时间：</view>
-            	<view class="date_1">
-					<input type="text" value="" @tap="show(1)" v-model="beginInfo"/>
-            	</view>
-            </view>
+			<view class="input-box">
+				<view class="uni-title uni-common-mt date_test">*开始时间：</view>
+				<view class="date_1">
+					<input type="text" value="" @tap="show(1)" v-model="beginInfo" />
+				</view>
+			</view>
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*结束时间：</view>
 				<view class="date_1">
-					<input type="text" value="" @tap="show(2)" v-model="result"/>
+					<input type="text" value="" @tap="show(2)" v-model="result" />
 				</view>
 			</view>
 			<!-- 报备人 -->
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*报备人：</view>
 				<view class="date_2">
-					<input type="text" value="" v-model="name"/>
+					<input type="text" value="" v-model="name" />
 				</view>
 			</view>
 			<!-- 报备人手机 -->
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*报备人手机：</view>
 				<view class="">
-					<input type="text" value="" v-model="phone"/>
+					<input type="text" value="" v-model="phone" />
 				</view>
 			</view>
 			<!-- 报备人信息 -->
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*报备人信息：</view>
 				<view class="">
-					<textarea value="" placeholder=""  v-model="info"/>
-				</view>
+					<textarea value="" placeholder="" v-model="info" />
+					</view>
 			</view>
 			<!-- 附件 -->
-			<view class="input-box">
-				<view class="uni-title uni-common-mt date_test">*附件：</view>
-				<button type="primary"><m-icon type="plusempty" color="#fff" size="20"></m-icon>附件上传</button>
+			<view class="input-box submit_flie">
+                <view class="flie_bar">
+                	<view class="uni-title uni-common-mt date_test">附件：</view>
+                	<button type="primary" class="flie" @tap="submitFlie"><m-icon type="plusempty" color="#fff" size="20"></m-icon>附件上传</button>
+                </view>
+				<block class="box">
+					<t-table>
+						<t-tr style="background: #F2F2F2;">
+							<t-th style="border-left: 1px #d0dee5 solid;">文件名</t-th>
+							<t-th>大小</t-th>
+							<t-th>操作</t-th>
+						</t-tr>
+						<t-tr v-for="(item, index) in flieList" :key="index">
+							<t-td style="border-left: 1px #d0dee5 solid; border-bottom: 1px #d0dee5 solid;">{{ item.name }}</t-td> 
+							<t-td style="border-bottom: 1px #d0dee5 solid;">{{ item.size }}kb</t-td>
+							<t-td style="border-bottom: 1px #d0dee5 solid;"><button type="primary" class="del_flie">删除</button></t-td>
+						</t-tr>
+					</t-table>
+				</block>
 			</view>
 			
-			<button type="primary">立即提交</button>
+			<button type="primary" @tap="submit" class="submit">立即提交</button>
 		</view>
 		<tui-datetime ref="dateTime" :type="type" :startYear="startYear" :endYear="endYear" :cancelColor="cancelColor" :color="color"
 		 :setDateTime="setDateTime" @confirm="change"></tui-datetime>
@@ -135,13 +157,35 @@
 <script>
 import tuiDatetime from "@/components/dateTime/dateTime";
 import mIcon from "@/components/m-icon/m-icon.vue";
+import api from "@/api/api.js";
+import storage from "@/api/storage.js";
+import util from "@/common/util.js";
+import tran from "@/common/tran.js";
+import tTable from '@/components/t-table/t-table.vue';
+import tTh from '@/components/t-table/t-th.vue';
+import tTr from '@/components/t-table/t-tr.vue';
+import tTd from '@/components/t-table/t-td.vue';
 export default{
 	components: {
 		tuiDatetime,
-		mIcon
+		mIcon,
+		tTable,
+		tTh,
+		tTr,
+		tTd
 	},
 	data() {
 		return {
+			userEn: null,
+			flieList: [{
+				name: "flie1",
+				size: 1.9,
+				caozuo: 111
+			},{
+				name: "flie1",
+				size: 1.9,
+				caozuo: 111
+			}], //附件信息列表
 			// 时间选择器参数
 			type: 0,
 			startYear: 1980,
@@ -159,6 +203,7 @@ export default{
 			operationType: null  ,//运维类型
 			
 			//正确值
+			dataType: [], //选择的数据因子
 			cod: false,  	//cod
 			andan: false, 	//氨氮
 			ss: false, 		//ss
@@ -182,14 +227,199 @@ export default{
 			phendTime:'',	//ph结束时间
 		}
 	},
+	onLoad(){
+		this.userEn = storage.getMyInfo();
+	},
 	methods:{
+		// 上传附件
+		submitFlie(){
+			let _this = this;
+			uni.chooseImage({
+				sourceType: ["album"],
+				success(res){
+					for(let i = 0; i < res.tempFilePaths.length; ++i){
+						api.uploadFileToCache(res.tempFilePaths[i], {pc: _this.userEn.pc} ,res=>{
+							console.log(res);
+						})
+					}
+				}
+			})
+			// api.Upload({},res=>{
+				
+			// })
+		},
+		//判断简单数据类型是否为空
+		check1(){
+			if(util.isEmpty(this.operationType)
+			|| util.isEmpty(this.dataType)
+			|| util.isEmpty(this.beginInfo)
+			|| util.isEmpty(this.result)
+			|| util.isEmpty(this.name)
+			|| util.isEmpty(this.phone)
+			|| util.isEmpty(this.info)){
+				return false;
+			}
+			return true;
+		},
+		//判断复杂类型是否为空
+		check2(){
+			for(let i = 0; i < this.dataType.length; ++i){
+				let val = this.dataType[i];
+				switch (val){
+					case "COD":
+					{
+						if(util.isEmpty(this.codStartInputMsg)
+						|| util.isEmpty(this.codEndInputMsg)
+						|| util.isEmpty(this.codstartTime)
+						|| util.isEmpty(this.codendTime)){
+							return false;
+						};
+					}
+					break;
+					
+					case "氨氮":
+					{
+						if(util.isEmpty(this.andanStartInputMsg)
+						|| util.isEmpty(this.andanEndInputMsg)
+						|| util.isEmpty(this.andanstartTime)
+						|| util.isEmpty(this.andanendTime)){
+							return false;
+						};
+					}
+					break;
+					
+					case "SS":
+					{
+						if(util.isEmpty(this.ssStartInputMsg)
+						|| util.isEmpty(this.ssEndInputMsg)
+						|| util.isEmpty(this.ssstartTime)
+						|| util.isEmpty(this.ssendTime)){
+							return false;
+						};
+					}
+					break;
+					
+					case "PH":
+					{
+						if(util.isEmpty(this.phStartInputMsg)
+						|| util.isEmpty(this.phEndInputMsg)
+						|| util.isEmpty(this.phstartTime)
+						|| util.isEmpty(this.phendTime)){
+							return false;
+						};
+					}
+					break;
+				}
+			}
+			return true;
+		},
+		// 组装被选中的数据因子信息
+		getDataInfo(){
+			let dataInfo = [];
+			for(let i = 0; i < this.dataType.length; ++i){
+				let val = this.dataType[i];
+				switch (val){
+					case "COD":
+					{
+						let codObj = {};
+						codObj.dataType = "COD";
+						codObj.startTime = this.codstartTime;
+						codObj.endTime = this.codendTime;
+						codObj.startValue = this.codStartInputMsg;
+						codObj.endValue = this.codEndInputMsg;
+						dataInfo.push(codObj);
+					}
+					break;
+					case "氨氮":
+					{
+						let andanObj = {};
+						andanObj.dataType = "氨氮";
+						andanObj.startTime = this.andanstartTime;
+						andanObj.endTime = this.andanendTime;
+						andanObj.startValue = this.andanStartInputMsg;
+						andanObj.endValue = this.andanEndInputMsg;
+						dataInfo.push(andanObj);
+					}
+					break;
+					case "SS":
+					{
+						let ssObj = {};
+						ssObj.dataType = "氨氮";
+						ssObj.startTime = this.ssstartTime;
+						ssObj.endTime = this.ssendTime;
+						ssObj.startValue = this.ssStartInputMsg;
+						ssObj.endValue = this.ssEndInputMsg;
+						dataInfo.push(ssObj);
+					}
+					break;
+					case "PH":
+					{
+						let phObj = {};
+						phObj.dataType = "氨氮";
+						phObj.startTime = this.phstartTime;
+						phObj.endTime = this.phendTime;
+						phObj.startValue = this.phStartInputMsg;
+						phObj.endValue = this.phEndInputMsg;
+						dataInfo.push(phObj);
+					}
+					break;
+				}
+			}
+			return dataInfo;
+		},
+		//提交
+		submit(){
+			let info = this.getDataInfo();
+			info = tran.obj2Json(info);
+			if(this.check1() && this.check2()){
+				let str = tran.arr2Str(this.dataType, ",");
+				api.addDataReport({
+					operationType: this.operationType,
+					reportName: this.name,
+					reportPhone: this.phone,
+					reportInfo: this.info,
+					dataType: str,
+					dataCorrect: info,
+					startTime: this.beginInfo,
+					endTime: this.result,
+					pc: this.userEn.pc
+				},res=>{
+					let code = api.getCode(res);
+					let msg = api.getMsg(res);
+					if(code === 0){
+						uni.showToast({
+							title: msg,
+							image:'/static/img/check-circle.png',
+							duration:2000
+						})
+						setTimeout(function(){
+							uni.navigateBack({
+								delta: 1
+							})
+						},500)
+					}else{
+						uni.showToast({
+							title: msg,
+							image:'/static/img/fail-circle.png',
+							duration:2500
+						});						
+					}
+				})
+			}else{
+				uni.showToast({
+					title: "必填信息不能为空",
+					image:'/static/img/fail-circle.png',
+					duration:2500
+				});
+			}
+		},
 		//获取数据因子
 		getDataType(e){
-			let dataType = e.detail.value;
-			this.cod = dataType.includes("cod") ? true : false;
-			this.andan = dataType.includes("andan") ? true : false;
-			this.ss = dataType.includes("ss") ? true : false;
-			this.ph = dataType.includes("ph") ? true : false;
+			this.dataType = e.detail.value;
+			this.cod = this.dataType.includes("COD") ? true : false;
+			this.andan = this.dataType.includes("氨氮") ? true : false;
+			this.ss = this.dataType.includes("SS") ? true : false;
+			this.ph = this.dataType.includes("PH") ? true : false;
 		},
 		//获取运维类型
 		getType(e){
@@ -321,6 +551,9 @@ export default{
 		margin-bottom:30rpx;
 		margin-top:50rpx;
 	}
+	.submit_flie{
+		flex-direction:column;
+	}
 	.date_test{
 		font-size:16px;
 	}
@@ -384,5 +617,24 @@ export default{
 	.infoWidth{
 		width:40%;
 		display:inline-block;
+	}
+	.flie_bar{
+		display:flex;
+		align-items:center;
+		margin-bottom:40rpx;
+		width:100%;
+	}
+	.flie{
+		font-size:14px;
+		background:#1E9FFF;
+		border-radius:0;
+	}
+	.submit{
+		background:#009688;
+		margin-top:40rpx;
+	}
+	.del_flie{
+		font-size:14px;
+		background:#FF5722;
 	}
 </style>

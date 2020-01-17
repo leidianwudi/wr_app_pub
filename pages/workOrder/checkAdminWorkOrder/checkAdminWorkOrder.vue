@@ -243,6 +243,13 @@ export default{
 								uni.navigateBack({
 									delta: 1
 								})
+							}else{
+								let msg = api.getMsg(res);
+								uni.showToast({
+									title: msg,
+									image:'/static/img/fail-circle.png',
+									duration:2500
+								});
 							}
 						})
 					};

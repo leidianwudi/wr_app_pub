@@ -4,16 +4,16 @@ import store from "@/store/store.js";
 //网络操作封装
 module.exports = {
 	//取返回数据内,code数据
-	getCode: function(res) {return res.data.data.errCode},
+	getCode: function(res) {return res.data.errCode},
 	
 	//取返回数据内,msg数据
-	getMsg: function(res) {return res.data.data.msg},
+	getMsg: function(res) {return res.data.msg},
 	
 	//取返回数据内,data数据
-	getData: function(res) {return res.data.data.resp},
+	getData: function(res) {return res.data.resp},
 	
 	//取返回数据内,page分页的列表数据.只返回分页列表数据,不返回总页数等数据
-	getPageList: function(res) {return res.data.data.data},
+	getPageList: function(res) {return res.data.data},
 	
 	//登录到网关
 	loginGate: function(postData, funSuccess) {httpUtil.post('gate/loginGate', postData, funSuccess);},
@@ -24,139 +24,90 @@ module.exports = {
 	//登录
 	login: function(postData, funSuccess) 
 	{
-		let data = {
-			"url": config.baseUrl2 + "/admin/login",
-			"head":["Content-Type:application/x-www-form-urlencoded"],
-			"data": postData,
-			"type":"post"
-		}
-		httpUtil.post('wr/request2', data, funSuccess);
+		httpUtil.post('admin/login', postData, funSuccess);
 	},
 	
 	//查询瞬时数据
 	NowDataList: function(postData, funSuccess)
 	{
 		postData.token = store.state.token;  //添加token
-		let data = {
-			"url": config.baseUrl2 + "/zhgyData/NowDataList",
-			"head":["Content-Type:application/x-www-form-urlencoded",
-					"Referer:" + config.baseUrl2 + "/admin/zhgy/data/nowDataList.html"],
-			"data": postData,
-			"type":"post"
-		}
-		httpUtil.post('wr/request2', data, funSuccess);
+		httpUtil.post('zhgyData/NowDataList', postData, funSuccess);
 	},
 	
 	//查询日数据
 	DayDataList: function(postData, funSuccess) 
 	{
-		postData.token = store.state.token;  //添加token
-		let data = {
-			"url": config.baseUrl2 + "/zhgyData/EnterpriceDayDataList",
-			"head":["Content-Type:application/x-www-form-urlencoded",
-					"Referer:" + config.baseUrl2 + "/admin/zhgy/data/enterpriceDayDataList.html"],
-			"data": postData,
-			"type":"get"
-		}
-		httpUtil.post('wr/request2', data, funSuccess);
+		let data = "?date=" + postData.date + "&token=" + store.state.token + "&pc=" + postData.pc;
+		httpUtil.get('zhgyData/EnterpriceDayDataList', data, funSuccess);
 	},
 	
 	//查询月数据
 	MonthDataList: function(postData, funSuccess) 
 	{
-		postData.token = store.state.token;  //添加token
-		let data = {
-			"url": config.baseUrl2 + "/zhgyData/EnterpriceMonthDataList",
-			"head":["Content-Type:application/x-www-form-urlencoded",
-					"Referer:" + config.baseUrl2 + "/admin/zhgy/data/enterpriceMonthDataList.html"],
-			"data": postData,
-			"type":"get"
+		if(postData.serverId || postData.enterpriceName){
+			let data = "?date=" + postData.date + "&token=" + store.state.token + "&pc=" + postData.pc + "&serverId=" + postData.serverId + "&enterpriceName=" + postData.enterpriceName;
+			httpUtil.get('zhgyData/EnterpriceMonthDataList', data, funSuccess);
 		}
-		httpUtil.post('wr/request2', data, funSuccess);
+		else{
+			let data = "?date=" + postData.date + "&token=" + store.state.token + "&pc=" + postData.pc;
+			httpUtil.get('zhgyData/EnterpriceMonthDataList', data, funSuccess);			
+		}
 	},
 	
 	//获取瞬时数据的子服务器列表
 	NowDataZhgyServerList: function(postData, funSuccess)
 	{
-		postData.token = store.state.token;  //添加token
-		let data = {
-			"url": config.baseUrl2 + "/zhgyServer/List",
-			"head":["Content-Type:application/x-www-form-urlencoded",
-					"Referer:" + config.baseUrl2 + "/admin/zhgy/data/nowDataList.html"],
-			"data": postData,
-			"type":"get"
-		}
-		httpUtil.post('wr/request2', data, funSuccess);
+		let data = "?size=" + postData.size + "&token=" + store.state.token + "&pc=" + postData.pc;		
+		httpUtil.get('zhgyServer/List', data, funSuccess);
 	},
 	
 	//获取瞬时数据的企业名称列表
 	NowDataZhgyEnterpriceList: function(postData, funSuccess)
 	{
-		postData.token = store.state.token;  //添加token
-		let data = {
-			"url": config.baseUrl2 + "/zhgyEnterprice/List",
-			"head":["Content-Type:application/x-www-form-urlencoded",
-					"Referer:" + config.baseUrl2 + "/admin/zhgy/data/nowDataList.html"],
-			"data": postData,
-			"type":"get"
-		}
-		httpUtil.post('wr/request2', data, funSuccess);
+		let data = "?size=" + postData.size + "&token=" + store.state.token + "&pc=" + postData.pc;	
+		httpUtil.get('zhgyEnterprice/List', data, funSuccess);
 	},
 	
-	
+		
 	//获取数据报错列表
 	zhgyDataHandleList: function(postData, funSuccess)
 	{
 		postData.token = store.state.token;  //添加token
-		let data = {
-			"url": config.baseUrl2 + "/zhgyDataHandle/List",
-			"head":["Content-Type:application/x-www-form-urlencoded",
-					"Referer:" + config.baseUrl2 + "/admin/zhgy/dataHandle/dataReport.html"],
-			"data": postData,
-			"type":"post"
-		}
-		httpUtil.post('wr/request2', data, funSuccess);
+		httpUtil.post('zhgyDataHandle/List', postData, funSuccess);
 	},
 	
 	//获取数据报错详细信息
 	zhgyDataHandle: function(postData, funSuccess)
 	{
-		postData.token = store.state.token;  //添加token
-		let data = {
-			"url": config.baseUrl2 + "/zhgyDataHandle/Get",
-			"head":["Content-Type:application/x-www-form-urlencoded",
-					"Referer:" + config.baseUrl2 + "/admin/zhgy/dataHandle/viewDataReport.html"],
-			"data": postData,
-			"type":"get"
-		}
-		httpUtil.post('wr/request2', data, funSuccess);
+		let data = "?id=" + postData.id + "&token=" + store.state.token + "&pc=" + postData.pc;			
+		httpUtil.get('zhgyDataHandle/Get', data, funSuccess);
 	},
 	
 	//管理员处理数据报错
 	editDataReport: function(postData, funSuccess)
 	{
 		postData.token = store.state.token;  //添加token
-		let data = {
-			"url": config.baseUrl2 + "/zhgyDataHandle/Edit",
-			"head":["Content-Type:application/x-www-form-urlencoded",
-					"Referer:" + config.baseUrl2 + "/admin/zhgy/dataHandle/editDataReport.html"],
-			"data": postData,
-			"type":"post"
-		}
-		httpUtil.post('wr/request2', data, funSuccess);
+		httpUtil.post('zhgyDataHandle/Edit', postData, funSuccess);
 	},
 	
 	//管理员删除数据报错
 	dataReport: function(postData, funSuccess)
 	{
+		let data = "?id=" + postData.id + "&token=" + store.state.token + "&pc=" + postData.pc;		
+		httpUtil.get('zhgyDataHandle/Delete', data, funSuccess);
+	},
+	
+	//新增数据报错
+	addDataReport: function(postData, funSuccess)
+	{
 		postData.token = store.state.token;  //添加token
-		let data = {
-			"url": config.baseUrl2 + "/zhgyDataHandle/Delete",
-			"head":["Content-Type:application/x-www-form-urlencoded",
-					"Referer:" + config.baseUrl2 + "/admin/zhgy/dataHandle/dataReport.html"],
-			"data": postData,
-			"type":"get"
-		}
-		httpUtil.post('wr/request2', data, funSuccess);
+		httpUtil.post('zhgyDataHandle/Add', postData, funSuccess);
+	},
+	
+	//上传附件
+	uploadFileToCache: function(path, postData, funSuccess)
+	{
+		let url = "File/Upload?type=5&pc=" + postData.pc
+		httpUtil.upload(url, path, 'file', funSuccess);
 	},
 } 

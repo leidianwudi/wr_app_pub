@@ -14,7 +14,8 @@
 				<view class="head_barImg">
 					<image src="/static/img/work_order.png" mode="widthFix" @tap="toworkOrder"></image>
 				</view>
-				<text>待处理工单<tui-badge :type="level==2?'gray':'danger'" :dot="level==3?true:false" v-if="msgNum>0">{{level!=3?msgNum:""}}</tui-badge></text>
+				<text>待处理工单</text>
+				<tui-badge :type="level==2?'gray':'danger'" :dot="level==3?true:false" v-if="msgNum>0">{{level!=3?msgNum:""}}</tui-badge>
 			</view>
 			<view class="report">
 				<view class="head_barImg">
@@ -47,7 +48,7 @@
 				</view>
 				<text>数据调阅</text>
 			</view>
-			<view class="boder-righr btn_box" @tap="toResort">
+			<view class="boder-righr btn_box" @tap="toResort" v-if="!admin">
 				<view class="btn btn_baobei">
 					<m-icon type="gear" color="#fff" size="32"></m-icon>
 				</view>
@@ -79,12 +80,16 @@ export default {
 			level: 1,
 			msgNum: 3,
 			warn: '',
-			notice: ''
+			notice: '',
+			admin: false
 		}
+	},
+	onLoad() {
+		this.isAdmin();//判断是否为管理员
 	},
 	methods:{
 		toCheck(){
-			if(storage.getMyInfo().isAdmin === 1){
+			if(this.admin){
 				uni.navigateTo({
 					url:'/pages/checkAdminInfo/checkAdminInfo'
 				})
@@ -93,6 +98,11 @@ export default {
 					url:'/pages/checkInfo/checkInfo'
 				})
 			}
+		},
+		//判断是否为管理员
+		isAdmin(){
+			if(storage.getMyInfo().isAdmin === 1) this.admin = true;
+			else this.admin = false;
 		},
 		toResort(){
 			uni.navigateTo({
