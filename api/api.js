@@ -107,7 +107,8 @@ module.exports = {
 	//上传附件
 	uploadFileToCache: function(path, postData, funSuccess)
 	{
-		let url = "File/Upload?type=5&pc=" + postData.pc
-		httpUtil.upload(url, path, 'file', funSuccess);
+		let url = "File/Upload?type=5&pc=" + postData.pc;
+		url = "File/Upload";
+		httpUtil.upload(url, path, 'file', funSuccess, postData);
 	},
 } 

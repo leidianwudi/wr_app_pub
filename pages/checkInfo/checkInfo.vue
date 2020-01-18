@@ -348,6 +348,7 @@
 					let code = api.getCode(res);
 					let data = api.getData(res);
 					if(code === 0){
+						console.log(res);
 						let list = tranNowList.tranNowList(data);
 						list.forEach(function(item){
 							_this.name = item.zhgyServerName;

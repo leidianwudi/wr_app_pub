@@ -134,14 +134,14 @@
 				<block class="box">
 					<t-table>
 						<t-tr style="background: #F2F2F2;">
-							<t-th style="border-left: 1px #d0dee5 solid;">文件名</t-th>
-							<t-th>大小</t-th>
-							<t-th>操作</t-th>
+							<t-th style="border-left: 1px #d0dee5 solid; width:250rpx;">文件名</t-th>
+							<t-th style="width:150rpx;">大小</t-th>
+							<t-th style="width:150rpx;">操作</t-th>
 						</t-tr>
 						<t-tr v-for="(item, index) in flieList" :key="index">
-							<t-td style="border-left: 1px #d0dee5 solid; border-bottom: 1px #d0dee5 solid;">{{ item.name }}</t-td> 
-							<t-td style="border-bottom: 1px #d0dee5 solid;">{{ item.size }}kb</t-td>
-							<t-td style="border-bottom: 1px #d0dee5 solid;"><button type="primary" class="del_flie">删除</button></t-td>
+							<t-td style="border-left: 1px #d0dee5 solid; border-bottom: 1px #d0dee5 solid;  width:250rpx;"><text class="fileOriginalName">{{ item.fileOriginalName }}</text></t-td> 
+							<t-td style="border-bottom: 1px #d0dee5 solid; width:150rpx;">{{ item.fileSize|sizeFormat }}kb</t-td>
+							<t-td style="border-bottom: 1px #d0dee5 solid; width:150rpx;"><button type="primary" class="del_flie" @tap="del_flie(index)">删除</button></t-td>
 						</t-tr>
 					</t-table>
 				</block>
@@ -174,18 +174,18 @@ export default{
 		tTr,
 		tTd
 	},
+	//定义过滤器
+	filters:{
+		sizeFormat(value){
+			let size = value/1024;
+			size = size.toFixed(1);
+			return size;
+		}
+	},
 	data() {
 		return {
 			userEn: null,
-			flieList: [{
-				name: "flie1",
-				size: 1.9,
-				caozuo: 111
-			},{
-				name: "flie1",
-				size: 1.9,
-				caozuo: 111
-			}], //附件信息列表
+			flieList: [], //附件信息列表
 			// 时间选择器参数
 			type: 0,
 			startYear: 1980,
@@ -231,6 +231,10 @@ export default{
 		this.userEn = storage.getMyInfo();
 	},
 	methods:{
+		//删除附件
+		del_flie(index){
+			this.flieList.splice(index, 1); //删除指定index的附件信息
+		},
 		// 上传附件
 		submitFlie(){
 			let _this = this;
@@ -239,7 +243,12 @@ export default{
 				success(res){
 					for(let i = 0; i < res.tempFilePaths.length; ++i){
 						api.uploadFileToCache(res.tempFilePaths[i], {pc: _this.userEn.pc} ,res=>{
-							console.log(res);
+							let code = res.errCode;
+							let data = res.resp;
+							if(code === 0){
+								console.log(data);
+								_this.flieList.push(data);
+							}
 						})
 					}
 				}
@@ -367,9 +376,22 @@ export default{
 			}
 			return dataInfo;
 		},
+		//获取文件列表id
+		getFileIds(){
+			let ids = "";  //返回的附件列表id数据
+			let newFileOpendIds = [];  //存放附件列表id的数组
+			this.flieList.forEach(function(item){
+				newFileOpendIds.push(item.fileOpendIds); //把附件id添加到数组
+			});
+			 //  把附件id数组转化为字符串格式
+			if(newFileOpendIds.length > 0) ids = tran.arr2Str(newFileOpendIds, ","); 
+			
+			return ids;
+		},
 		//提交
 		submit(){
-			let info = this.getDataInfo();
+			let fileIds = this.getFileIds();  //获取附件列表id
+			let info = this.getDataInfo();  //获取正确值列表
 			info = tran.obj2Json(info);
 			if(this.check1() && this.check2()){
 				let str = tran.arr2Str(this.dataType, ",");
@@ -382,7 +404,8 @@ export default{
 					dataCorrect: info,
 					startTime: this.beginInfo,
 					endTime: this.result,
-					pc: this.userEn.pc
+					pc: this.userEn.pc,
+					attachFile: fileIds
 				},res=>{
 					let code = api.getCode(res);
 					let msg = api.getMsg(res);
@@ -636,5 +659,11 @@ export default{
 	.del_flie{
 		font-size:14px;
 		background:#FF5722;
+	}
+	.fileOriginalName{
+		width:100%;
+		overflow: hidden;
+		text-overflow:ellipsis;
+		white-space: nowrap;
 	}
 </style>

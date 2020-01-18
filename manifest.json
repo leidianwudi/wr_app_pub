@@ -1,7 +1,7 @@
 {
-    "name" : "wr_app",
+    "name" : "污染源",
     "appid" : "__UNI__1EA940F",
-    "description" : "污染源",
+    "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,

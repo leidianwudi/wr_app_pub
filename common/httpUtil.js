@@ -5,17 +5,20 @@ import storage from '@/api/storage.js';
 //http操作工具类
 module.exports = {
 	//上传文件  url:服务器地址 path:本地文件路径 name:上传文件名称 funSuccess:成功时的回调函数
-	upload: function(url, path, name, funSuccess) {
+	upload: function(url, path, name, funSuccess, postData) {
 		console.log(path);
 		console.log(url);
 		uni.uploadFile({
-			header: {"Content-Type":"multipart/form-data"},
-			method: 'post',
-			dataType: 'json',
+			//header: {"Content-Type":"multipart/form-data"},
 			url: config.baseUrl + '/' + url, //文件上传地址
 			//url: 'http://120.25.255.223:8021/api/external/uploadFileToCache',
 			filePath: path,
 			name: name,
+			dataType: 'json',
+			formData: {
+			             'type': '5',
+						 'pc': postData.pc
+			          },
 			success: (res) => {
 				let data = tran.json2Obj(res.data);
 				funSuccess(data);
