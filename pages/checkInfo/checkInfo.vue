@@ -10,7 +10,7 @@
 		
 		<!-- <scroll-view :scroll-x="true" :scroll-into-view="scrollToView" class="scrollbox" :scroll-with-animation="true"> -->
 			    <!-- 瞬时数据界面 -->
-				<view class="box" id="box0" v-if="dataType === 0">
+				<view class="box" id="box0" v-show="dataType === 0">
 							<!-- 瞬时数据企业信息 -->
 							<view class="enterprise_info">
 								<view class="day">
@@ -65,7 +65,7 @@
 							</view>
 				</view>
 				<!-- 日数据界面 -->
-				<view class="box" id="box1" v-if="dataType === 1">
+				<view class="box" id="box1" v-show="dataType === 1">
 					<!-- 日数据信息 -->
 					<view class="enterprise_info">
 					    <view class="day">
@@ -129,7 +129,7 @@
 					</view>
 				</view>
 				<!-- 月数据界面 -->
-				<view class="box" id="box2" v-if="dataType === 2">
+				<view class="box" id="box2" v-show="dataType === 2">
 					<!-- 月数据信息 -->
 					<view class="enterprise_info">  <!-- @touchmove="handletouchmove" @touchstart="handletouchstart" @touchend="handletouchend" -->
 					    <view class="month">

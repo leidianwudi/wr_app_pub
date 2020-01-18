@@ -10,7 +10,7 @@
 		
 		<!-- <scroll-view :scroll-x="true" :scroll-into-view="scrollToView" class="scrollbox" :scroll-with-animation="true"> -->
 			    <!-- 瞬时数据界面 -->
-				<view class="box" id="box0" v-if="dataTye === 0">
+				<view class="box" id="box0" v-show="dataTye === 0">
 							<!-- 瞬时数据企业信息 -->
 							<view class="enterprise_info">
 								<view class="day">
@@ -78,7 +78,7 @@
 							</view>
 				</view>
 				<!-- 日数据界面 -->
-				<view class="box" id="box1" v-if="dataTye === 1">
+				<view class="box" id="box1" v-show="dataTye === 1">
 					<!-- 日数据信息 -->
 					<view class="enterprise_info">
 						<view class="day">
@@ -154,7 +154,7 @@
 					</view>
 				</view>
 				<!-- 月数据界面 -->
-				<view class="box" id="box2" v-if="dataTye === 2">
+				<view class="box" id="box2" v-show="dataTye === 2">
 					<!-- 月数据信息 -->
 					<view class="enterprise_info">
 						<view class="month">
