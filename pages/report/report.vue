@@ -100,14 +100,14 @@
 			</view>
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*结束时间：</view>
-				<view class="date_1">
+				<view class="">
 					<input type="text" value="" @tap="show(2)" v-model="result" :disabled="true" />
 				</view>
 			</view>
 			<!-- 报备人 -->
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*报备人：</view>
-				<view class="date_2">
+				<view class="">
 					<input type="text" value="" v-model="name" />
 				</view>
 			</view>
@@ -120,7 +120,7 @@
 			</view>
 			<!-- 报备人信息 -->
 			<view class="input-box">
-				<view class="uni-title uni-common-mt date_test">*报备人信息：</view>
+				<view class="uni-title uni-common-mt date_test">*报备信息：</view>
 				<view class="">
 					<textarea value="" placeholder=" " v-model="info" />
 					</view>
@@ -418,15 +418,10 @@ export default{
 					let msg = api.getMsg(res);
 					if(code === 0){
 						uni.showToast({
-							title: msg,
+							title: "成功",
 							image:'/static/img/check-circle.png',
 							duration:2000
-						})
-						setTimeout(function(){
-							uni.navigateBack({
-								delta: 1
-							})
-						},500)
+						});
 					}else{
 						uni.showToast({
 							title: msg,
@@ -576,7 +571,7 @@ export default{
 	}
 	.input-box{
 		display:flex;
-		justify-content:flex-start;
+		justify-content:center;
 		align-items:center;
 		margin-bottom:30rpx;
 		margin-top:50rpx;
@@ -586,6 +581,8 @@ export default{
 	}
 	.date_test{
 		font-size:16px;
+		width:35%;
+		text-align:right;
 	}
 	.input-box input, .input-box textarea{
 		border:1px solid #e6e6e6;
@@ -594,12 +591,6 @@ export default{
 	}
 	.input-box textarea{
 		width:430rpx;
-	}
-	.date_1{
-		margin-left:1em;
-	}
-	.date_2{
-		margin-left:2em;
 	}
 	.m-icon{
 		margin-right:10rpx;

@@ -19,7 +19,7 @@
 				<!-- 处理反馈 -->
 				<view class="people_info">
 					<text>处理反馈：</text>
-					<textarea v-model="state_msg" placeholder="" class="textarea_box" autoHeight="true"/>
+					<textarea v-model="state_msg" placeholder=" " class="textarea_box" autoHeight="true"/>
 				</view>
 				<view class="people_info">
 					<button type="primary" class="submit" @tap="submit">确认处理</button>
