@@ -189,6 +189,7 @@ import tTable from '@/components/t-table/t-table.vue';
 import tTh from '@/components/t-table/t-th.vue';
 import tTr from '@/components/t-table/t-tr.vue';
 import tTd from '@/components/t-table/t-td.vue';
+import util from '@/common/util.js';
 export default{
 	components: {
 		mIcon,
@@ -266,7 +267,8 @@ export default{
 		//处理按钮
 		handle(){
 			uni.navigateTo({
-				url: '/pages/workOrder/checkAdminWorkOrder/handleData/handleData?id=' + this.id + "&operationType=" + this.operationType + "&state=" +  this.state
+				url: '/pages/workOrder/checkAdminWorkOrder/handleData/handleData?id=' + this.id + 
+				"&operationType=" + this.operationType + "&state=" +  this.state + "&state_msg=" + this.state_msg
 			})
 		},
 		//处理按钮
@@ -308,16 +310,16 @@ export default{
 			},res=>{
 				let code = api.getCode(res);
 				let data = api.getData(res);
-				if(code === 0){
+				if(code == 0){
 					//报备人信息
 					_this.name = data.reportName;
 					_this.phone = data.reportPhone;
 					_this.info = data.reportInfo;
 					//状态信息
-					_this.state = data.state;
-					_this.state_msg = data.handleMsg;
+					_this.state = parseInt(data.state);
+					_this.state_msg = util.isEmpty(data.handleMsg) ? " " : data.handleMsg;
 		            //开始时间和结束时间
-					_this.startTime = data.startTime;
+					_this.startTime = data.startTime; 
 					_this.endTime = data.endTime;
 					//运维类别
 					_this.operationType = data.operationType;
