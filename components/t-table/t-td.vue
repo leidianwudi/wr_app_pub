@@ -61,6 +61,7 @@
 		align-items: center;
 		padding: 15upx 10rpx;
 		border-right: 1px #d0dee5 solid;
+		border-bottom: 1px #d0dee5 solid;		
 		text-align: center;
 		color: #555c60;
 		font-size: 28upx;

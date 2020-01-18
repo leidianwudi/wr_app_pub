@@ -132,8 +132,5 @@
 		background-color: #0faeff;
 		color:#fff;
 	}
-	.box>t-table>t-tr>t-th{
-		width:300rpx;
-	}
 </style>
 

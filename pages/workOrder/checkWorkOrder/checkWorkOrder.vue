@@ -154,8 +154,23 @@
 					<text>结束时间：<text>{{endTime}}</text></text>            		
             	</view>				
 				<!-- 附件 -->
-            	<view class="people_info">
-					<text>附件：<text>{{name}}</text></text>            		
+            	<view class="people_info input_box">
+					<text>附件：</text>
+					<block class="box" style="margin:0 auto;">
+						<t-table style="width:100%;">
+							<t-tr style="display: flex;">
+								<!-- <t-th style="border-left: 1px #d0dee5 solid;">文件名</t-th> -->
+								<t-th style="flex:1;">文件名</t-th>
+								<t-th style="flex:1;">大小</t-th>
+								<t-th style="flex:1;">操作</t-th>
+							</t-tr>
+							<t-tr v-for="(item, index) in flieList" :key="index" style="display: flex;">								
+								<t-td style="flex:1;">{{ item.originalName|fileNameFormat }}</t-td>
+								<t-td style="flex:1;">{{ item.size|sizeFormat }}</t-td>
+								<t-td style="text-decoration:underline;flex:1;" @tap="checkFile(index)">查看</t-td>
+							</t-tr>
+						</t-table>
+					</block>
             	</view>
             </view>
 		</view>
@@ -166,14 +181,35 @@
 import mIcon from "@/components/m-icon/m-icon.vue";
 import storage from '@/api/storage.js';
 import api from '@/api/api.js';
+import tTable from '@/components/t-table/t-table.vue';
+import tTh from '@/components/t-table/t-th.vue';
+import tTr from '@/components/t-table/t-tr.vue';
+import tTd from '@/components/t-table/t-td.vue';
 export default{
 	components: {
 		mIcon,
+		tTable,
+		tTh,
+		tTr,
+		tTd
+	},
+	//定义过滤器
+	filters:{
+		sizeFormat(value){
+			let size = value/1024;
+			size = size.toFixed(1);
+			return size+"kb";
+		},
+		fileNameFormat(value){
+			let name = value.slice(0, 7);
+			return name+"...";
+		},
 	},
 	data() {
 		return {
 			id: null,
 			userEn: null,
+			flieList: [], //附件信息列表
 			
 			// 表单数据
 			name: "",  //报备人
@@ -215,6 +251,14 @@ export default{
 		this.checkZhgyDataHandle();  //获取数据报错详细信息
 	},
 	methods:{
+		//查看附件
+		checkFile(index){
+			console.log(index);
+			let url = api.getFileUrl({pc: this.userEn.pc, openId: this.flieList[index].openId})
+			uni.previewImage({
+				urls: [url]
+			});
+		},
 		//获取数据报错详细信息
 		checkZhgyDataHandle(){
 			let _this = this;
@@ -265,6 +309,7 @@ export default{
 							_this.phendTime = item.endTime;							
 						}
 					});
+					_this.flieList = data.attachFileModel;
 				}
 			})
 		}
@@ -277,7 +322,7 @@ export default{
 		word-wrap: break-word;
 	}
 	.workOrder_info{
-		padding:10rpx 30rpx;
+		padding:10rpx;
 		box-sizing:border-box;
 		overflow:hidden;
 	}	
@@ -355,5 +400,29 @@ export default{
 	}
 	.correct_name{
 		font-weight:bold;
+	}
+	.input_box{
+		display:flex;
+		justify-content:flex-start;
+		align-items:center;
+		margin-bottom:30rpx;
+		margin-top:20rpx;
+		flex-direction:column;
+	}
+	.input_box text{
+		width:100%;
+		text-align:left;
+		font-weight:bold;
+		margin-bottom:10rpx;
+	}
+	.del_flie{
+		font-size:14px;
+		background:#FF5722;
+	}
+	.fileOriginalName{
+		width:100%;
+		overflow: hidden;
+		text-overflow:ellipsis;
+		white-space: nowrap;
 	}
 </style>

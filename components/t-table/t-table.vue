@@ -65,6 +65,8 @@
 	.t-table {
 /* 		display:flex;
 		flex-direction:column; */
+		border-left: 1px #d0dee5 solid;
+		/* border-bottom: 1px #d0dee5 solid; */
 	}
 
 	.t-table>>>t-tr {
@@ -72,12 +74,12 @@
 	}
 
 	.t-table>>>t-tr:nth-child(2n) {
-		background: #fffffff;
+		background: #FFFFFF;
 	}
 
 	/* #ifdef H5 */
 	.t-table>>>.t-tr:nth-child(2n) {
-		background: #ffffff;
+		background: #FFFFFF;
 	}
 	/* #endif */
 </style>

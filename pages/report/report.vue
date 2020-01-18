@@ -131,17 +131,17 @@
                 	<view class="uni-title uni-common-mt date_test">附件：</view>
                 	<button type="primary" class="flie" @tap="submitFlie"><m-icon type="plusempty" color="#fff" size="20"></m-icon>附件上传</button>
                 </view>
-				<block class="box">
-					<t-table>
-						<t-tr style="background: #F2F2F2;">
-							<t-th style="border-left: 1px #d0dee5 solid; width:250rpx;">文件名</t-th>
-							<t-th style="width:150rpx;">大小</t-th>
-							<t-th style="width:150rpx;">操作</t-th>
-						</t-tr>
-						<t-tr v-for="(item, index) in flieList" :key="index">
-							<t-td style="border-left: 1px #d0dee5 solid; border-bottom: 1px #d0dee5 solid;  width:250rpx;"><text class="fileOriginalName">{{ item.fileOriginalName }}</text></t-td> 
-							<t-td style="border-bottom: 1px #d0dee5 solid; width:150rpx;">{{ item.fileSize|sizeFormat }}kb</t-td>
-							<t-td style="border-bottom: 1px #d0dee5 solid; width:150rpx;"><button type="primary" class="del_flie" @tap="del_flie(index)">删除</button></t-td>
+				<block class="box" style="margin:0 auto;">
+					<t-table style="width:100%;">
+							<t-tr style="display: flex;">
+								<t-th style="flex:1;">文件名</t-th>
+								<t-th style="flex:1;">大小</t-th>
+								<t-th style="flex:1;">操作</t-th>
+							</t-tr>
+						<t-tr v-for="(item, index) in flieList" :key="index" style="display: flex;">
+							<t-td style="flex:1;"><text class="fileOriginalName">{{ item.fileOriginalName }}</text></t-td> 
+							<t-td style="flex:1;">{{ item.fileSize|sizeFormat }}kb</t-td>
+							<t-td style="text-decoration:underline;flex:1;" @tap="del_flie(index)">删除</t-td>
 						</t-tr>
 					</t-table>
 				</block>
@@ -233,7 +233,14 @@ export default{
 	methods:{
 		//删除附件
 		del_flie(index){
-			this.flieList.splice(index, 1); //删除指定index的附件信息
+			let _this = this;
+			uni.showModal({
+				title:'删除',
+				content:'你确定要删除吗？',
+				success(res) {
+					if(res.confirm)	_this.flieList.splice(index, 1); //删除指定index的附件信息
+				}
+			})
 		},
 		// 上传附件
 		submitFlie(){
