@@ -10,9 +10,9 @@
 					<text>处理操作：</text>
 					<view class="info">
 						<radio-group @change="getState">
-							<label class="radio"><radio value="0" :checked="state === 0"/>待处理</label>
-							<label class="radio"><radio value="1" :checked="state === 1"/>处理完成</label>
-							<label class="radio"><radio value="2" :checked="state === 2" />处理终止</label>							
+							<label class="radio"><radio value="0" :checked="state == 0"/>待处理</label>
+							<label class="radio"><radio value="1" :checked="state == 1"/>处理完成</label>
+							<label class="radio"><radio value="2" :checked="state == 2" />处理终止</label>							
 						</radio-group>
 					</view>
 				</view>
@@ -44,11 +44,10 @@ export default{
 			userEn: null,
 			operationType: null,
 			state_msg: '',  //处理反馈
-			state: null //处理操作
+			state: 0 //处理操作
 		}
 	},
 	onLoad(res) {
-		console.log(res);
 		this.id = res.id;
 		this.operationType = res.operationType;
 		this.userEn = storage.getMyInfo();

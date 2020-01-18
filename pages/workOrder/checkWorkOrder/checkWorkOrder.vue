@@ -8,9 +8,9 @@
 				<!-- 当前状态 -->
 				<view class="people_info">
 					<text>当前状态：</text>
-					<text style="color:#ff0000; font-weight:bold;" v-if="state === 2">处理终止</text>
-					<text style="color:#009688; font-weight:bold;" v-if="state === 1">处理完成</text>
-					<text style="color:#FFB800; font-weight:bold;" v-if="state === 0">待处理</text>
+					<text style="color:#ff0000; font-weight:bold;" v-if="state == 2">处理终止</text>
+					<text style="color:#009688; font-weight:bold;" v-if="state == 1">处理完成</text>
+					<text style="color:#FFB800; font-weight:bold;" v-if="state == 0">待处理</text>
 				</view>
 				<!-- 处理反馈 -->
 				<view class="people_info">
@@ -217,8 +217,8 @@ export default{
 			phone: "", //报备人手机
 			info: '', //报备信息
 			state_msg: '', //处理反馈信息
-			state:"",  //当前状态
-			operationType: '', //运维类别
+			state: 0,  //当前状态
+			operationType:  1, //运维类别
 			startTime: '', //开始时间
 			endTime:  '', //结束时间
 			cod: false,  	//cod
