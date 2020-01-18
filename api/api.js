@@ -117,4 +117,11 @@ module.exports = {
 		url = "File/Upload";
 		httpUtil.upload(url, path, 'file', funSuccess, postData);
 	},
+	
+	//获取待处理数据报错和子服务器数
+	getDrHandleAndServerRun: function(postData, funSuccess)
+	{
+		let data = "?size=100&token=" + store.state.token + "&pc=" + postData.pc;		
+		httpUtil.get('zhgyHome/GetHomeData', data, funSuccess);
+	},
 } 

@@ -24,13 +24,6 @@
         <view class="btn-row">
             <button class="primary" @tap="bindLogin" hover-class="onbutton">登录</button>
         </view>
-		
-		
-        <view class="action-row">
-            <navigator url="/pages/user/reg/reg">注册账号</navigator>
-            <text>|</text>
-            <navigator url="/pages/user/updpwd/updpwd">忘记密码?</navigator>
-        </view>
     </view>
 </template>
 

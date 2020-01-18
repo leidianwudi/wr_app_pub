@@ -15,14 +15,14 @@
 					<image src="/static/img/work_order.png" mode="widthFix" @tap="toworkOrder"></image>
 				</view>
 				<text>待处理工单</text>
-				<tui-badge :type="level==2?'gray':'danger'" :dot="level==3?true:false" v-if="msgNum>0">{{level!=3?msgNum:""}}</tui-badge>
+				<tui-badge :type="msgNum>0 ? 'danger':'gray'" :dot="false">{{msgNum}}</tui-badge>			
 			</view>
 			<view class="report">
 				<view class="head_barImg">
-					<image src="/static/img/report.png" mode="widthFix" @tap="toResort"></image>
+					<image src="/static/img/report.png" mode="widthFix"></image>
 				</view>
-				<text>待处理报备</text>
-				<tui-badge :type="level==2?'gray':'danger'" :dot="level==3?true:false" v-if="msgNum>0">{{level!=3?msgNum:""}}</tui-badge>
+				<text>运行的子服务器数：</text>
+				<text class="serverRunCount">{{serverRunCount}}</text>
 			</view>
 		</view>
 		<!-- 公告 -->
@@ -69,6 +69,7 @@ import tuiBadge from "@/components/badge/badge";
 import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue";
 import mIcon from "@/components/m-icon/m-icon.vue";
 import storage from '@/api/storage.js';
+import api from "@/api/api.js";
 export default {
 	components: {
 		uniNavBar,
@@ -77,17 +78,36 @@ export default {
 	},
 	data() {
 		return {
-			level: 1,
-			msgNum: 3,
-			warn: '',
-			notice: '',
-			admin: false
+			msgNum: 0,  //待处理工单数
+			warn: '',  // 告警文字
+			notice: '', //公告文字
+			admin: false, //
+			userEn: null,
+			serverRunCount: 0 //运行的子服务器数
 		}
 	},
 	onLoad() {
 		this.isAdmin();//判断是否为管理员
+		this.userEn = storage.getMyInfo();
+	},
+	onShow(){
+		this.getDrHandleAndServerRun();
 	},
 	methods:{
+		//获取待处理数据报错和子服务器数
+		getDrHandleAndServerRun(){
+			let _this = this;
+			api.getDrHandleAndServerRun({pc: this.userEn.pc},res=>{
+				let code = api.getCode(res);
+				let data = api.getData(res);
+				console.log(data);
+				if(code ===0){
+					_this.serverRunCount = data.serverRunCount;
+					_this.msgNum = data.drHandleCount;
+				}
+			});
+		},
+		//进入报备 or 查看页面
 		toCheck(){
 			if(this.admin){
 				uni.navigateTo({
@@ -252,5 +272,8 @@ export default {
 		margin-top:10rpx;
 		color:#2E2E2E;
 		font-size:15px;
+	}
+	.serverRunCount{
+		font-weight:bold;
 	}
 </style>

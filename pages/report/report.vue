@@ -46,11 +46,11 @@
 						<text class="margin_T correct_name">COD：</text>
 						<view class="correct_info">
 							<input class="margin_T timeWidth" type="text" value="" @tap="show('codStart')" v-model="codstartTime"
-							 placeholder="开始时间" />
+							 placeholder="开始时间" :disabled="true" />
 							<input type="text" value="" v-model="codStartInputMsg" placeholder="输入开始正确值" class="margin_T infoWidth" />
 						</view>
 						<view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="codendTime" placeholder="结束时间" @tap="show('codEnd')" />
+							<input class="margin_T timeWidth" type="text" value="" v-model="codendTime" placeholder="结束时间" @tap="show('codEnd')" :disabled="true" />
 							<input type="text" value="" v-model="codEndInputMsg" class="margin_T infoWidth" placeholder="输入结束正确值" />
 						</view>
 					</view>
@@ -58,11 +58,11 @@
 					<view class="" v-if="andan ? true : false">
 						<text class="margin_T correct_name">氨氮：</text>
 						<view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="andanstartTime" placeholder="开始时间" @tap="show('andanStart')" />
+							<input class="margin_T timeWidth" type="text" value="" v-model="andanstartTime" placeholder="开始时间" @tap="show('andanStart')" :disabled="true"/>
 							<input type="text" value="" v-model="andanStartInputMsg" placeholder="输入开始正确值" class="margin_T infoWidth" />
 						</view>
 						<view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="andanendTime" placeholder="结束时间" @tap="show('andanEnd')" />
+							<input class="margin_T timeWidth" type="text" value="" v-model="andanendTime" placeholder="结束时间" @tap="show('andanEnd')" :disabled="true"/>
 							<input type="text" value="" v-model="andanEndInputMsg" placeholder="输入结束正确值" class="margin_T infoWidth" />
 						</view>
 					</view>
@@ -70,22 +70,22 @@
 					<view class="SS" v-if="ss ? true : false">
 						<text class="margin_T correct_name">SS：</text>
 						<view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="ssstartTime" placeholder="开始时间" @tap="show('ssStart')" />
+							<input class="margin_T timeWidth" type="text" value="" v-model="ssstartTime" placeholder="开始时间" @tap="show('ssStart')" :disabled="true"/>
 							<input type="text" value="" v-model="ssStartInputMsg" placeholder="输入开始正确值" class="margin_T infoWidth" />
 						</view>
 						<view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="ssendTime" placeholder="结束时间" @tap="show('ssEnd')" />
+							<input class="margin_T timeWidth" type="text" value="" v-model="ssendTime" placeholder="结束时间" @tap="show('ssEnd')" :disabled="true"/>
 							<input type="text" value="" v-model="ssEndInputMsg" placeholder="输入结束正确值" class="margin_T infoWidth" />
 						</view>
 					</view>
 					<view class="PH" v-if="ph ? true : false">
 						<text class="margin_T correct_name">PH：</text>
 						<view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="phstartTime" placeholder="开始时间" @tap="show('phStart')" />
+							<input class="margin_T timeWidth" type="text" value="" v-model="phstartTime" placeholder="开始时间" @tap="show('phStart')" :disabled="true" />
 							<input type="text" value="" v-model="phStartInputMsg" placeholder="输入结束正确值" class="margin_T infoWidth" />
 						</view>
 						<view class="correct_info">
-							<input class="margin_T timeWidth" type="text" value="" v-model="phendTime" placeholder="结束时间" @tap="show('phEnd')" />
+							<input class="margin_T timeWidth" type="text" value="" v-model="phendTime" placeholder="结束时间" @tap="show('phEnd')" :disabled="true" />
 							<input type="text" value="" v-model="phEndInputMsg" placeholder="输入结束正确值" class="margin_T infoWidth" />
 						</view>
 					</view>
@@ -95,13 +95,13 @@
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*开始时间：</view>
 				<view class="date_1">
-					<input type="text" value="" @tap="show(1)" v-model="beginInfo" />
+					<input type="text" value="" @tap="show(1)" v-model="beginInfo" :disabled="true" />
 				</view>
 			</view>
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*结束时间：</view>
 				<view class="date_1">
-					<input type="text" value="" @tap="show(2)" v-model="result" />
+					<input type="text" value="" @tap="show(2)" v-model="result" :disabled="true" />
 				</view>
 			</view>
 			<!-- 报备人 -->
@@ -122,7 +122,7 @@
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*报备人信息：</view>
 				<view class="">
-					<textarea value="" placeholder="" v-model="info" />
+					<textarea value="" placeholder=" " v-model="info" />
 					</view>
 			</view>
 			<!-- 附件 -->
@@ -437,7 +437,7 @@ export default{
 				})
 			}else{
 				uni.showToast({
-					title: "必填信息不能为空",
+					title: "提交数据不完整",
 					image:'/static/img/fail-circle.png',
 					duration:2500
 				});

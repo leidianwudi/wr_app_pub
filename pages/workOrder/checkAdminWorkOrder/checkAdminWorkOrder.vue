@@ -20,7 +20,7 @@
 				<!-- 处理反馈 -->
 				<view class="people_info">
 					<text>处理反馈：</text>
-					<textarea v-model="state_msg" placeholder="" class="textarea_box" autoHeight="true" :disabled="true"/>
+					<textarea v-model="state_msg" placeholder=" " class="textarea_box" autoHeight="true" :disabled="true"/>
 				</view>
 <!-- 				<view class="people_info">
 					<button type="primary" class="submit">确认处理</button>
@@ -42,7 +42,7 @@
 				<!-- 报备信息 -->
 				<view class="people_info">
 					<text>报备信息：</text>
-					<textarea v-model="info" placeholder="" class="textarea_box" autoHeight="true" :disabled="true"/>
+					<textarea v-model="info" placeholder=" " class="textarea_box" autoHeight="true" :disabled="true"/>
 				</view>
 			</view>
 			<!-- 数据信息 -->
