@@ -266,7 +266,7 @@ export default{
 		//处理按钮
 		handle(){
 			uni.navigateTo({
-				url: '/pages/workOrder/checkAdminWorkOrder/handleData/handleData?id=' + this.id + "&operationType=" + this.operationType
+				url: '/pages/workOrder/checkAdminWorkOrder/handleData/handleData?id=' + this.id + "&operationType=" + this.operationType + "&state=" +  this.state
 			})
 		},
 		//处理按钮
@@ -315,7 +315,7 @@ export default{
 					_this.info = data.reportInfo;
 					//状态信息
 					_this.state = data.state;
-					_this.state_msg = data.handleMsg === null ? '' : data.handleMsg;
+					_this.state_msg = data.handleMsg;
 		            //开始时间和结束时间
 					_this.startTime = data.startTime;
 					_this.endTime = data.endTime;
