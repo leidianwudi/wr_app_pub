@@ -1,13 +1,13 @@
 <template>
-	<view class="">
+	<view class="content" style="background:#fff;">
 <!-- 		自定义导航栏 -->
-		<uni-nav-bar background-color="#4f80df" color="#fff">
+<!-- 		<uni-nav-bar background-color="#4f80df" color="#fff">
 			<view slot="default" class="content">
 				<input type="text" value="" />
 				<m-icon type="search" class="search_icon"></m-icon>
 				<m-icon type="scan" class="scan_icon"></m-icon>
 			</view>
-		</uni-nav-bar>	
+		</uni-nav-bar> -->	
 		<!-- 未读信息 -->
 		<view class="head_bar">
 			<view class="work_order">

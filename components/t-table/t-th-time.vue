@@ -62,7 +62,7 @@
 		display:flex;
 		justify-content:center;
 		align-items:center;
-		font-size: 30upx;
+		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
 		color: #3b4246;

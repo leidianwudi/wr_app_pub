@@ -100,29 +100,29 @@
 			</view>
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*结束时间：</view>
-				<view class="">
+				<view class="date_1">
 					<input type="text" value="" @tap="show(2)" v-model="result" :disabled="true" />
 				</view>
 			</view>
 			<!-- 报备人 -->
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*报备人：</view>
-				<view class="">
+				<view class="date_1">
 					<input type="text" value="" v-model="name" />
 				</view>
 			</view>
 			<!-- 报备人手机 -->
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*报备人手机：</view>
-				<view class="">
+				<view class="date_1">
 					<input type="text" value="" v-model="phone" />
 				</view>
 			</view>
 			<!-- 报备人信息 -->
 			<view class="input-box">
 				<view class="uni-title uni-common-mt date_test">*报备信息：</view>
-				<view class="">
-					<textarea value="" placeholder=" " v-model="info" />
+				<view class="date_1">
+					<textarea value="" placeholder=" " v-model="info" style="width:100%;"/>
 					</view>
 			</view>
 			<!-- 附件 -->
@@ -139,7 +139,7 @@
 								<t-th style="flex:1;">操作</t-th>
 							</t-tr>
 						<t-tr v-for="(item, index) in flieList" :key="index" style="display: flex;">
-							<t-td style="flex:1;"><text class="fileOriginalName">{{ item.fileOriginalName }}</text></t-td> 
+							<t-td style="flex:1;">{{ item.fileOriginalName|fileNameFormat }}</t-td> 
 							<t-td style="flex:1;">{{ item.fileSize|sizeFormat }}kb</t-td>
 							<t-td style="text-decoration:underline;flex:1;" @tap="del_flie(index)">删除</t-td>
 						</t-tr>
@@ -180,6 +180,11 @@ export default{
 			let size = value/1024;
 			size = size.toFixed(1);
 			return size;
+		},
+		fileNameFormat(value){
+			console.log(value);
+			let name = value.slice(0, 7);
+			return name+"...";
 		}
 	},
 	data() {
@@ -253,7 +258,6 @@ export default{
 							let code = res.errCode;
 							let data = res.resp;
 							if(code === 0){
-								console.log(data);
 								_this.flieList.push(data);
 							}
 						})
@@ -417,11 +421,18 @@ export default{
 					let code = api.getCode(res);
 					let msg = api.getMsg(res);
 					if(code === 0){
-						uni.showToast({
-							title: "成功",
-							image:'/static/img/check-circle.png',
-							duration:2000
-						});
+						uni.showModal({
+							title: "提示",
+							content: "提交成功！",
+							showCancel: false,
+							success(res) {
+								if(res.confirm){
+									uni.navigateBack({
+										delta: 1
+									})
+								}
+							}
+						})
 					}else{
 						uni.showToast({
 							title: msg,
@@ -571,7 +582,7 @@ export default{
 	}
 	.input-box{
 		display:flex;
-		justify-content:center;
+		justify-content:space-between;
 		align-items:center;
 		margin-bottom:30rpx;
 		margin-top:50rpx;
@@ -581,8 +592,11 @@ export default{
 	}
 	.date_test{
 		font-size:16px;
-		width:35%;
+		width:36%;
 		text-align:right;
+	}
+	.date_1{
+		width:64%;
 	}
 	.input-box input, .input-box textarea{
 		border:1px solid #e6e6e6;

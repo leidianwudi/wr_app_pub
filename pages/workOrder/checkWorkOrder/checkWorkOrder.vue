@@ -46,7 +46,7 @@
 				<!-- 运维类别 -->
 				<view class="people_info">
 					<text>运维类别：</text>    
-					<view class="info">
+<!-- 					<view class="info">
 						<checkbox-group>
 							<label>
 							    <checkbox value="cb" :disabled="true" :checked ="operationType === 1? true : false"/>
@@ -69,7 +69,21 @@
 								<text>日常运维</text>
 							</label>							
 						</checkbox-group>
-					</view>				
+					</view> -->	
+					<view class="info">
+						<radio-group>
+							<label class="radio">
+								<radio value="1" :checked ="operationType === 1? true : false" :disabled="true"/>设备标定</label>
+							<label class="radio">
+								<radio value="2" :checked ="operationType === 2? true : false" :disabled="true"/>设备清洗</label>
+							<label class="radio">
+								<radio value="3" :checked ="operationType === 3? true : false" :disabled="true"/>备注校准</label>
+							<label class="radio">
+								<radio value="4" :checked ="operationType === 4? true : false" :disabled="true"/>设备故障提示</label>
+							<label class="radio">
+								<radio value="5" :checked ="operationType === 5? true : false" :disabled="true"/>日常运维</label>
+						</radio-group>
+					</view>
 				</view>
 				<!-- 数据因子 -->
             	<view class="people_info">
@@ -425,5 +439,15 @@ export default{
 		overflow: hidden;
 		text-overflow:ellipsis;
 		white-space: nowrap;
+	}
+	.info checkbox-group, .info radio-group{
+		display:flex;
+		justify-content:flex-start;
+		font-size:15px;
+		flex-wrap: wrap;
+	}
+	.info label{
+		margin-top:20rpx;
+		margin-left:20rpx;
 	}
 </style>

@@ -59,12 +59,12 @@
 		width:300rpx;
 		display: flex;
 		align-items: center;
-		padding: 15upx 10rpx;
+		padding: 15upx 10upx;
 		border-right: 1px #d0dee5 solid;
 		border-bottom: 1px #d0dee5 solid;		
 		text-align: center;
 		color: #555c60;
-		font-size: 28upx;
+		font-size: 14px;
 		flex-shrink: 0;
 	}
 </style>
