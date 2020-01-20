@@ -59,6 +59,7 @@
 	.content {
 		display: flex;
 		flex: 1;
+		width:100%;
 		flex-direction: column;
 		overflow:hidden;
 /* 		background-color:rgba(238,235,233,.3); */
