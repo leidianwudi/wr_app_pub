@@ -47,10 +47,10 @@
 												<t-th>余氯</t-th>
 												<t-th>电导率</t-th>
 												<t-th>温度</t-th>
-												<t-th>阀门控制模式</t-th>
+												<!-- <t-th>阀门控制模式</t-th>
 												<t-th>阀门自动</t-th>
 												<t-th>市电</t-th>
-												<t-th>阀门状态</t-th>
+												<t-th>阀门状态</t-th> -->
 											</t-tr>
 											<t-tr v-for="(item, index) in tableList" :key="index">
 												<t-td>{{ item.zhgyServerName }}</t-td>
@@ -67,10 +67,10 @@
 												<t-td>{{ item.yuLv }}</t-td>  <!-- 余氯 -->
 												<t-td>{{ item.eleLv }}</t-td>  <!-- 电导率 -->
 												<t-td>{{ item.temperature }}</t-td>  <!-- 温度 -->
-												<t-td>{{ item.gateControl === 0 ? "计费模式" : item.gateControl }}</t-td>  <!-- 阀门控制模式 -->
-												<t-td>{{ item.gateAuto === 1 ? "自动" : "手动" }}</t-td>   <!-- 阀门自动 -->
-												<t-td>{{ item.cityEle === 1 ? "市电" : item.cityEle }}</t-td>   <!-- 市电 -->
-												<t-td>{{ item.gateOpen === 1 ? "开到位" : "关到位" }}</t-td>  <!-- 阀门开到位 -->
+												<!-- <t-td>{{ item.gateControl === 0 ? "计费模式" : item.gateControl }}</t-td> -->  <!-- 阀门控制模式 -->
+												<!-- <t-td>{{ item.gateAuto === 1 ? "自动" : "手动" }}</t-td> -->   <!-- 阀门自动 -->
+												<!-- <t-td>{{ item.cityEle === 1 ? "市电" : item.cityEle }}</t-td> -->   <!-- 市电 -->
+												<!-- <t-td>{{ item.gateOpen === 1 ? "开到位" : "关到位" }}</t-td> --> <!-- 阀门开到位 -->
 											</t-tr>
 										</t-table>
 									</block>
@@ -249,6 +249,7 @@
     import tranNowList from "@/api/tranNowList.js";
 	import tranDayList from "@/api/tranDayList.js";
 	import tranMoneyList from "@/api/tranMoneyList.js";
+	import util from "@/common/util.js";
 	export default {
 		components: {
 			uniSegmentedControl,
@@ -307,9 +308,9 @@
 			}
 		},
 		onLoad() {
-			this.getNowDataList();
 			this.getNowDataNameList();
-			this.myTimerOpen();
+			//this.myTimerOpen();
+			//this.getNowDataList();
 		},
 		onUnload() {
 			this.myTimerStop();  //关闭瞬时数据请求定时器
@@ -450,45 +451,35 @@
 				uni.showLoading({
 				    title: '加载中',
 					success() {
-						let data = {
-							page: 1,
-							limit: 200,
-							pc: storage.getMyInfo().pc,
-							serverId: _this.saveNowServerNameInfo == "" ? null : _this.saveNowServerNameInfo.id,
-							enterpriceName: _this.nowEnterpriceName == "" ? null : _this.nowEnterpriceName
-						}
-						api.NowDataList(data, res=>{
-							let data1 = api.getData(res);
-							let code = api.getCode(res);
-							if(code === 0){
-								_this.tableList = data1;
-								uni.hideLoading();
-							}
-						});
+                        _this.NowDataList();
 					}
 				});
 			},
-			//获取瞬时数据列表（每20秒获取一次）
-			getNowDataList(){
-				if(this.current != 0) return;
+
+			//获取瞬间数据封装
+			NowDataList(){
 				let _this = this;
-				api.NowDataList({
+				let data = {
 					page: 1,
 					limit: 200,
 					pc: storage.getMyInfo().pc
-				},res=>{
+				}
+				if(!util.isEmpty(this.saveNowServerNameInfo)) data.serverId = this.saveNowServerNameInfo.id;
+				if(!util.isEmpty(this.nowEnterpriceName)) data.enterpriceName =  this.nowEnterpriceName;
+				api.NowDataList(data, res=>{
+					let data1 = api.getData(res);
 					let code = api.getCode(res);
-					let data = api.getData(res);
 					if(code === 0){
-						// console.log(data);
-						let list = tranNowList.tranNowList(data);
-						_this.tableList = list;
-						// for(let i=0; i<data.length; i++){
-						// 	_this.tableList.push(data[i]);
-						// 	if(_this.tableList.length == data.length) uni.hideLoading();
-						// }
+						_this.tableList = tranNowList.tranNowList(data1);
+						uni.hideLoading();
 					}
 				});
+			},
+			
+			//获取瞬时数据列表（每20秒获取一次）
+			getNowDataList(){
+				if(this.current != 0) return;
+				this.NowDataList();
 			},
 			//获取日数据列表
 			dayDataList(){

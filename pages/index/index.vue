@@ -100,7 +100,6 @@ export default {
 			api.getDrHandleAndServerRun({pc: this.userEn.pc},res=>{
 				let code = api.getCode(res);
 				let data = api.getData(res);
-				console.log(data);
 				if(code ===0){
 					_this.serverRunCount = data.serverRunCount;
 					_this.msgNum = data.drHandleCount;

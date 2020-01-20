@@ -1,59 +1,60 @@
+import util from "@/common/util.js";
 module.exports = {
 	tranNowList(nowList){
 		let newList = [];
 		nowList.forEach(function(item){
 			let newObj = {};
-			newObj.COD = item.COD;
-			newObj.PH = item.PH;
-			newObj.SS = item.SS;
-			newObj.enterpriceId = item.enterpriceId;
-			newObj.enterpriceName = item.enterpriceName;
-			newObj.id = item.id;
+			newObj.COD = util.dataFormat(item.COD);
+			newObj.PH = util.dataFormat(item.PH);
+			newObj.SS = util.dataFormat( item.SS);
+			newObj.enterpriceId = util.dataFormat(item.enterpriceId);
+			newObj.enterpriceName = util.dataFormat(item.enterpriceName);
+			newObj.id = util.dataFormat(item.id);
 			
-			newObj.pId = item.pId;
-			newObj.zhgyServerId = item.zhgyServerId;
-			newObj.zhgyServerName = item.zhgyServerName;
-			newObj.yuLv = item.余氯;
-			newObj.closeFail = item.关阀超时故障;
+			newObj.pId = util.dataFormat(item.pId);
+			newObj.zhgyServerId = util.dataFormat(item.zhgyServerId);
+			newObj.zhgyServerName = util.dataFormat(item.zhgyServerName);
+			newObj.yuLv = util.dataFormat(item.余氯);
+			newObj.closeFail = util.dataFormat(item.关阀超时故障);
 			
-			newObj.closeTimeSet = item.关阀超时时间设置;
-			newObj.cityEle = item.市电;
-			newObj.cityFail = item.市电故障;
-			newObj.openFail = item.开阀超时故障;
-			newObj.openTimeSet = item.开阀超时时间设置;
+			newObj.closeTimeSet = util.dataFormat(item.关阀超时时间设置);
+			newObj.cityEle = util.dataFormat(item.市电);                  //
+			newObj.cityFail = util.dataFormat(item.市电故障);
+			newObj.openFail = util.dataFormat(item.开阀超时故障);
+			newObj.openTimeSet = util.dataFormat(item.开阀超时时间设置);
 			
-			newObj.allBalance = item.总余额;
-			newObj.failRst = item.故障复位;
-			newObj.dayAmount = item.日配额;
-			newObj.dayAmountRemain = item.日配额余量;
-			newObj.dayAmountMin = item.日配额分;
+			newObj.allBalance = util.dataFormat(item.总余额);
+			newObj.failRst = util.dataFormat(item.故障复位);
+			newObj.dayAmount = util.dataFormat(item.日配额);
+			newObj.dayAmountRemain = util.dataFormat(item.日配额余量);
+			newObj.dayAmountMin = util.dataFormat(item.日配额分);
 			
-			newObj.dayAmountHour = item.日配额时;		
-			newObj.time = item.时间;
-			newObj.millisecond = item.毫秒;
-			newObj.anDan = item.氨氮;
-			newObj.waterMoney = item.流量吨水收费;
+			newObj.dayAmountHour = util.dataFormat(item.日配额时);		
+			newObj.time = util.dataFormat(item.时间);
+			newObj.millisecond = util.dataFormat(item.毫秒);
+			newObj.anDan = util.dataFormat(item.氨氮);
+			newObj.waterMoney = util.dataFormat(item.流量吨水收费);
 			
-			newObj.waterSp = item.流量结算间隔;	
-			newObj.waterFail = item.流量计通讯故障;
-			newObj.temperature = item.温度;
-			newObj.eleLv = item.电导率;
-			newObj.nowWater = item.瞬时流量;
+			newObj.waterSp = util.dataFormat(item.流量结算间隔);	
+			newObj.waterFail = util.dataFormat(item.流量计通讯故障);
+			newObj.temperature = util.dataFormat(item.温度);
+			newObj.eleLv = util.dataFormat(item.电导率);
+			newObj.nowWater = util.dataFormat(item.瞬时流量);
 			
-			newObj.addWater = item.累计流量;
-			newObj.networkStatus = item.网络状态;	
-			newObj.overLimit = item.透支额度;		
-			newObj.doorOpen = item.门禁开;
-			newObj.doorCloseTime = item.门禁自动关时间;
+			newObj.addWater = util.dataFormat(item.累计流量);
+			newObj.networkStatus = util.dataFormat(item.网络状态);	
+			newObj.overLimit = util.dataFormat(item.透支额度);		
+			newObj.doorOpen = util.dataFormat(item.门禁开);
+			newObj.doorCloseTime = util.dataFormat(item.门禁自动关时间);
 			
-			newObj.gateClose = item.阀门关到位;
-			newObj.gateOpen = item.阀门开到位;
-			newObj.gateControl = item.阀门控制模式;	
-			newObj.gateFail = item.阀门故障;
-			newObj.gateAuto = item.阀门自动;
+			newObj.gateClose = util.dataFormat(item.阀门关到位);       //
+			newObj.gateOpen = util.dataFormat(item.阀门开到位);        //
+			newObj.gateControl = util.dataFormat(item.阀门控制模式);	 //
+			newObj.gateFail = util.dataFormat(item.阀门故障);         //
+			newObj.gateAuto = util.dataFormat(item.阀门自动);         //
 			
-			newObj.gateFarClose = item.阀门远控关;	
-			newObj.gateFarOpen = item.阀门远控开;
+			newObj.gateFarClose = util.dataFormat(item.阀门远控关);	//
+			newObj.gateFarOpen = util.dataFormat(item.阀门远控开);    //
 			
 			newList.push(newObj);
 		});

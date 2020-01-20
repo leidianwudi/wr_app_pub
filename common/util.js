@@ -90,5 +90,24 @@ module.exports = {
 		uni.setNavigationBarTitle({
 		    title: val
 		});
+	},
+	//是否是数字
+	isNum(num){
+		if(!isNaN(num)){
+			return true;
+		}
+		return false;
+	},
+	
+	//数据格式化
+	dataFormat(data){
+		if(this.isEmpty(data)) return "无";
+		if(this.isNum(data)){
+			if(data%1 == 0) return data;
+			
+			return data.toFixed(2);
+		}
+		
+		return data;
 	}
 }
