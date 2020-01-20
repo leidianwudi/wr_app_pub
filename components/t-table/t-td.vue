@@ -57,7 +57,7 @@
 <style>
 	.t-td {
 		width:200rpx;
-		display: flex;
+		/* display: flex; */
 		align-items: center;
 		padding: 15upx 10rpx;
 		border-right: 1px #d0dee5 solid;

@@ -59,9 +59,9 @@
 	.t-th {
         width:200rpx;
 		height:30rpx;
-		display:flex;
-		justify-content:center;
-		align-items:center;
+		/* display:flex; */
+/* 		justify-content:center;
+		align-items:center; */
 		font-size: 30upx;
 		font-weight: bold;
 		text-align: center;
