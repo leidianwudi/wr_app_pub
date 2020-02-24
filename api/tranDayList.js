@@ -28,7 +28,7 @@ module.exports = {
 			newObj.eleLvMax = util.dataFormat(item.电导率Max);
 			newObj.eleLvMin = util.dataFormat(item.电导率Min);
 			newObj.dleAddWater = util.dataFormat(item.累计流量);
-			
+			newObj.hour = "";	//时间，客户端自己使用
 			newList.push(newObj);
 		});
 		return newList;

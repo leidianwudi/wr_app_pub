@@ -494,8 +494,7 @@
 				if(util.isEmpty(this.dayData) || util.isEmpty(this.saveDayServerNameInfo) || util.isEmpty(this.dayEnterpriceName)) {
 					this.mustSelectInput();
 					return;
-				}
-				this.dayList = [];
+				}				
 				let _this = this;
 				uni.showLoading({
 					title: '加载中',
@@ -509,12 +508,9 @@
 							let code = api.getCode(res);
 							let data = api.getData(res);
 							if(code === 0){								
-								let list = tranDayList.tranDayList(data);
-								list.forEach(function(item, index){
-									item.hour = "";
-									_this.dayList.push(item);
-									if(index == data.length -1) uni.hideLoading();
-								});	
+								let list = tranDayList.tranDayList(data);								
+								uni.hideLoading();
+								_this.dayList = list;
 								for(let i = 0; i < _this.hourList.length; i++){
 									_this.dayList[i].hour = _this.hourList[i];
 								};
@@ -529,7 +525,6 @@
 					this.mustSelectInput();
 					return;
 				}
-				this.monthList = [];
 				let _this = this;
 				uni.showLoading({
 				    title: '加载中',
@@ -544,9 +539,7 @@
 							let data = api.getData(res);
 							if(code === 0){
 								let list = tranMoneyList.tranMoneyList(data);
-								list.forEach(function(item, index){
-									if(index == data.length -1) uni.hideLoading();									
-								});
+								uni.hideLoading();									
 								_this.monthList = list;
 							};
 						});
