@@ -56,15 +56,16 @@
 
 <style>
 	.t-td-time {
-		width:300rpx;
-		display: flex;
+		width:150px;
+		height:16px;
+		/* display: flex; */
 		align-items: center;
-		padding: 15upx 10upx;
+		padding: 5px 10px;
 		border-right: 1px #d0dee5 solid;
 		border-bottom: 1px #d0dee5 solid;		
 		text-align: center;
 		color: #555c60;
-		font-size: 14px;
+		font-size: 12px;
 		flex-shrink: 0;
 	}
 </style>

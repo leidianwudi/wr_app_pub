@@ -57,19 +57,19 @@
 
 <style>
 	.t-th {
-        width:200rpx;
-		height:30rpx;
-		/* display:flex; */
-/* 		justify-content:center;
-		align-items:center; */
-		font-size: 16px;
-		font-weight: bold;
+        width:80px;
+		height:16px;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		font-size: 12px;
+		/* font-weight: bold; */
 		text-align: center;
 		color: #3b4246;
 		border-top: 1px #d0dee5 solid;
 		border-right: 1px #d0dee5 solid;
 		border-bottom: 1px #d0dee5 solid;
-		padding: 15upx 10rpx;
+		padding: 5px 10px;
 		flex-shrink: 0;
 	}
 </style>

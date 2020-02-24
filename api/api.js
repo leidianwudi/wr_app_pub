@@ -43,8 +43,14 @@ module.exports = {
 	//查询日数据
 	DayDataList: function(postData, funSuccess) 
 	{
-		let data = "?date=" + postData.date + "&token=" + store.state.token + "&pc=" + postData.pc;
-		httpUtil.get('zhgyData/EnterpriceDayDataList', data, funSuccess);
+		if(postData.serverId || postData.enterpriceName){
+			let data = "?date=" + postData.date + "&token=" + store.state.token + "&pc=" + postData.pc + "&serverId=" + postData.serverId + "&enterpriceName=" + postData.enterpriceName;
+			httpUtil.get('zhgyData/EnterpriceDayDataList', data, funSuccess);
+		}
+		else{				
+			let data = "?date=" + postData.date + "&token=" + store.state.token + "&pc=" + postData.pc;
+			httpUtil.get('zhgyData/EnterpriceDayDataList', data, funSuccess);
+		}
 	},
 	
 	//查询月数据

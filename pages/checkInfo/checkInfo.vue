@@ -24,6 +24,8 @@
 									<block class="box">
 										<t-table>
 											<t-tr>
+												<t-th>子服务器</t-th>
+												<t-th>企业</t-th>
 												<t-th-time>时间</t-th-time>
 												<t-th>瞬时</t-th>
 												<t-th>累计</t-th>
@@ -42,6 +44,8 @@
 												<t-th>阀门状态</t-th>
 											</t-tr>
 											<t-tr v-for="(item, index) in tableList" :key="index">
+												<t-td>{{ item.zhgyServerName }}</t-td>
+												<t-td>{{ item.enterpriceName }}</t-td>
 												<t-td-time>{{ item.time }}</t-td-time> <!-- 时间 -->
 												<t-td>{{ item.nowWater }}</t-td>  <!-- 瞬时流量 -->
 												<t-td>{{ item.addWater }}</t-td>  <!-- 累计流量 -->
@@ -212,6 +216,8 @@
     import tranNowList from "@/api/tranNowList.js";
 	import tranDayList from "@/api/tranDayList.js";
 	import tranMoneyList from "@/api/tranMoneyList.js";
+	import util from "@/common/util.js";
+	
 	export default {
 		components: {
 			uniSegmentedControl,
@@ -358,8 +364,21 @@
 					}
 				});
 			},
+			//请选择日期提示
+			mustSelectDate(){
+				uni.showToast({
+					title: "请选择日期",
+					image:'/static/img/fail-circle.png',
+					duration:2500
+				});	
+			},
+			//获取日数据列表
 			dayDataList(){
-				if(this.dayData === '') return;
+				if(util.isEmpty(this.dayData)) 
+				{
+					this.mustSelectDate();
+					return;
+				}
 				this.dayList = [];
 				let _this = this;
 				api.DayDataList({
@@ -380,8 +399,12 @@
 					};
 				});
 			},
+			////获取月数据列表
 			monthDataList(){
-				if(this.monthData === '') return;
+				if(util.isEmpty(this.monthData)) {
+					this.mustSelectDate();
+					return;
+				}
 				this.monthList = [];
 				let _this = this;
 				api.MonthDataList({

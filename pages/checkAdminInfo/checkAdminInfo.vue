@@ -47,10 +47,10 @@
 												<t-th>余氯</t-th>
 												<t-th>电导率</t-th>
 												<t-th>温度</t-th>
-												<!-- <t-th>阀门控制模式</t-th>
+												<t-th>阀门控制模式</t-th>
 												<t-th>阀门自动</t-th>
 												<t-th>市电</t-th>
-												<t-th>阀门状态</t-th> -->
+												<t-th>阀门状态</t-th>
 											</t-tr>
 											<t-tr v-for="(item, index) in tableList" :key="index">
 												<t-td>{{ item.zhgyServerName }}</t-td>
@@ -67,10 +67,10 @@
 												<t-td>{{ item.yuLv }}</t-td>  <!-- 余氯 -->
 												<t-td>{{ item.eleLv }}</t-td>  <!-- 电导率 -->
 												<t-td>{{ item.temperature }}</t-td>  <!-- 温度 -->
-												<!-- <t-td>{{ item.gateControl === 0 ? "计费模式" : item.gateControl }}</t-td> -->  <!-- 阀门控制模式 -->
-												<!-- <t-td>{{ item.gateAuto === 1 ? "自动" : "手动" }}</t-td> -->   <!-- 阀门自动 -->
-												<!-- <t-td>{{ item.cityEle === 1 ? "市电" : item.cityEle }}</t-td> -->   <!-- 市电 -->
-												<!-- <t-td>{{ item.gateOpen === 1 ? "开到位" : "关到位" }}</t-td> --> <!-- 阀门开到位 -->
+												<t-td>{{ item.gateControl === 0 ? "计费模式" : item.gateControl }}</t-td>  <!-- 阀门控制模式 -->
+												<t-td>{{ item.gateAuto === 1 ? "自动" : "手动" }}</t-td>   <!-- 阀门自动 -->
+												<t-td>{{ item.cityEle === 1 ? "市电" : item.cityEle }}</t-td>   <!-- 市电 -->
+												<t-td>{{ item.gateOpen === 1 ? "开到位" : "关到位" }}</t-td> <!-- 阀门开到位 -->
 											</t-tr>
 										</t-table>
 									</block>
@@ -481,18 +481,30 @@
 				if(this.current != 0) return;
 				this.NowDataList();
 			},
+			//查询条件不完整提示
+			mustSelectInput(){
+				uni.showToast({
+					title: "查询条件不完整",
+					image:'/static/img/fail-circle.png',
+					duration:2500
+				});	
+			},
 			//获取日数据列表
 			dayDataList(){
-				if(this.dayData === '') return;
+				if(util.isEmpty(this.dayData) || util.isEmpty(this.saveDayServerNameInfo) || util.isEmpty(this.dayEnterpriceName)) {
+					this.mustSelectInput();
+					return;
+				}
+				this.dayList = [];
 				let _this = this;
 				uni.showLoading({
 					title: '加载中',
 					success() {
 						api.DayDataList({
 						    date: _this.dayData,
-							pc: storage.getMyInfo().pc,
-							serverId: _this.saveDayServerNameInfo == "" ? null : _this.saveDayServerNameInfo.id,
-							enterpriceName: _this.dayEnterpriceName == "" ? null : _this.nowEnterpriceName
+							pc: storage.getMyInfo().pc,							
+							serverId: _this.saveDayServerNameInfo.id,
+							enterpriceName: _this.dayEnterpriceName
 						},res=>{
 							let code = api.getCode(res);
 							let data = api.getData(res);
@@ -513,7 +525,11 @@
 			},
 			//获取月数据列表
 			monthDataList(){
-				if(this.monthData === '') return;
+				if(util.isEmpty(this.monthData) ||  util.isEmpty(this.saveMonthServerNameInfo) || util.isEmpty(this.monthEnterpriceName)) {
+					this.mustSelectInput();
+					return;
+				}
+				this.monthList = [];
 				let _this = this;
 				uni.showLoading({
 				    title: '加载中',
@@ -521,8 +537,8 @@
 						api.MonthDataList({
 						    date: _this.monthData,
 							pc: storage.getMyInfo().pc,
-							serverId: _this.saveMonthServerNameInfo == "" ? null : _this.saveMonthServerNameInfo.id,
-							enterpriceName: _this.monthEnterpriceName == "" ? null : _this.monthEnterpriceName
+							serverId: _this.saveMonthServerNameInfo.id,
+							enterpriceName: _this.monthEnterpriceName
 						},res=>{
 							let code = api.getCode(res);
 							let data = api.getData(res);

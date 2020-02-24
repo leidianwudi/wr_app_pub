@@ -62,7 +62,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		width: 80upx;
+		width: 80px;
 		color: #3b4246;
 	}
 
