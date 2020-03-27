@@ -60,7 +60,7 @@
 				</view>
 				<text>数据异常</text>
 			</view>
-			<view class="btn_box" @tap="toResort" v-if="!admin">
+			<view class="boder-righr btn_box" @tap="toResort" v-if="!admin">
 				<view class="btn btn_baobei">
 					<m-icon type="gear" color="#fff" size="32"></m-icon>
 				</view>
@@ -116,11 +116,11 @@ export default {
 		toAbnormal(){
 			if(this.admin){
 				uni.navigateTo({
-					url:'/pages/abnormal/abnormalAdmin/abnormalAdmin'
+					url:'/pages/abnormal/abnormal?isAdmin=1'
 				})
 			}else{
 				uni.navigateTo({
-					url:'/pages/abnormal/abnormal'
+					url:'/pages/abnormal/abnormal?isAdmin=0'
 				})
 			}
 		},

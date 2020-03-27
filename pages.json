@@ -62,11 +62,6 @@
 			"style":{
 				"navigationBarTitleText": "数据异常"
 			}
-		},{
-			"path":"pages/abnormal/abnormalAdmin/abnormalAdmin",
-			"style":{
-				"navigationBarTitleText": "数据异常"
-			}
 		}
 	],
 	"globalStyle": {
