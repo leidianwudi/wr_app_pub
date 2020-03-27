@@ -130,4 +130,18 @@ module.exports = {
 		let data = "?size=100&token=" + store.state.token + "&pc=" + postData.pc;		
 		httpUtil.get('zhgyHome/GetHomeData', data, funSuccess);
 	},
+	
+	//查询数据异常列表
+	DataExceptionList: function(postData, funSuccess)
+	{
+		postData.token = store.state.token;  //添加token
+		httpUtil.post('zhgyDataHandle/DataExceptionList', postData, funSuccess);
+	},
+	
+	//确认数据异常
+	ViewDataException: function(postData, funSuccess)
+	{
+		let data = "?id=" + postData.id + "&token=" + store.state.token + "&pc=" + postData.pc;		
+		httpUtil.get('zhgyDataHandle/ViewDataException', data, funSuccess);
+	},
 } 

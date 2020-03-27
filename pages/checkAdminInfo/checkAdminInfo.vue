@@ -310,7 +310,7 @@
 		onLoad() {
 			this.getNowDataNameList();
 			//this.myTimerOpen();
-			//this.getNowDataList();
+			this.getNowDataList();
 		},
 		onUnload() {
 			this.myTimerStop();  //关闭瞬时数据请求定时器

@@ -48,17 +48,23 @@
 				</view>
 				<text>数据调阅</text>
 			</view>
-			<view class="boder-righr btn_box" @tap="toResort" v-if="!admin">
-				<view class="btn btn_baobei">
-					<m-icon type="gear" color="#fff" size="32"></m-icon>
-				</view>
-				<text>现场报备</text>
-			</view>
-			<view class="btn_box" @tap="toworkOrder">
+			<view class="boder-righr btn_box" @tap="toworkOrder">
 				<view class="btn btn_guanli">
 					<m-icon type="compose" color="#fff" size="32"></m-icon>
 				</view>
 				<text>工单管理</text>
+			</view>
+			<view class="btn_box" @tap="toAbnormal">
+				<view class="btn btn_yichang">
+					<m-icon type="locked" color="#fff" size="32"></m-icon>
+				</view>
+				<text>数据异常</text>
+			</view>
+			<view class="btn_box" @tap="toResort" v-if="!admin">
+				<view class="btn btn_baobei">
+					<m-icon type="gear" color="#fff" size="32"></m-icon>
+				</view>
+				<text>现场报备</text>
 			</view>
 		</view>
 	</view>
@@ -105,6 +111,18 @@ export default {
 					_this.msgNum = data.drHandleCount;
 				}
 			});
+		},
+		//进入数据异常界面(普通用户与管理员的界面不同)
+		toAbnormal(){
+			if(this.admin){
+				uni.navigateTo({
+					url:'/pages/abnormal/abnormalAdmin/abnormalAdmin'
+				})
+			}else{
+				uni.navigateTo({
+					url:'/pages/abnormal/abnormal'
+				})
+			}
 		},
 		//进入报备 or 查看页面
 		toCheck(){
@@ -233,6 +251,7 @@ export default {
 	.btn_bar{
 		width:100%;
 		display:flex;
+		flex-wrap:wrap;
 	}
 	.btn_bar>view{
 		width:33.2%;
@@ -242,6 +261,7 @@ export default {
 		align-items:center;
 		padding:20rpx 0;
 		box-sizing:border-box;
+		flex-shrink: 0;
 	}
 	.boder-righr{
 		border-right:1px solid #dcdcde;
@@ -249,6 +269,7 @@ export default {
 	.btn_box{
 		display:flex;
 		flex-direction:column;
+		border-bottom:1px solid #dcdcde;
 	}
 	.btn{
 		width:100rpx;
@@ -266,6 +287,9 @@ export default {
 	}
 	.btn_guanli{
 		background:#f89959;
+	}
+	.btn_yichang{
+		background:#FFB800;
 	}
 	.btn_box>text{
 		margin-top:10rpx;

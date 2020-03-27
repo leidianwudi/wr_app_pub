@@ -57,6 +57,16 @@
 			"style":{
 				"navigationBarTitleText": "处理工单"
 			}
+		},{
+			"path":"pages/abnormal/abnormal",
+			"style":{
+				"navigationBarTitleText": "数据异常"
+			}
+		},{
+			"path":"pages/abnormal/abnormalAdmin/abnormalAdmin",
+			"style":{
+				"navigationBarTitleText": "数据异常"
+			}
 		}
 	],
 	"globalStyle": {
