@@ -208,6 +208,7 @@ export default{
 						pc: storage.getMyInfo().pc
 			}	
 			if(!util.isEmpty(this.saveNowServerNameInfo)) data.serverId = this.saveNowServerNameInfo.id;
+			if(!util.isEmpty(this.nowEnterpriceName)) data.enterpriceName =  this.nowEnterpriceName;
 			uni.showLoading({
 				title: "正在加载...",
 				success() {
