@@ -1,19 +1,24 @@
 <template>
-	<view class="content" style="padding-bottom:250rpx;">
-		<view class="enterprise_info" v-if="isAdmin == 1">
-			<view class="day">
+	<view class="content" style="padding-bottom:180rpx;">
+		<view class="enterprise_info">
+			<view class="day" v-if="isAdmin == 1">
 				<text>子服务器名：</text>
 				<picker :range="ZhgyServerNameList" @change="zhgyServerNameListChange" range-key="name">
 					<input type="text" value="" v-model="nowZhgyServerName" :disabled="true"/>
 				</picker>
 			</view>
-			<view class="day">
+			<view class="day" v-if="isAdmin == 1">
 				<text>企业名：</text>
 				<picker :range="ZhgyEnterpriceNameList" @change="ZhgyEnterpriceNameListChange" range-key="name">
 					<input type="text" value="" v-model="nowEnterpriceName" :disabled="true"/>
 				</picker>
 			</view>
-			<button type="primary" @tap="getDataExceptionList">搜索</button>
+			<view class="page_num">
+				<button type="primary" @tap="getDataExceptionList">搜索</button>
+				<picker :range="rank" @change="nowRankSelect" range-key="lev">
+					<input type="text" value="" v-model="nowRank" :disabled="true" class="rank_ipt"/>
+				</picker>
+			</view>
 		</view>
 		<view class="info_lists">
 			<scroll-view scroll-y="true" class="scroll">
@@ -21,12 +26,11 @@
 					<view class="lists" v-for="(item, index) in tableList" :key="index">
 						<view class="flex_row">
 							<view class="">
-								<text class="test_black">子服务器</text>：<text>{{item.zhgyServerName}}</text>
+								<text>{{item.zhgyServerName}}</text><text>({{item.zhgyEnterpriceName}})</text>
 							</view>
 							<view :class="item.state == 0 ? 'static_1' : 'static_2' ">{{item.state == 0 ? "待阅读" : "已阅读"}}</view>
+							<view class="define" v-if="item.state == 0" @tap="confirmRead(item.id)">确认阅读</view>
 						</view>
-						
-						<view class=""><text class="test_black">企业名称</text>：{{item.zhgyEnterpriceName}}</view>
 						
 						<view class="flex_row flex_box">
 							<view class="">
@@ -45,14 +49,14 @@
 								<text class="test_black">SS</text>：<text>{{item.ss}}</text>
 							</view>
 						</view>
+
 						
-						<view class=""><text class="test_black">COD</text>：{{item.cod}}</view>
-						
-						<view class="flex_row">
+						<view class="flex_row flex_box">
+							<view><text class="test_black">COD</text>：{{item.cod}}</view>
 							<view class="">
-								<text class="test_black">时间</text>：<text>{{item.createTime}}</text>
+								<text>{{item.createTime}}</text>
 							</view>
-							<view class="define" v-if="item.state == 0" @tap="confirmRead(item.id)">确认阅读</view>
+							
 						</view>
 					</view>
 				</block>
@@ -68,14 +72,6 @@
 					<button class="skip" @tap="pageJump">确定</button>
 				</view>
 			</view>
-			<view class="page_num">
-				<view class="">
-					共<text class="info_num">{{infoNum}}</text>条
-				</view>
-				<picker :range="rank" @change="nowRankSelect" range-key="lev">
-					<input type="text" value="" v-model="nowRank" :disabled="true" class="rank_ipt"/>
-				</picker>
-			</view>	
 		</view>
 	</view>
 </template>
@@ -133,8 +129,7 @@ export default{
 	},
 	onLoad(res) {
 		this.isAdmin = res.isAdmin;
-		this.getNowDataNameList();  //获取子服务器列表和企业列表
-		this.getDataExceptionList();  //获取数据异常列表
+		if(this.isAdmin == 1) this.getNowDataNameList();  //获取子服务器列表和企业列表
 	},
 	methods:{
 		// 瞬时获取选中的子服务器
@@ -151,7 +146,6 @@ export default{
 		    this.nowRank = this.rank[e.detail.value].lev;
 			let nowPage = this.nowRank.substring(0, 2);
 			this.limit = parseInt(nowPage);
-			this.getDataExceptionList();
 		},
 		//获取子服务器列表和企业列表
 		getNowDataNameList(){
@@ -179,8 +173,8 @@ export default{
 		getDataExceptionList(){
 			let _this = this;
 			let data = {
-						page: _this.pageNum,
-						limit: _this.limit,
+						page: this.pageNum,
+						limit: this.limit,
 						pc: storage.getMyInfo().pc
 			}	
 			if(!util.isEmpty(this.saveNowServerNameInfo)) data.serverId = this.saveNowServerNameInfo.id;
@@ -251,7 +245,7 @@ export default{
 
 <style>
 	.pagination{
-		height:250rpx;
+		height:180rpx;
 		position:fixed;
 		left: 0;
 		right: 0;

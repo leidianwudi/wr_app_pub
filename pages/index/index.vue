@@ -1,13 +1,9 @@
 <template>
 	<view class="content" style="background:#fff;">
-<!-- 		自定义导航栏 -->
-		<uni-nav-bar background-color="#4f80df" color="#fff">
-			<view slot="default" class="content">
-				<input type="text" value="" />
-				<m-icon type="search" class="search_icon"></m-icon>
-				<m-icon type="scan" class="scan_icon"></m-icon>
-			</view>
-		</uni-nav-bar>	
+		<view class="user">
+			<text v-if="!admin">欢迎用户：{{userEn.nickName}}</text>
+			<text v-if="admin">欢迎管理员：{{userEn.nickName}}</text>			
+		</view>
 		<!-- 未读信息 -->
 		<view class="head_bar">
 			<view class="work_order">
@@ -26,14 +22,20 @@
 			</view>
 		</view>
 		<!-- 公告 -->
-		<view class="Notice">
+		<view class="Notice" v-if="msgNum != 0">
 			<view class="boder-bottom notice_bar">
 				<view class="Notice_img">
 					<image src="/static/img/warn.png" mode="widthFix"></image>
 				</view>
-				<text class="test_red">告警：</text>{{warn}}
+				<text class="test_red">告警：</text>
+				<view class='tui-notice-board'>
+					<view class="tui-scorll-view" @tap='detail'>
+						<view class="tui-notice" :class="[animation?'tui-animation':'']" v-if="admin">您有{{msgNum}}条待处理工单，请及时处理！</view>
+						<view class="tui-notice" :class="[animation?'tui-animation':'']" v-if="!admin">您有{{msgNum}}条工单正在进行处理。</view>						
+					</view>
+				</view>
 			</view>
-			<view class="notice_bar">
+			<view class="notice_bar" v-if="false">
 				<view class="Notice_img">
 					<image src="/static/img/notice.png" mode="widthFix"></image>
 				</view>
@@ -66,6 +68,57 @@
 				</view>
 				<text>现场报备</text>
 			</view>
+			<view class="boder-righr btn_box" @tap="toExit">
+				<view class="btn btn_exit">
+					<m-icon type="info" color="#fff" size="32"></m-icon>
+				</view>
+				<text>退出登录</text>
+			</view>
+		</view>
+		
+		<view class="data_box">
+			<view class="data_bar data_title">
+				<view class="data_test data_title">
+					最新一条数据：
+				</view>
+				<view class="data_title">
+					<view class="data_title">
+						<view class="static_g"></view>
+						<text>在线</text>
+					</view>
+					<view class="data_title">
+						<view class="static_g static_w"></view>
+						<text>离线</text>
+					</view>
+				</view>
+			</view>
+			
+			<view class="data_show">
+				<view class="data_info">
+					<view class="info_type">时间：</view>
+					<view class="">{{dataTime}}</view>
+				</view>
+				
+				<view class="data_info">
+					<view class="info_type">子服务器：</view>
+					<view class="">{{dataServer}}</view>
+				</view>
+				
+				<view class="data_info">
+					<view class="info_type">企业：</view>
+					<view class="">{{dataEnterpriceName}}</view>
+				</view>
+				
+				<view class="data_info">
+					<view class="info_type">累计：</view>
+					<view class="">{{dataAddWater}}</view>
+				</view>
+				
+				<view class="data_info">
+					<view class="info_type">配额：</view>
+					<view class="">{{dataAmount}}</view>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -76,6 +129,7 @@ import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue";
 import mIcon from "@/components/m-icon/m-icon.vue";
 import storage from '@/api/storage.js';
 import api from "@/api/api.js";
+import tranNowList from "@/api/tranNowList.js";
 export default {
 	components: {
 		uniNavBar,
@@ -89,17 +143,64 @@ export default {
 			notice: '', //公告文字
 			admin: false, //
 			userEn: null,
-			serverRunCount: 0 //运行的子服务器数
+			serverRunCount: 0, //运行的子服务器数
+			animation: false,  //跑马灯消息开关
+			dataTime: "",  //时间
+			dataServer: "",  //子服务器名
+			dataEnterpriceName: "",  //企业名
+			dataAddWater: "",  //累计
+			dataAmount: "",  //配额
+			tableList: [] //最新一条数据
 		}
 	},
 	onLoad() {
 		this.isAdmin();//判断是否为管理员
 		this.userEn = storage.getMyInfo();
+		this.getNowDataList();
+		setTimeout(() => {
+			this.animation = true
+		}, 600)
 	},
 	onShow(){
 		this.getDrHandleAndServerRun();
 	},
 	methods:{
+		//获取最新一条瞬时数据
+		getNowDataList(){
+			let _this = this;
+			let data = {
+				page: 1,
+				limit: 200,
+				pc: storage.getMyInfo().pc
+			}
+			api.NowDataList(data, res=>{
+				let data1 = api.getData(res);
+				let code = api.getCode(res);
+				if(code === 0){
+					_this.tableList = tranNowList.tranNowList(data1)[0];
+					_this.dataTime = _this.tableList.time;
+					_this.dataServer = _this.tableList.zhgyServerName;
+					_this.dataEnterpriceName = _this.tableList.enterpriceName;
+					_this.dataAddWater = _this.tableList.addWater;
+					_this.dataAmount = _this.tableList.dayAmount;
+				}
+			});
+		},
+		//退出登录
+		toExit(){
+			uni.showModal({
+				title: "退出登录",
+				content: "您确定要退出？",
+				success(res) {
+					if(res.confirm){
+						storage.outLogin();
+						uni.reLaunch({
+							url: '/pages/user/login/login'
+						});
+					}
+				}
+			})
+		},
 		//获取待处理数据报错和子服务器数
 		getDrHandleAndServerRun(){
 			let _this = this;
@@ -161,33 +262,48 @@ export default {
 </script>
 
 <style>
+	.data_title{
+		display:flex;
+		justify-content:space-between;
+		align-items: center;
+		font-size:15px;
+	}
+	.data_bar{
+		padding:20rpx;
+		background:#F2F3F5;
+	}
+	.data_show{
+		padding:40rpx 40rpx 0;
+	}
+	.static_g{
+		width:20rpx;
+		height:20rpx;
+		background:#13CE67;
+		margin-right:10rpx;
+		margin-left:20rpx;
+	}
+	.static_w{
+		background:#E5E9F2;
+	}
+	.data_info{
+		padding:20rpx 10rpx;
+		border-bottom:1px solid #EEEEF0;
+		display:flex;
+		font-size:15px;
+	}
+	.data_info>view{
+		width:50%;
+	}
+	.info_type{
+		color:#62ABD1;
+	}
 	image{
 		width:100%;
 		height:auto;
 	}
-	.content{
-       width:100%;
-       position:relative;
-	   background:#4f80df;
-	}
-	.content>input{
-		width:100%;
-		height:80%;
-		background:#7196e4;
-		border-radius:13px;
-		padding:8rpx 0;
-		padding-left:90rpx;
-		box-sizing:border-box;
-	}
-	.search_icon{
-		position:absolute;
-		top:3px;
-		left:20px;
-	}
-	.scan_icon{
-		position:absolute;
-		right:20px;
-		top:3px;
+	.user{
+		font-size:15px;
+		padding:10rpx;
 	}
 	.head_bar{
 		width:100%;
@@ -196,6 +312,7 @@ export default {
 		padding:30rpx;
 		box-sizing:border-box;
 		background:#4f7ddd;
+		margin-bottom:20rpx;
 	}
 	.work_order{
 		border-right:1px solid #fff;
@@ -223,7 +340,6 @@ export default {
 		width:100%;
 		background:#fff;
 		border-top:1px solid #dcdcde;
-		border-bottom:1px solid #dcdcde;
 	}
 	.boder-bottom{
 		border-bottom:1px solid #dcdcde;
@@ -233,7 +349,7 @@ export default {
 		height:70rpx;
 	}
 	.notice_bar{
-		padding:15rpx;
+		padding:15rpx 0 15rpx 15rpx;
 		box-sizing:border-box;
 		display:flex;
 		align-items:center;
@@ -252,6 +368,8 @@ export default {
 		width:100%;
 		display:flex;
 		flex-wrap:wrap;
+		border-top:1px solid #dcdcde;
+		margin-bottom:20rpx;
 	}
 	.btn_bar>view{
 		width:33.2%;
@@ -283,13 +401,16 @@ export default {
 		background:#f781b5;
 	}
 	.btn_baobei{
-		background:#53b2f2;
+		background:#8CC773;
 	}
 	.btn_guanli{
 		background:#f89959;
 	}
 	.btn_yichang{
 		background:#FFB800;
+	}
+	.btn_exit{
+		background:#53b2f2;
 	}
 	.btn_box>text{
 		margin-top:10rpx;
@@ -298,5 +419,49 @@ export default {
 	}
 	.serverRunCount{
 		font-weight:bold;
+	}
+	.tui-notice-board {
+		width: 79%;
+		padding-right: 30upx;
+		box-sizing: border-box;
+		font-size: 28upx;
+		height: 60upx;
+		display: flex;
+		align-items: center;
+	}
+	.tui-scorll-view {
+		flex: 1;
+		line-height: 1;
+		white-space: nowrap;
+		overflow: hidden;
+		color: #f54f46;
+	}
+	
+	.tui-notice {
+		transform: translateX(100%);
+	}
+	
+	.tui-animation {
+		-webkit-animation: tui-rolling 12s linear infinite;
+		animation: tui-rolling 12s linear infinite;
+	}
+	@-webkit-keyframes tui-rolling {
+		0% {
+			transform: translateX(100%);
+		}
+	
+		100% {
+			transform: translateX(-170%);
+		}
+	}
+	
+	@keyframes tui-rolling {
+		0% {
+			transform: translateX(100%);
+		}
+	
+		100% {
+			transform: translateX(-170%);
+		}
 	}
 </style>
