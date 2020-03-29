@@ -69,9 +69,19 @@ export default{
 			},res=>{
 				let code = api.getCode(res);
 				if(code === 0){
-					uni.navigateBack({
-						delta: 1
-					})
+					
+					uni.showModal({
+						title:"提示",
+						content: "操作成功",
+						showCancel: false,
+						success(res) {
+							if(res.confirm){
+								uni.navigateBack({
+									delta: 1
+								})
+							};
+						}
+					});					
 				}
 			})
 		}

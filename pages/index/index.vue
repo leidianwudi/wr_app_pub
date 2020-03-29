@@ -118,6 +118,26 @@
 					<view class="info_type">配额：</view>
 					<view class="">{{dataAmount}}</view>
 				</view>
+				<view class="data_info">
+					<view class="info_type">COD：</view>
+					<view class="">{{tableList.COD}}</view>
+				</view>
+				<view class="data_info">
+					<view class="info_type">氨氮：</view>
+					<view class="">{{tableList.anDan}}</view>
+				</view>
+				<view class="data_info">
+					<view class="info_type">PH：</view>
+					<view class="">{{tableList.PH}}</view>
+				</view>
+				<view class="data_info">
+					<view class="info_type">SS：</view>
+					<view class="">{{tableList.SS}}</view>
+				</view>
+				<view class="data_info">
+					<view class="info_type">余氯：</view>
+					<view class="">{{tableList.yuLv}}</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -150,7 +170,12 @@ export default {
 			dataEnterpriceName: "",  //企业名
 			dataAddWater: "",  //累计
 			dataAmount: "",  //配额
-			tableList: [] //最新一条数据
+			// COD: "",  //COD
+			// anDan: "",//氨氮
+			// PH:"",//PH
+			// SS:"",
+			// yuLv:"",//余氯
+			tableList: null //最新一条数据
 		}
 	},
 	onLoad() {

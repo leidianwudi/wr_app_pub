@@ -91,8 +91,12 @@ export default {
 							pc: resData.pc,
 							userName: resData.user.userName
 						};
-						if(resData.permissions.search("删除用户") != -1) data.isAdmin = 1;
-						else data.isAdmin = 0;
+						if((resData.permissions.search("处理数据报错") != -1) 
+						|| (resData.permissions.search("删除数据报错") != -1)) 
+							data.isAdmin = 1;	//管理员
+						else 
+							data.isAdmin = 0;
+							
 						if(_this.shadow){
 							let userInfo = {
 								userName: _this.account,

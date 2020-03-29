@@ -13,11 +13,11 @@
 					<input type="text" value="" v-model="nowEnterpriceName" :disabled="true"/>
 				</picker>
 			</view>
-			<view class="page_num">
-				<button type="primary" @tap="getDataExceptionList">搜索</button>
+			<view class="page_num">			
 				<picker :range="rank" @change="nowRankSelect" range-key="lev">
 					<input type="text" value="" v-model="nowRank" :disabled="true" class="rank_ipt"/>
 				</picker>
+				<button type="primary" @tap="getDataExceptionList">搜索</button>
 			</view>
 		</view>
 		<view class="info_lists">
@@ -187,7 +187,7 @@ export default{
 						if(code == 0){
 							let data = api.getData(res);
 							_this.tableList = data;
-							_this.total = parseInt(res.data.count);
+							_this.total = parseInt(res.data.count / _this.limit);//总页数
 							_this.infoNum = res.data.count;
 							uni.hideLoading();
 						}
@@ -257,11 +257,11 @@ export default{
 		display: flex;
 		flex-direction: column;
 		justify-content:center;
-		padding: 40rpx 100rpx;
+		padding: 30rpx 100rpx 4rpx;
 		box-sizing: border-box;
 		align-items: center;
 		background: #fff;
-		border-bottom:10px solid #e3e3e3;
+		border-bottom:6px solid #e3e3e3;
 	}
 	.date {
 		text-align:center;
@@ -396,8 +396,8 @@ export default{
 		font-weight:bold;
 	}
 	.rank_ipt{
-		width:140rpx;
+		width:160rpx;
 		text-align:center;
-		margin-left:20rpx;
+		margin-right:100rpx;
 	}
 </style>

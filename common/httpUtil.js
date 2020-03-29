@@ -62,11 +62,11 @@ module.exports = {
 	//判断是否被处理
 	middleRes(res){
 		let code = this.getCode(res);
+		let msg = this.getMsg(res);
 		if(res.hasOwnProperty("token")){
 			this.$store.state.setToken(data.token)
 		}
-		if(code === -1){
-			let msg = this.getMsg(res);
+		if(code === -1){		
 			uni.showModal({
 				title:"提示",
 				content: msg,
@@ -80,6 +80,14 @@ module.exports = {
 					};
 				}
 			});
+		}
+		else if (code != 0)
+		{
+			uni.showModal({
+				title:"错误",
+				content: msg,
+				showCancel: false
+				});
 		}
 	},
 	
