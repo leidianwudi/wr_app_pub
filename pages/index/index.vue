@@ -120,23 +120,23 @@
 				</view>
 				<view class="data_info">
 					<view class="info_type">COD：</view>
-					<view class="">{{tableList.COD}}</view>
+					<view class="">{{COD}}</view>
 				</view>
 				<view class="data_info">
 					<view class="info_type">氨氮：</view>
-					<view class="">{{tableList.anDan}}</view>
+					<view class="">{{anDan}}</view>
 				</view>
 				<view class="data_info">
 					<view class="info_type">PH：</view>
-					<view class="">{{tableList.PH}}</view>
+					<view class="">{{PH}}</view>
 				</view>
 				<view class="data_info">
 					<view class="info_type">SS：</view>
-					<view class="">{{tableList.SS}}</view>
+					<view class="">{{SS}}</view>
 				</view>
 				<view class="data_info">
 					<view class="info_type">余氯：</view>
-					<view class="">{{tableList.yuLv}}</view>
+					<view class="">{{yuLv}}</view>
 				</view>
 			</view>
 		</view>
@@ -170,11 +170,11 @@ export default {
 			dataEnterpriceName: "",  //企业名
 			dataAddWater: "",  //累计
 			dataAmount: "",  //配额
-			// COD: "",  //COD
-			// anDan: "",//氨氮
-			// PH:"",//PH
-			// SS:"",
-			// yuLv:"",//余氯
+			COD: "",  //COD
+			anDan: "",//氨氮
+			PH:"",//PH
+			SS:"",
+			yuLv:"",//余氯
 			tableList: null //最新一条数据
 		}
 	},
@@ -208,6 +208,11 @@ export default {
 					_this.dataEnterpriceName = _this.tableList.enterpriceName;
 					_this.dataAddWater = _this.tableList.addWater;
 					_this.dataAmount = _this.tableList.dayAmount;
+					_this.COD = _this.tableList.COD;
+					_this.anDan = _this.tableList.anDan;
+					_this.PH = _this.tableList.PH;
+					_this.SS = _this.tableList.SS;
+					_this.yuLv = _this.tableList.yuLv;
 				}
 			});
 		},

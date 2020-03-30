@@ -1,19 +1,19 @@
 <template>
 	<view class="content" style="padding-bottom:180rpx;">
 		<view class="enterprise_info">
-			<view class="day" v-if="isAdmin == 1">
-				<text>子服务器名：</text>
+			<view class="day" v-if="isAdmin == 1" style="margin-bottom: 10px;">
+				<text>子服务器：</text>
 				<picker :range="ZhgyServerNameList" @change="zhgyServerNameListChange" range-key="name">
 					<input type="text" value="" v-model="nowZhgyServerName" :disabled="true"/>
 				</picker>
 			</view>
-			<view class="day" v-if="isAdmin == 1">
+			<view class="day" v-if="isAdmin == 1" style="margin-bottom: 10px;">
 				<text>企业名：</text>
 				<picker :range="ZhgyEnterpriceNameList" @change="ZhgyEnterpriceNameListChange" range-key="name">
 					<input type="text" value="" v-model="nowEnterpriceName" :disabled="true"/>
 				</picker>
 			</view>
-			<view class="page_num">			
+			<view class="page_num" style="margin-bottom: 5px;">			
 				<picker :range="rank" @change="nowRankSelect" range-key="lev">
 					<input type="text" value="" v-model="nowRank" :disabled="true" class="rank_ipt"/>
 				</picker>
@@ -245,7 +245,9 @@ export default{
 
 <style>
 	.pagination{
-		height:180rpx;
+		display: flex;
+		flex-direction: column;
+		/* height:180rpx; */
 		position:fixed;
 		left: 0;
 		right: 0;

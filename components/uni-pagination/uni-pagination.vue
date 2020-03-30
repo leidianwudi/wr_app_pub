@@ -158,7 +158,8 @@
 		/* #ifndef APP-NVUE */
 		display: flex;
 		/* #endif */
-		font-size: $uni-font-size-base;
+		// font-size: $uni-font-size-base;
+		font-size: 14px;
 		position: relative;
 		flex-direction: row;
 		justify-content: center;
