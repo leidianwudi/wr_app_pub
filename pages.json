@@ -49,6 +49,16 @@
 				"navigationBarTitleText": "数据调阅"
 			}
 		},{
+			"path":"pages/checkAdminInfo/concise/concise",
+			"style":{
+				"navigationBarTitleText": "数据调阅"
+			}
+		},{
+			"path":"pages/checkInfo/concise/concise",
+			"style":{
+				"navigationBarTitleText": "数据调阅"
+			}
+		},{
 			"path":"pages/workOrder/checkAdminWorkOrder/handleData/handleData",
 			"style":{
 				"navigationBarTitleText": "处理工单"

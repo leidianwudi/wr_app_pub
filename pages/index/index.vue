@@ -259,11 +259,13 @@ export default {
 		toCheck(){
 			if(this.admin){
 				uni.navigateTo({
-					url:'/pages/checkAdminInfo/checkAdminInfo'
+					// url:'/pages/checkAdminInfo/checkAdminInfo'   
+					url: '/pages/checkAdminInfo/concise/concise'
 				})
 			}else{
 				uni.navigateTo({
-					url:'/pages/checkInfo/checkInfo'
+					// url:'/pages/checkInfo/checkInfo'
+					url: '/pages/checkInfo/concise/concise'
 				})
 			}
 		},
