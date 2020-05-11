@@ -14,7 +14,7 @@
 							<!-- 瞬时数据企业信息 -->
 							<view class="enterprise_info">
 								<view class="day">
-									<text>子服务器名：</text>
+									<text>子服务器：</text>
 									<picker :range="ZhgyServerNameList" @change="zhgyServerNameListChange" range-key="name">
 										<input type="text" value="" v-model="nowZhgyServerName" :disabled="true"/>
 									</picker>
@@ -74,7 +74,7 @@
 					<!-- 日数据信息 -->
 					<view class="enterprise_info">
 						<view class="day">
-							<text>子服务器名：</text>
+							<text>子服务器：</text>
 							<picker :range="ZhgyServerNameList" @change="dayzhgyServerNameListChange" range-key="name">
 								<input type="text" value="" v-model="dayZhgyServerName" :disabled="true"/>
 							</picker>
@@ -147,7 +147,7 @@
 					<!-- 月数据信息 -->
 					<view class="enterprise_info">
 						<view class="month">
-							<text>子服务器名：</text>
+							<text>子服务器：</text>
 							<picker :range="ZhgyServerNameList" @change="monthzhgyServerNameListChange" range-key="name">
 								<input type="text" value="" v-model="monthZhgyServerName" :disabled="true"/>
 							</picker>
@@ -506,7 +506,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content:center;
-		padding: 40rpx 100rpx;
+		padding: 26rpx 100rpx;
 		box-sizing: border-box;
 		align-items: center;
 		background: #fff;
@@ -564,7 +564,7 @@
 		justify-content:space-between;
 		font-size:15px;
 		width:100%;
-		margin-bottom:40rpx;
+		margin-bottom:28rpx;
 	}
 	.day>button, .month>button{
 		font-size:12px;
