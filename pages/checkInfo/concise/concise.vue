@@ -20,7 +20,7 @@
 			</view>
 			<!-- 瞬时数据信息列表 -->
 							<view class="info_lists">
-								<uni-collapse ref="add" class="warp" @change="change">
+								<uni-collapse ref="add" class="warp">
 									<uni-collapse-item v-for="(item, index) in tableList" :key="index" :open="item.open" 
 									:title="item.zhgyServerName+'(' + item.enterpriceName + ')'" :time = "item.time">
 										
@@ -72,9 +72,9 @@
 			</view>
 			<!-- 日数据信息列表 -->
 							<view class="info_lists">
-								<uni-collapse ref="add" class="warp" @change="change">
+								<uni-collapse ref="add" class="warp">
 									<uni-collapse-item v-for="(item, index) in dayList" :key="index" :open="item.open" 
-									:title="name +'(' + position_name + ')'" :time = "dayData + '-' + item.hour">
+									:title="name +'(' + position_name + ')'" :time = "item.hour">
 										<template v-if="!item.type">
 											<text class="content list_bar">
 												<text class="before_row"><text class="list_title">时流量：</text>{{ item.hourWater }}</text>
@@ -134,9 +134,9 @@
 			</view>
 			<!-- 月数据信息列表 -->
 						<view class="info_lists">
-							<uni-collapse ref="add" class="warp" @change="change">
+							<uni-collapse ref="add" class="warp">
 								<uni-collapse-item v-for="(item, index) in monthList" :key="index" :open="item.open" 
-								:title="name +'(' + position_name + ')'" :time = "monthData + '-' + item.day + '日'">
+								:title="name +'(' + position_name + ')'" :time = "item.day + '日'">
 
 										<template v-if="!item.type">
 											<text class="content list_bar">
@@ -320,6 +320,7 @@
 				this.$refs.dateTime.show()
 			},
 			change: function(e) {
+				console.log(e);
 				if (this.num === 1) this.dayData = e.result;
 				if (this.num === 2) this.monthData = e.result;
 			},
@@ -509,7 +510,7 @@
 		font-size: 12px;
 	}
 	.info_lists{
-		margin-top:16rpx;
+		margin-top:4rpx;
 	}
 	.list_bar{
 		font-size:14px;

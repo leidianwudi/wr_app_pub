@@ -29,7 +29,7 @@
 							</view>
 							<!-- 瞬时数据信息列表 -->
 							<view class="info_lists">
-								<uni-collapse ref="add" class="warp" @change="change">
+								<uni-collapse ref="add" class="warp">
 									<uni-collapse-item v-for="(item, index) in tableList" :key="index" :open="item.open" 
 									:title="item.zhgyServerName+'(' + item.enterpriceName + ')'" :time = "item.time">
 										
@@ -93,7 +93,7 @@
 					</view>
 					<!-- 日数据信息列表 -->
 							<view class="info_lists">
-								<uni-collapse ref="add" class="warp" @change="change">
+								<uni-collapse ref="add" class="warp">
 									<uni-collapse-item v-for="(item, index) in dayList" :key="index" :open="item.open" 
 									:title="dayZhgyServerName+'(' + dayEnterpriceName + ')'" :time = "item.hour">
 										<template v-if="!item.type">
@@ -166,7 +166,7 @@
 					</view>
 					<!-- 月数据信息列表 -->
 						<view class="info_lists">
-							<uni-collapse ref="add" class="warp" @change="change">
+							<uni-collapse ref="add" class="warp">
 								<uni-collapse-item v-for="(item, index) in monthList" :key="index" :open="item.open" 
 								:title="monthZhgyServerName+'(' + monthEnterpriceName + ')'" :time = "item.day + '日'">
 
@@ -545,7 +545,7 @@
 		vertical-align:top;
 	}
 	.info_lists{
-		margin-top:16rpx;
+		margin-top:4rpx;
 	}
 	input{
 		border: 1px solid #e1e1e1;
