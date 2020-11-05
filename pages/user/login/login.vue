@@ -85,6 +85,8 @@ export default {
 					let resData = api.getData(res);
 					// console.log(res);
 					if(code === 0){
+						//pc返回值为空
+						//if(util.isEmpty(resData.pc)) resData.pc = "zhgy";
 						let data = {
 							nickName: resData.user.nickName,
 							token: resData.userToken.token,
@@ -104,6 +106,7 @@ export default {
 							}
 							storage.setMyUserInfo(userInfo);
 						}else storage.delMyUserInfo();
+						
 						storage.setMyInfo(data);
 						this.$store.state.setToken(resData.userToken.token);
 						uni.reLaunch({

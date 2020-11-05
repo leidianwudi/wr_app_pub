@@ -136,4 +136,8 @@ button.primary {
 	background-color: #0faeff;
 	color: #fff;
 }
+
+.btn_style>button{
+	background-color:#009688;
+}
 </style>

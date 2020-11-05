@@ -377,11 +377,11 @@ export default {
 		border-bottom:1px solid #dcdcde;
 	}
 	.Notice_img{
-		width:60rpx;
-		height:70rpx;
+		width:50rpx;
+		height:60rpx;
 	}
 	.notice_bar{
-		padding:15rpx 0 15rpx 15rpx;
+		padding:15rpx 0 15rpx 20rpx;
 		box-sizing:border-box;
 		display:flex;
 		align-items:center;

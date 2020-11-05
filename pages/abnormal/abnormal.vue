@@ -1,6 +1,6 @@
 <template>
-	<view class="content" style="padding-bottom:180rpx;">
-		<view class="enterprise_info">
+	<view class="content">
+<!-- 		<view class="enterprise_info">
 			<view class="day" v-if="isAdmin == 1" style="margin-bottom: 10px;">
 				<text>子服务器：</text>
 				<picker :range="ZhgyServerNameList" @change="zhgyServerNameListChange" range-key="name">
@@ -19,7 +19,29 @@
 				</picker>
 				<button type="primary" @tap="getDataExceptionList">搜索</button>
 			</view>
+		</view> -->
+		<view class="search_column" style="display:flex; align-items:center; justify-content: space-between;" v-if="isAdmin != 1">
+			<text style="display: inline-block;width:40%;">每页条数：</text>
+			<view class="search_ipt">
+				<picker :range="rank" @change="nowRankSelect" range-key="lev">
+					<input type="text" value="" v-model="nowRank" :disabled="true" class="rank_ipt"/>
+				</picker>
+			</view>
+			<view class="sea_btn btn_style">
+				<button type="default" @tap="getDataExceptionList(0)" hover-class="btn_hover" style="padding: 0;">查询</button>
+			</view>
 		</view>
+		
+		<view class="search_column" style="display:flex; align-items:center; justify-content: space-between;" v-if="isAdmin == 1">
+			<text style="display: inline-block;width:40%;">子服务器：</text>
+			<view class="search_ipt">
+				<input type="text" value="" v-model="nowZhgyServerName" placeholder="选择子服务器" :disabled="true" @tap="openDrawer"/>
+			</view>
+			<view class="sea_btn btn_style">
+				<button type="default" @tap="getDataExceptionList(0)" hover-class="btn_hover" style="padding: 0;">查询</button>
+			</view>
+		</view>
+		
 		<view class="info_lists">
 			<scroll-view scroll-y="true" class="scroll">
 				<block class="box">
@@ -62,7 +84,7 @@
 				</block>
 			</scroll-view>
 		</view>
-		<view class="pagination">
+<!-- 		<view class="pagination">
 			<uni-pagination :total="total" show-icon="false" @change="getNowPage" :current="pageNum"></uni-pagination>
 			<view class="page_skip">
 				<view class="page_num">
@@ -72,7 +94,52 @@
 					<button class="skip" @tap="pageJump">确定</button>
 				</view>
 			</view>
-		</view>
+		</view> -->
+		
+		
+		<tui-drawer mode="right" :visible="rightDrawer" @close="closeDrawer" style="z-index:999;">
+			<view class="d-container">
+						<view class="" style="width:100%; text-align: center; color:#F57341;"><text>数据异常</text></view>
+						<view class="search_time">
+							<view class="search_test">
+								<text>子服务器</text>
+							</view>
+							<view class="">
+								<picker :range="ZhgyServerNameList" @change="zhgyServerNameListChange" range-key="name">
+									<input type="text" value="" v-model="selZhgyServerName" :disabled="true"/>
+								</picker>
+							</view>
+						</view>
+						<view class="search_time">
+							<view class="search_test">
+								<text>企业名</text>
+							</view>
+							<view class="">
+								<picker :range="ZhgyEnterpriceNameList" @change="ZhgyEnterpriceNameListChange" range-key="name">
+									<input type="text" value="" v-model="selEnterpriceName" :disabled="true"/>
+								</picker>
+							</view>
+						</view>
+						<view class="search_time">
+							<view class="search_test">
+								<text>每页条数</text>
+							</view>
+							<view class="">
+								<picker :range="rank" @change="nowRankSelect" range-key="lev">
+									<input type="text" value="" v-model="nowRank" :disabled="true" class="rank_ipt"/>
+								</picker>
+							</view>
+						</view>
+						<view class="search_btn btn_style">
+							<button type="default" @tap="getDataExceptionList(0)" hover-class="btn_hover">确定</button>
+						</view>
+					</view>
+		</tui-drawer>
+		
+		<!--加载loadding-->
+		<tui-loadmore v-if="loadding" :index="3" type="primary"></tui-loadmore>
+		<tui-nomore v-if="!pullUpOn"></tui-nomore>
+		<!--加载loadding-->
 	</view>
 </template>
 
@@ -88,6 +155,9 @@ import tTd from '@/components/t-table/t-td.vue';
 import tuiDatetime from "@/components/dateTime/dateTime";
 import uniPagination from '@/components/uni-pagination/uni-pagination.vue';
 import util from "@/common/util.js";
+import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
+import tuiLoadmore from "@/components/tui-loadmore/tui-loadmore.vue";
+import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 export default{
 	components:{
 		tTable,
@@ -97,7 +167,10 @@ export default{
 		tuiDatetime,
 		tTdTime,
 		tThTime,
-		uniPagination
+		uniPagination,
+		tuiDrawer,
+		tuiLoadmore,
+		tuiNomore
 	},
 	data() {
 		return {
@@ -125,6 +198,13 @@ export default{
 			limit: 10, //每页获取数据条数
 			current: 1, //跳转页数
 			isAdmin: null,  //判断是否是管理员
+			
+			
+			rightDrawer: false,//抽屉开关
+			selZhgyServerName: "",   //抽屉选中的子服务器
+			selEnterpriceName: "",   //抽屉选中的企业名
+			loadding: false, //加载数据提示
+			pullUpOn: true,  //上拉加载数据
 		}
 	},
 	onLoad(res) {
@@ -132,13 +212,37 @@ export default{
 		if(this.isAdmin == 1) this.getNowDataNameList();  //获取子服务器列表和企业列表
 	},
 	methods:{
+		//上拉刷新
+		onPullDownRefresh: function() {
+			//延时为了看效果
+			setTimeout(() => {
+				this.getDataExceptionList(0);
+				this.pullUpOn = true;
+				this.loadding = false;
+			}, 200)
+		},
+		
+		//关闭抽屉
+		closeDrawer(e) {
+			this.rightDrawer = false;
+		},
+		//打开抽屉
+		openDrawer() {
+			
+			this.rightDrawer = true;  //打开抽屉
+			this.selZhgyServerName = this.nowZhgyServerName;  //获取子服务器
+			this.selEnterpriceName = this.nowEnterpriceName;  //获取企业名
+		},
+		
 		// 瞬时获取选中的子服务器
 		zhgyServerNameListChange:function(e){
+			this.selZhgyServerName = this.ZhgyServerNameList[e.detail.value].name;
 		    this.nowZhgyServerName = this.ZhgyServerNameList[e.detail.value].name;
 			this.saveNowServerNameInfo = this.ZhgyServerNameList[e.detail.value];
 		},
 		// 瞬时获取选中的企业名
 		ZhgyEnterpriceNameListChange:function(e){
+			this.selEnterpriceName = this.ZhgyEnterpriceNameList[e.detail.value].name;
 		    this.nowEnterpriceName = this.ZhgyEnterpriceNameList[e.detail.value].name;
 		},
 		// 获取当前选中的每页条数
@@ -169,13 +273,21 @@ export default{
 				}
 			});
 		},
-		//获取数据异常列表
-		getDataExceptionList(){
+		//获取数据异常列表  type 0:普通查询 1: 获取更多信息
+		getDataExceptionList(type){
+			this.closeDrawer();  //关闭抽屉
+			let page = null;
+			if(type == 0) page = 1;
+			if(type == 1)
+			{
+				page = ++this.pageNum;
+				this.loadding = true;
+			}
 			let _this = this;
 			let data = {
-						page: this.pageNum,
-						limit: this.limit,
-						pc: storage.getMyInfo().pc
+				page: page,
+				limit: this.limit,
+				pc: storage.getMyInfo().pc
 			}	
 			if(!util.isEmpty(this.saveNowServerNameInfo)) data.serverId = this.saveNowServerNameInfo.id;
 			if(!util.isEmpty(this.nowEnterpriceName)) data.enterpriceName =  this.nowEnterpriceName;
@@ -186,7 +298,29 @@ export default{
 						let code = api.getCode(res);
 						if(code == 0){
 							let data = api.getData(res);
-							_this.tableList = data;
+							if(util.isEmpty(data)){
+								this.loadding = false;
+								this.pullUpOn = false;
+							}
+							else{
+								if(type == 0)
+								{
+									_this.tableList = data;
+									uni.showToast({
+										title: '刷新成功',
+										icon: "none",
+									});
+									uni.stopPullDownRefresh();
+								}
+								else
+								{
+									_this.loadding = false;
+									data.forEach((item) =>{
+										_this.tableList.push(item);
+									});
+								}
+							}
+							
 							_this.total = parseInt(res.data.count / _this.limit);//总页数
 							_this.infoNum = res.data.count;
 							uni.hideLoading();
@@ -214,7 +348,7 @@ export default{
 									title: msg,
 									duration: 2000,
 									success() {
-										_this.getDataExceptionList();
+										_this.getDataExceptionList(0);
 									}
 								})
 							}else{
@@ -231,15 +365,20 @@ export default{
 		//获取当前页数
 		getNowPage(e){
 			this.pageNum = e.current;  //获取当前页数
-			this.getDataExceptionList();   //根据当前页数重新加载数据
+			this.getDataExceptionList(0);   //根据当前页数重新加载数据
 		},
 		//跳转页数
 		pageJump(){
 			if(this.pageNum == this.current) return;  //当跳转页数和当前页数一致时
 			this.pageNum = this.current;  //获取输入的跳转页数
-			this.getDataExceptionList();   //根据当前页数重新加载数据
+			this.getDataExceptionList(0);   //根据当前页数重新加载数据
 		}
-	}
+	},
+	//上拉获取更多数据
+	onReachBottom(){
+		if (!this.pullUpOn) return;
+		 this.getDataExceptionList(1);  //查询数据异常
+	},
 }
 </script>
 
@@ -398,8 +537,62 @@ export default{
 		font-weight:bold;
 	}
 	.rank_ipt{
-		width:160rpx;
-		text-align:center;
-		margin-right:100rpx;
+
+	}
+	
+	
+	
+	
+	
+	
+	/* 搜索栏 */
+	input{
+		border:none;
+	}
+	.search_column{
+		display:flex;
+		align-items: center;
+		justify-content:center;
+		font-size:16px;
+		padding:20rpx 40rpx 10rpx;
+		box-sizing:border-box;
+		border-bottom:1px solid #808080;
+		background-color: #fff;
+	}
+	.search_column input{
+		text-align:left;
+		font-size:14px;
+	}
+	.sea_btn button{
+		font-size:12px;
+		color:#fff;
+		width:120rpx;
+	}
+	
+	
+	
+	/* 抽屉 */
+	.d-container{
+		padding:50rpx;
+		font-size:15px;
+	}
+	.search_time{
+		margin-top:40rpx;
+	}
+	.search_test{
+		margin-bottom:20rpx;
+	}
+	.d-container input{
+		border-bottom:1px solid #808080;
+		color:#808080;
+	}
+	.search_btn{
+		margin-top:100rpx;
+	}
+	.search_btn button{
+		font-size:14px;
+		color:#fff;
+		border-radius:10rpx;
+		padding:0 !important;
 	}
 </style>

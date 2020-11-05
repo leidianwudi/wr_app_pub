@@ -22,7 +22,7 @@
 							<view class="info_lists">
 								<uni-collapse ref="add" class="warp">
 									<uni-collapse-item v-for="(item, index) in tableList" :key="index" :open="item.open" 
-									:title="item.zhgyServerName+'(' + item.enterpriceName + ')'" :time = "item.time">
+									:title="item.zhgyServerName+'(' + item.enterpriceName + ')'" :time = "item.time" style="background-color: #fff;">
 										
 										<template v-if="!item.type">
 											<text class="content list_bar">
@@ -32,14 +32,14 @@
 											</text>
 											
 											<text class="content list_bar">
-												<text class="list_row"><text class="list_title">用量：</text>{{ item.dayAmountRemain }}</text>
-												<text class="list_row"><text class="list_title">余氯：</text>{{ item.yuLv }}</text>
-												<text class="list_row"><text class="list_title">氨氮：</text>{{ item.anDan }}</text>
-												<text class="list_row"><text class="list_title">PH：</text>{{ item.PH }}</text>
+												<text class="before_row"><text class="list_title">用量：</text>{{ item.dayAmountRemain }}</text>
+												<text class="before_row"><text class="list_title">余氯：</text>{{ item.yuLv }}</text>
+												<text class="before_row"><text class="list_title">氨氮：</text>{{ item.anDan }}</text>
 											</text>
 											
 											<text class="content list_bar">
-												<text class=""><text class="list_title">COD：</text>{{ item.COD }}</text>
+												<text class=""><text class="list_title">PH：</text>{{ item.PH }}</text>
+												<text class=""><text class="list_title list_marginL">COD：</text>{{ item.COD }}</text>
 												<text class=""><text class="list_title list_marginL">SS：</text>{{ item.SS }}</text>												
 												<text class=""><text class="list_title list_marginL">电导率：</text>{{ item.eleLv }}</text>
 											</text>
@@ -74,11 +74,11 @@
 							<view class="info_lists">
 								<uni-collapse ref="add" class="warp">
 									<uni-collapse-item v-for="(item, index) in dayList" :key="index" :open="item.open" 
-									:title="name +'(' + position_name + ')'" :time = "item.hour">
+									:title="name +'(' + position_name + ')'" :time = "item.hour" style="background-color: #fff;">
 										<template v-if="!item.type">
 											<text class="content list_bar">
 												<text class="before_row"><text class="list_title">时流量：</text>{{ item.hourWater }}</text>
-												<text class="before_row"><text class="list_title">累计流量：</text>{{ item.dleAddWater }}</text>
+												<text class="before_row" style="width:50%;"><text class="list_title">累计流量：</text>{{ item.dleAddWater }}</text>
 											</text>
 											
 											<text class="content list_bar">
@@ -136,12 +136,12 @@
 						<view class="info_lists">
 							<uni-collapse ref="add" class="warp">
 								<uni-collapse-item v-for="(item, index) in monthList" :key="index" :open="item.open" 
-								:title="name +'(' + position_name + ')'" :time = "item.day + '日'">
+								:title="name +'(' + position_name + ')'" :time = "item.day + '日'" style="background-color: #fff;">
 
 										<template v-if="!item.type">
 											<text class="content list_bar">
 												<text class="before_row"><text class="list_title">时流量：</text>{{ item.hourWater }}</text>
-												<text class="before_row"><text class="list_title">累计流量：</text>{{ item.dleAddWater }}</text>
+												<text class="before_row" style="width:50%;"><text class="list_title">累计流量：</text>{{ item.dleAddWater }}</text>
 											</text>
 											
 											<text class="content list_bar">
@@ -253,6 +253,26 @@
 			this.myTimerStop(); //关闭瞬时数据请求定时器
 		},
 		methods: {
+			//普通上拉刷新
+			onPullDownRefresh: function() {
+				if(this.current == 0){
+					//延时为了看效果
+					setTimeout(() => {
+						this.getNowDataList(2);  //查询瞬时数据
+					}, 200)
+				}else if(this.current == 1){
+					//延时为了看效果
+					setTimeout(() => {
+						this.dayDataList();  //查询日数据
+					}, 200)
+				}else if(this.current == 2){
+					//延时为了看效果
+					setTimeout(() => {
+						this.monthDataList();  //查询月数据
+					}, 200)
+				}
+			},
+			
 			//每20秒自动获取一次瞬时数据
 			myTimerOpen() {
 				this.intervalID = setInterval(this.getNowDataList.bind(this), 20000);
@@ -333,7 +353,8 @@
 				};
 			},
 			// 获取瞬时数据列表
-			getNowDataList() {
+			getNowDataList(type) {
+				if(this.nowLoadding) return;
 				if (this.current != 0) return;
 				let _this = this;
 				api.NowDataList({
@@ -344,12 +365,19 @@
 					let code = api.getCode(res);
 					let data = api.getData(res);
 					if (code === 0) {
-						console.log(res);
 						let list = tranNowList.tranNowList(data);
 						list.forEach(function(item) {
 							_this.name = item.zhgyServerName;
 							_this.position_name = item.enterpriceName;
 						});
+						if(type == 2)
+						{
+							uni.showToast({
+								title: '刷新成功',
+								icon: "none",
+							});
+						}
+						uni.stopPullDownRefresh();
 						_this.tableList = list;
 					}
 				});
@@ -384,6 +412,11 @@
 								list.forEach((item, index) =>{
 									item.open = false;
 								});
+								uni.showToast({
+									title: '刷新成功',
+									icon: "none",
+								});
+								uni.stopPullDownRefresh();
 								uni.hideLoading();
 								_this.dayList = list;
 								for (let i = 0; i < _this.hourList.length; i++) {
@@ -416,6 +449,11 @@
 								list.forEach((item, index) =>{
 									item.open = false;
 								});
+								uni.showToast({
+									title: '刷新成功',
+									icon: "none",
+								});
+								uni.stopPullDownRefresh();
 								uni.hideLoading();
 								_this.monthList = list;
 							};
@@ -503,11 +541,25 @@
 		flex-direction: row;
 		align-items: center;
 		font-size: 15px;
+		padding:0 40rpx;
+		box-sizing:border-box;
+	}
+	
+	.day>text,
+	.month>text {
+		display:inline-block;
+		width:20%;
+	}
+	
+	.day>input,
+	.month>input {
+		flex: 1;
 	}
 
 	.day>button,
 	.month>button {
 		font-size: 12px;
+		width:20%;
 	}
 	.info_lists{
 		margin-top:4rpx;

@@ -7,13 +7,10 @@
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
-        "usingComponents" : true,
         "nvueCompiler" : "uni-app",
         "splashscreen" : {
-            "alwaysShowBeforeRender" : true,
-            "waiting" : true,
-            "autoclose" : true,
-            "delay" : 0
+            "alwaysShowBeforeRender" : false,
+            "waiting" : false
         },
         /* 模块配置 */
         "modules" : {},
@@ -44,7 +41,8 @@
                     "<uses-feature android:name=\"android.hardware.camera\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
-                ]
+                ],
+                "abiFilters" : [ "armeabi-v7a", "arm64-v8a", "x86" ]
             },
             /* ios打包配置 */
             "ios" : {
@@ -94,20 +92,26 @@
     "mp-weixin" : {
         "appid" : "",
         "setting" : {
-            "urlCheck" : false
-        },
-        "usingComponents" : true
+            "urlCheck" : true
+        }
     },
-    "mp-alipay" : {
-        "usingComponents" : true
-    },
-    "mp-baidu" : {
-        "usingComponents" : true
-    },
-    "mp-toutiao" : {
-        "usingComponents" : true
-    },
+    "mp-alipay" : {},
+    "mp-baidu" : {},
+    "mp-toutiao" : {},
     "h5" : {
-        "title" : "智慧工业"
+        "title" : "智慧工业",
+        "devServer" : {
+            "https" : false
+        },
+        "router" : {
+            "base" : "./"
+        },
+        "sdkConfigs" : {
+            "maps" : {
+                "qqmap" : {
+                    "key" : ""
+                }
+            }
+        }
     }
 }

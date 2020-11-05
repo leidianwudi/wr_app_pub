@@ -51,12 +51,14 @@
 		},{
 			"path":"pages/checkAdminInfo/concise/concise",
 			"style":{
-				"navigationBarTitleText": "数据调阅"
+				"navigationBarTitleText": "数据调阅",
+				"enablePullDownRefresh": true
 			}
 		},{
 			"path":"pages/checkInfo/concise/concise",
 			"style":{
-				"navigationBarTitleText": "数据调阅"
+				"navigationBarTitleText": "数据调阅",
+				"enablePullDownRefresh": true
 			}
 		},{
 			"path":"pages/workOrder/checkAdminWorkOrder/handleData/handleData",
@@ -66,7 +68,8 @@
 		},{
 			"path":"pages/abnormal/abnormal",
 			"style":{
-				"navigationBarTitleText": "数据异常"
+				"navigationBarTitleText": "数据异常",
+				"enablePullDownRefresh": true
 			}
 		}
 	],

@@ -10,15 +10,18 @@
 		
 		<!-- <scroll-view :scroll-x="true" :scroll-into-view="scrollToView" class="scrollbox" :scroll-with-animation="true"> -->
 			    <!-- 瞬时数据界面 -->
-				<view class="box" id="box0" v-show="dataTye === 0">
+				<view class="box" id="box0" v-show="dataTye === 0" style="background-color: #fff;">
+					<view class="search_column" style="display:flex; align-items:center; justify-content: space-between;">
+						<text>子服务器：</text>
+						<view class="search_ipt">
+							<input type="text" value="" v-model="nowZhgyServerName" placeholder="选择子服务器" :disabled="true" @tap="openDrawer(0)"/>
+						</view>
+						<view class="sea_btn btn_style">
+							<button type="default" @tap="searchNow(0)" hover-class="btn_hover" style="padding: 0;">查询</button>
+						</view>
+					</view>
 							<!-- 瞬时数据企业信息 -->
-							<view class="enterprise_info">
-								<view class="day">
-									<text>子服务器：</text>
-									<picker :range="ZhgyServerNameList" @change="zhgyServerNameListChange" range-key="name">
-										<input type="text" value="" v-model="nowZhgyServerName" :disabled="true"/>
-									</picker>
-								</view>
+<!-- 							<view class="enterprise_info">
 								<view class="day">
 									<text>企业名：</text>
 									<picker :range="ZhgyEnterpriceNameList" @change="ZhgyEnterpriceNameListChange" range-key="name">
@@ -26,12 +29,12 @@
 									</picker>
 								</view>
 								<button type="primary" @tap="searchNow">搜索</button>
-							</view>
+							</view> -->
 							<!-- 瞬时数据信息列表 -->
 							<view class="info_lists">
 								<uni-collapse ref="add" class="warp">
 									<uni-collapse-item v-for="(item, index) in tableList" :key="index" :open="item.open" 
-									:title="item.zhgyServerName+'(' + item.enterpriceName + ')'" :time = "item.time">
+									:title="item.zhgyServerName+'(' + item.enterpriceName + ')'" :time = "item.time" style="background-color: #fff;">
 										
 										<template v-if="!item.type">
 											<text class="content list_bar">
@@ -41,14 +44,14 @@
 											</text>
 											
 											<text class="content list_bar">
-												<text class="list_row"><text class="list_title">用量：</text>{{ item.dayAmountRemain }}</text>
-												<text class="list_row"><text class="list_title">余氯：</text>{{ item.yuLv }}</text>
-												<text class="list_row"><text class="list_title">氨氮：</text>{{ item.anDan }}</text>
-												<text class="list_row"><text class="list_title">PH：</text>{{ item.PH }}</text>
+												<text class="before_row"><text class="list_title">用量：</text>{{ item.dayAmountRemain }}</text>
+												<text class="before_row"><text class="list_title">余氯：</text>{{ item.yuLv }}</text>
+												<text class="before_row"><text class="list_title">氨氮：</text>{{ item.anDan }}</text>
 											</text>
 											
 											<text class="content list_bar">
-												<text class=""><text class="list_title">COD：</text>{{ item.COD }}</text>
+												<text class=""><text class="list_title">PH：</text>{{ item.PH }}</text>
+												<text class=""><text class="list_title list_marginL">COD：</text>{{ item.COD }}</text>
 												<text class=""><text class="list_title list_marginL">SS：</text>{{ item.SS }}</text>												
 												<text class=""><text class="list_title list_marginL">电导率：</text>{{ item.eleLv }}</text>
 											</text>
@@ -68,11 +71,24 @@
 									</uni-collapse-item>
 								</uni-collapse>
 							</view>
+							<!--加载loadding-->
+							<tui-loadmore v-if="nowLoadding" :index="3" type="primary"></tui-loadmore>
+							<tui-nomore v-if="!nowPullUpOn"></tui-nomore>
+							<!--加载loadding-->
 				</view>
 				<!-- 日数据界面 -->
-				<view class="box" id="box1" v-show="dataTye === 1">
+				<view class="box" id="box1" v-show="dataTye === 1" style="background-color: #fff;">
 					<!-- 日数据信息 -->
-					<view class="enterprise_info">
+					<view class="search_column" style="display:flex; align-items:center; justify-content: space-between;">
+						<text>子服务器：</text>
+						<view class="search_ipt">
+							<input type="text" value="" v-model="dayZhgyServerName" placeholder="选择子服务器" :disabled="true" @tap="openDrawer(1)"/>
+						</view>
+						<view class="sea_btn btn_style">
+							<button type="default" @tap="dayDataList(0)" hover-class="btn_hover" style="padding: 0;">查询</button>
+						</view>
+					</view>
+<!-- 					<view class="enterprise_info">
 						<view class="day">
 							<text>子服务器：</text>
 							<picker :range="ZhgyServerNameList" @change="dayzhgyServerNameListChange" range-key="name">
@@ -90,12 +106,12 @@
 							<input type="text" value="" @tap="onDay(1)" v-model="dayData" :disabled="true"/>
 					    </view>
 						<button type="primary" @tap="dayDataList">搜索</button>
-					</view>
+					</view> -->
 					<!-- 日数据信息列表 -->
 							<view class="info_lists">
 								<uni-collapse ref="add" class="warp">
 									<uni-collapse-item v-for="(item, index) in dayList" :key="index" :open="item.open" 
-									:title="dayZhgyServerName+'(' + dayEnterpriceName + ')'" :time = "item.hour">
+									:title="dayZhgyServerName+'(' + dayEnterpriceName + ')'" :time = "item.hour" style="background-color: #fff;">
 										<template v-if="!item.type">
 											<text class="content list_bar">
 												<text class="before_row"><text class="list_title">时流量：</text>{{ item.hourWater }}</text>
@@ -141,11 +157,24 @@
 									</uni-collapse-item>
 								</uni-collapse>
 							</view>
+							<!--加载loadding-->
+							<tui-loadmore v-if="dayLoadding" :index="3" type="primary"></tui-loadmore>
+							<tui-nomore v-if="!dayPullUpOn"></tui-nomore>
+							<!--加载loadding-->
 				</view>
 				<!-- 月数据界面 -->
-				<view class="box" id="box2" v-show="dataTye === 2">
+				<view class="box" id="box2" v-show="dataTye === 2" style="background-color: #fff;">
 					<!-- 月数据信息 -->
-					<view class="enterprise_info">
+					<view class="search_column" style="display:flex; align-items:center; justify-content: space-between;">
+						<text>子服务器：</text>
+						<view class="search_ipt">
+							<input type="text" value="" v-model="monthZhgyServerName" placeholder="选择子服务器" :disabled="true" @tap="openDrawer(2)"/>
+						</view>
+						<view class="sea_btn btn_style">
+							<button type="default" @tap="monthDataList(0)" hover-class="btn_hover" style="padding: 0;">查询</button>
+						</view>
+					</view>
+<!-- 					<view class="enterprise_info">
 						<view class="month">
 							<text>子服务器：</text>
 							<picker :range="ZhgyServerNameList" @change="monthzhgyServerNameListChange" range-key="name">
@@ -163,12 +192,12 @@
 							<input type="text" value="" @tap="onDay(2)" v-model="monthData" :disabled="true"/>
 					    </view>
 						<button type="primary" @tap="monthDataList">搜索</button>
-					</view>
+					</view> -->
 					<!-- 月数据信息列表 -->
 						<view class="info_lists">
 							<uni-collapse ref="add" class="warp">
 								<uni-collapse-item v-for="(item, index) in monthList" :key="index" :open="item.open" 
-								:title="monthZhgyServerName+'(' + monthEnterpriceName + ')'" :time = "item.day + '日'">
+								:title="monthZhgyServerName+'(' + monthEnterpriceName + ')'" :time = "item.day + '日'" style="background-color: #fff;">
 
 										<template v-if="!item.type">
 											<text class="content list_bar">
@@ -215,10 +244,55 @@
 								</uni-collapse-item>
 							</uni-collapse>
 						</view>
+						<!--加载loadding-->
+						<tui-loadmore v-if="monthLoadding" :index="3" type="primary"></tui-loadmore>
+						<tui-nomore v-if="!monthPullUpOn"></tui-nomore>
+						<!--加载loadding-->
 				</view>
 		<!-- </scroll-view> -->
 		<tui-datetime ref="dateTime" :type="type" :startYear="startYear" :endYear="endYear" :cancelColor="cancelColor" :color="color"
-		 :setDateTime="setDateTime" @confirm="change"></tui-datetime>
+		 :setDateTime="setDateTime" @confirm="change" style="z-index:100000;"></tui-datetime>
+		 
+		 <tui-drawer mode="right" :visible="rightDrawer" @close="closeDrawer" style="z-index:999;">
+		 	<view class="d-container">
+		 				<view class="" style="width:100%; text-align: center; color:#F57341;" v-show="drawerType == 0"><text>瞬间数据</text></view>
+		 				<view class="" style="width:100%; text-align: center; color:#F57341;" v-show="drawerType == 1"><text>日数据</text></view>
+		 				<view class="" style="width:100%; text-align: center; color:#F57341;" v-show="drawerType == 2"><text>月数据</text></view>
+		 				<view class="search_time">
+		 					<view class="search_test">
+		 						<text>子服务器</text>
+		 					</view>
+		 					<view class="">
+		 						<picker :range="ZhgyServerNameList" @change="zhgyServerNameListChange" range-key="name">
+		 							<input type="text" value="" v-model="selZhgyServerName" :disabled="true"/>
+		 						</picker>
+		 					</view>
+		 				</view>
+		 				<view class="search_time">
+		 					<view class="search_test">
+		 						<text>企业名</text>
+		 					</view>
+		 					<view class="">
+		 						<picker :range="ZhgyEnterpriceNameList" @change="ZhgyEnterpriceNameListChange" range-key="name">
+		 							<input type="text" value="" v-model="selEnterpriceName" :disabled="true"/>
+		 						</picker>
+		 					</view>
+		 				</view>
+						<view class="search_time" v-show="drawerType != 0">
+							<view class="search_test">
+								<text>日期</text>
+							</view>
+							<view class="">
+								<input type="text" value="" @tap="onDay(1)" v-model="selDayData" :disabled="true" v-show="drawerType == 1"/>
+								<input type="text" value="" @tap="onDay(2)" v-model="selMonthData" :disabled="true" v-show="drawerType == 2"/>
+							</view>
+						</view>
+		 				<view class="search_btn btn_style">
+		 					<button type="default" @tap="search" hover-class="btn_hover">确定</button>
+		 				</view>
+		 			</view>
+		 </tui-drawer>
+		 
 	</view>
 </template>
 
@@ -233,12 +307,18 @@
 	import util from "@/common/util.js";
 	import uniCollapse from '@/components/uni-collapse/uni-collapse.vue';
 	import uniCollapseItem from '@/components/uni-collapse-item/uni-collapse-item.vue';
+	import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
+	import tuiLoadmore from "@/components/tui-loadmore/tui-loadmore.vue";
+	import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 	export default {
 		components: {
 			uniSegmentedControl,
 			tuiDatetime,
 			uniCollapse,
 			uniCollapseItem,
+			tuiDrawer,
+			tuiLoadmore,
+			tuiNomore
 		},
 		data() {
 			return {
@@ -257,18 +337,30 @@
 				nowZhgyServerName: "" ,		//瞬时数据的子服务器搜索框
 				nowEnterpriceName: "" ,		//瞬时数据的企业搜索框
 				saveNowServerNameInfo: null,  	//瞬时保存被选中的子服务器信息
+				nowLoadding: false, //瞬间数据加载数据提示
+				nowPullUpOn: true,  //瞬间数据上拉加载数据
+				nowDataPage: 1,   //瞬时数据页数
+				
 				//有关日数据的信息
 				dayList: [],   			//日数据列表
 				dayData: ''  ,			//日数据时间搜索框值
 				dayZhgyServerName: "",	//日数据的子服务器搜索框
 				dayEnterpriceName: "",	//日数据的企业搜索框	
 				saveDayServerNameInfo: null,  	//日数据保存被选中的子服务器信息
+				dayLoadding: false, //日数据加载数据提示
+				dayPullUpOn: true,  //日数据上拉加载数据
+				dayDataPage: 1,   //日数据页数
+				
 				//有关月数据的信息
 				monthList: [],   	//月数据列表	
 				monthData: '' ,		//月数据时间搜索框值		
 				monthZhgyServerName: "",	//月数据的子服务器搜索框
 				monthEnterpriceName: "",	//月数据的企业搜索框	
-				saveMonthServerNameInfo: null,  	//月数据保存被选中的子服务器信息									
+				saveMonthServerNameInfo: null,  	//月数据保存被选中的子服务器信息
+				monthLoadding: false, //月数据加载数据提示
+				monthPullUpOn: true,  //月数据上拉加载数据
+				monthDataPage: 1,   //月数据页数
+		
 				num: null,  //区分日期选择器的标识 1:日时间 2:月时间
 				//日期选择器需要的属性
 				type: 1,
@@ -283,18 +375,87 @@
 				text: '',
 				lastX: 0,
 				intervalID: null, //定时器id
-				dataTye: 0 //控制瞬时，日，月数据页面切换的参数
+				dataTye: 0 ,//控制瞬时，日，月数据页面切换的参数
+				
+				
+				rightDrawer: false,//抽屉开关
+				drawerType: 0,  //抽屉类型 0：瞬时数据 1：日数据 2：月数据
+				selZhgyServerName: "",   //抽屉选中的子服务器
+				selEnterpriceName: "",   //抽屉选中的企业名
+				selDayData: null,   //抽屉选中的日数据日期
+				selMonthData: null,   //抽屉选中的月数据日期
 			}
 		},
 		onLoad() {
 			this.getNowDataNameList();
 			//this.myTimerOpen();
-			this.getNowDataList();
+			//this.searchNow(0);
 		},
 		onUnload() {
 			this.myTimerStop();  //关闭瞬时数据请求定时器
 		},
 		methods: {
+			//抽屉搜索按钮
+			search(){
+				if(this.drawerType == 0) this.searchNow(0);  //查询瞬时数据
+				if(this.drawerType == 1) this.dayDataList(0);  //查询日数据
+				if(this.drawerType == 2) this.monthDataList(0);  //查询月数据
+			},
+			//关闭抽屉
+			closeDrawer(e) {
+				this.rightDrawer = false;
+			},
+			//打开抽屉
+			openDrawer(type) {
+				this.rightDrawer = true;
+				//抽屉类型 0：瞬时数据 1：日数据 2：月数据
+				switch (type){
+					case 0:
+						this.drawerType =  type;
+						this.selZhgyServerName = this.nowZhgyServerName;
+						this.selEnterpriceName = this.nowEnterpriceName;
+						break;
+					case 1:
+						this.drawerType =  type;
+						this.selZhgyServerName = this.dayZhgyServerName;
+						this.selEnterpriceName = this.dayEnterpriceName;
+						break;
+					case 2:
+						this.drawerType =  type;
+						this.selZhgyServerName = this.monthZhgyServerName;
+						this.selEnterpriceName = this.monthEnterpriceName;
+						break;
+					default:
+						break;
+				}
+			},
+			
+			//普通上拉刷新
+			onPullDownRefresh: function() {
+				if(this.drawerType == 0){
+					//延时为了看效果
+					setTimeout(() => {
+						this.searchNow(0);  //查询瞬时数据
+						this.nowPullUpOn = true;
+						this.nowLoadding = false;
+					}, 200)
+				}else if(this.drawerType == 1){
+					//延时为了看效果
+					setTimeout(() => {
+						this.dayDataList();  //查询日数据
+						this.dayPullUpOn = true;
+						this.dayLoadding = false;
+					}, 200)
+				}else if(this.drawerType == 2){
+					//延时为了看效果
+					setTimeout(() => {
+						this.monthDataList();  //查询月数据
+						this.monthPullUpOn = true;
+						this.monthLoadding = false;
+					}, 200)
+				}
+			},
+			
 			//每20秒自动获取一次瞬时数据
 			myTimerOpen(){
 				this.intervalID = setInterval(this.getNowDataList.bind(this), 20000);
@@ -325,17 +486,25 @@
 				this.$refs.dateTime.show()
 			},
 			change: function(e) {
-				if(this.num === 1) 	this.dayData = e.result;
-				if(this.num === 2)  this.monthData = e.result;
+				if(this.num === 1) 	this.selDayData = e.result;
+				if(this.num === 2)  this.selMonthData = e.result;
 			},
 			// 瞬时获取选中的子服务器
 			zhgyServerNameListChange:function(e){
-			    this.nowZhgyServerName = this.ZhgyServerNameList[e.detail.value].name;
+			    this.selZhgyServerName = this.ZhgyServerNameList[e.detail.value].name;
 				this.saveNowServerNameInfo = this.ZhgyServerNameList[e.detail.value];
+				
+				if(this.drawerType == 0) this.nowZhgyServerName = this.selZhgyServerName;
+				if(this.drawerType == 1) this.dayZhgyServerName = this.selZhgyServerName;
+				if(this.drawerType == 2) this.monthZhgyServerName = this.selZhgyServerName;
 			},
 			// 瞬时获取选中的企业名
 			ZhgyEnterpriceNameListChange:function(e){
-			    this.nowEnterpriceName = this.ZhgyEnterpriceNameList[e.detail.value].name;
+			    this.selEnterpriceName = this.ZhgyEnterpriceNameList[e.detail.value].name;
+				
+				if(this.drawerType == 0) this.nowEnterpriceName = this.selEnterpriceName;
+				if(this.drawerType == 1) this.dayEnterpriceName = this.selEnterpriceName;
+				if(this.drawerType == 2) this.monthEnterpriceName = this.selEnterpriceName;
 			},
 			// 日数据获取选中的子服务器
 			dayzhgyServerNameListChange:function(e){
@@ -385,23 +554,33 @@
 				});
 
 			},
-			//搜索指定子服务器和企业的数据获取瞬时数据
-			searchNow(){
+							
+			//搜索指定子服务器和企业的数据获取瞬时数据  
+			//type 搜索方式  0: 普通搜索 1: 上拉获取更多数据
+			searchNow(type){
 				let _this = this;
 				uni.showLoading({
 				    title: '加载中',
+					mask: true,
 					success() {
-                        _this.NowDataList();
+                        _this.NowDataList(type);
 					}
 				});
 			},
-
+			
 			//获取瞬间数据封装
-			NowDataList(){
+			//type 搜索方式  0: 普通搜索 1: 上拉获取更多数据
+			NowDataList(type){
+				if(this.nowLoadding) return;
+				if(type == 0) this.nowDataPage = 1;
+				else{
+					++this.nowDataPage;
+					this.nowLoadding = true;
+				}
 				let _this = this;
 				let data = {
-					page: 1,
-					limit: 200,
+					page: this.nowDataPage,
+					limit: 15,
 					pc: storage.getMyInfo().pc
 				}
 				if(!util.isEmpty(this.saveNowServerNameInfo)) data.serverId = this.saveNowServerNameInfo.id;
@@ -411,11 +590,35 @@
 					let code = api.getCode(res);
 					if(code === 0){
 						let data = tranNowList.tranNowList(data1);
-						data.forEach((item, index) =>{
-							item.open = false;
-						});
-						_this.tableList = data;
+
+						if(util.isEmpty(data)){
+							_this.nowLoadding = false;
+							_this.nowPullUpOn = false;
+						}
+						else{
+							if(type == 0)
+							{
+								data.forEach((item, index) =>{
+									item.open = false;
+								});
+								_this.tableList = data;
+								uni.showToast({
+									title: '刷新成功',
+									icon: "none",
+								});
+								uni.stopPullDownRefresh();
+							}
+							else
+							{
+								_this.nowLoadding = false;
+								data.forEach((item, index) =>{
+									item.open = false;
+									_this.tableList.push(item);
+								});
+							}
+						}
 						uni.hideLoading();
+						_this.closeDrawer();  //关闭抽屉
 					}
 				});
 			},
@@ -435,7 +638,7 @@
 			},
 			//获取日数据列表
 			dayDataList(){
-				if(util.isEmpty(this.dayData) || util.isEmpty(this.saveDayServerNameInfo) || util.isEmpty(this.dayEnterpriceName)) {
+				if(util.isEmpty(this.selDayData) || util.isEmpty(this.saveNowServerNameInfo) || util.isEmpty(this.dayEnterpriceName)) {
 					this.mustSelectInput();
 					return;
 				}				
@@ -444,9 +647,9 @@
 					title: '加载中',
 					success() {
 						api.DayDataList({
-						    date: _this.dayData,
+						    date: _this.selDayData,
 							pc: storage.getMyInfo().pc,							
-							serverId: _this.saveDayServerNameInfo.id,
+							serverId: _this.saveNowServerNameInfo.id,
 							enterpriceName: _this.dayEnterpriceName
 						},res=>{
 							let code = api.getCode(res);
@@ -456,7 +659,13 @@
 								list.forEach((item, index) =>{
 									item.open = false;
 								});
+								uni.showToast({
+									title: '刷新成功',
+									icon: "none",
+								});
+								uni.stopPullDownRefresh();
 								uni.hideLoading();
+								_this.closeDrawer();  //关闭抽屉
 								_this.dayList = list;
 								for(let i = 0; i < _this.hourList.length; i++){
 									_this.dayList[i].hour = _this.hourList[i];
@@ -468,7 +677,7 @@
 			},
 			//获取月数据列表
 			monthDataList(){
-				if(util.isEmpty(this.monthData) ||  util.isEmpty(this.saveMonthServerNameInfo) || util.isEmpty(this.monthEnterpriceName)) {
+				if(util.isEmpty(this.selMonthData) ||  util.isEmpty(this.saveNowServerNameInfo) || util.isEmpty(this.monthEnterpriceName)) {
 					this.mustSelectInput();
 					return;
 				}
@@ -477,9 +686,9 @@
 				    title: '加载中',
 					success() {
 						api.MonthDataList({
-						    date: _this.monthData,
+						    date: _this.selMonthData,
 							pc: storage.getMyInfo().pc,
-							serverId: _this.saveMonthServerNameInfo.id,
+							serverId: _this.saveNowServerNameInfo.id,
 							enterpriceName: _this.monthEnterpriceName
 						},res=>{
 							let code = api.getCode(res);
@@ -489,14 +698,25 @@
 								list.forEach((item, index) =>{
 									item.open = false;
 								});
-								uni.hideLoading();									
+								uni.showToast({
+									title: '刷新成功',
+									icon: "none",
+								});
+								uni.stopPullDownRefresh();
+								uni.hideLoading();		
+								_this.closeDrawer();  //关闭抽屉
 								_this.monthList = list;
 							};
 						});
 					}
 				});
 			}
-		}
+		},
+		//上拉获取更多数据
+		onReachBottom(){
+			if (!this.nowPullUpOn) return;
+			if(this.drawerType == 0) this.searchNow(1);  //查询瞬时数据
+		},
 	}
 </script>
 
@@ -540,7 +760,7 @@
 	}
 	.box{
 		width:100%;
-		background:#e3e3e3;
+		/* background:#e3e3e3; */
 		display:inline-block;
 		vertical-align:top;
 	}
@@ -565,9 +785,24 @@
 		font-size:15px;
 		width:100%;
 		margin-bottom:28rpx;
+		padding:0 40rpx;
+		box-sizing:border-box;
 	}
-	.day>button, .month>button{
-		font-size:12px;
+	.day>text,
+	.month>text {
+		display:inline-block;
+		width:35%;
+	}
+	
+	.day>input,
+	.month>input {
+		flex: 1;
+	}
+
+	.day>button,
+	.month>button {
+		font-size: 12px;
+		width:20%;
 	}
 	.list_bar{
 		font-size:14px;
@@ -588,6 +823,64 @@
 	}
 	.list_marginL{
 		margin-left:14rpx;
+	}
+	
+	
+	/* 搜索栏 */
+	input{
+		border:none;
+	}
+	.search_column{
+		width:100%;
+		display:flex;
+		align-items: center;
+		justify-content:center;
+		margin-top:20rpx;
+		font-size:16px;
+		padding:0 40rpx 10rpx;
+		box-sizing:border-box;
+		border-bottom:1px solid #808080;
+		background-color: #fff;
+	}
+	.search_column>text{
+		display:inline-block;
+		width:40%;
+	}
+	.search_column input{
+		text-align:left;
+		font-size:14px;
+	}
+	.sea_btn button{
+		font-size:12px;
+		color:#fff;
+		width:120rpx;
+	}
+	
+	
+	
+	/* 抽屉 */
+	.d-container{
+		padding:40rpx;
+		font-size:15px;
+	}
+	.search_time{
+		margin-top:40rpx;
+	}
+	.search_test{
+		margin-bottom:20rpx;
+	}
+	.d-container input{
+		border-bottom:1px solid #808080;
+		color:#808080;
+	}
+	.search_btn{
+		margin-top:100rpx;
+	}
+	.search_btn button{
+		font-size:14px;
+		color:#fff;
+		border-radius:10rpx;
+		padding:0 !important;
 	}
 </style>
 
